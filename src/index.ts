@@ -1,3 +1,6 @@
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 import { uwufy } from "./uwufy.ts";
 
@@ -31,10 +34,25 @@ type UiContext = {
 
 export default function uwuExtension(pi: ExtensionAPI) {
   let enabled = true;
+  let stateReady: Promise<void> | undefined;
   let style: "rewrite" | "prompt" = "rewrite";
   let hookSupport: boolean | undefined;
   let promptAddedThisTurn = false;
   let notifiedFallback = false;
+
+  const statePath = join(pi.pi.getAgentDir(), "omp-uwu.json");
+  const loadState = () => {
+    stateReady ??= readFile(statePath, "utf8")
+      .then((raw) => {
+        const state: unknown = JSON.parse(raw);
+        if (typeof state === "object" && state !== null && "enabled" in state && typeof state.enabled === "boolean") {
+          enabled = state.enabled;
+        }
+      })
+      .catch(() => {});
+    return stateReady;
+  };
+  const saveState = () => writeFile(statePath, `${JSON.stringify({ enabled }, null, 2)}\n`, "utf8");
 
   const updateBadge = (ctx: UiContext) => {
     if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.setStatus) return;
@@ -45,6 +63,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
   pi.registerCommand("uwu", {
     description: "UwU chat style and mode (usage: /uwu [on|off|prompt|rewrite])",
     handler: async (args, rawCtx) => {
+      await loadState();
       const ctx = rawCtx as UiContext;
       const arg = String(args ?? "").trim().toLowerCase();
       if (arg === "prompt" || arg === "rewrite") {
@@ -57,14 +76,23 @@ export default function uwuExtension(pi: ExtensionAPI) {
         ctx.ui?.notify("Usage: /uwu [on|off|prompt|rewrite]", "info");
         return;
       }
+      try {
+        await saveState();
+      } catch {
+        ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
+      }
       updateBadge(ctx);
       ctx.ui?.notify(enabled ? `uwu mode ${style === "rewrite" ? "rewrite" : "prompt"}! (◕ᴗ◕✿)` : "uwu mode off", "info");
     },
   });
 
-  pi.on("session_start", (_event, rawCtx) => updateBadge(rawCtx as UiContext));
+  pi.on("session_start", async (_event, rawCtx) => {
+    await loadState();
+    updateBadge(rawCtx as UiContext);
+  });
 
   pi.on("before_agent_start", async (event, rawCtx) => {
+    await loadState();
     promptAddedThisTurn = false;
     const ctx = rawCtx as UiContext;
     if (ctx.agent?.kind === "sub") return undefined;
@@ -75,6 +103,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
     promptAddedThisTurn = true;
     return { systemPrompt: [...event.systemPrompt, UWU_PROMPT] };
   });
+
 
   // The hook is newer than the bundled 18.4.3 types, so register structurally.
   // ExtensionAPI.on stores event names as strings; old hosts simply never emit it.

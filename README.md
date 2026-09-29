@@ -59,7 +59,7 @@ The hook runs after streaming has finished. The TUI refreshes the current assist
 
 - **Deterministic rewrite.** No style instruction/token overhead once the hook is detected.
 - **Prompt style.** Model-dependent, with live uwu output while streaming.
-- **Session-local toggle.** Mode and enabled state reset for each new session.
+- **Persistent toggle.** `/uwu off` is remembered across sessions; `/uwu on` re-enables it. The setting is stored in `~/.omp/agent/omp-uwu.json`. UwU mode remains on by default until explicitly changed.
 
 ## Install options
 

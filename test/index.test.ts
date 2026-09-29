@@ -1,3 +1,7 @@
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import { beforeEach, describe, expect, test } from "bun:test";
 import uwuExtension, { UWU_PROMPT } from "../src/index.ts";
 
@@ -9,13 +13,13 @@ type RewriteResult = { content: Array<{ type: string; text?: string; id?: string
 let command: Command;
 let commandName: string;
 let notices: string[];
+let stateDir = "";
 const ctx = { mode: "tui", ui: { notify: (msg: string) => notices.push(msg), setStatus: () => {} } };
 const event = () => ({ systemPrompt: ["base policy"] });
 
-beforeEach(() => {
-  notices = [];
-  handlers = {};
+function installExtension() {
   const pi = {
+    pi: { getAgentDir: () => stateDir },
     registerCommand(name: string, opts: { handler: Command }) {
       commandName = name;
       command = opts.handler;
@@ -25,6 +29,14 @@ beforeEach(() => {
     },
   };
   uwuExtension(pi as never);
+}
+
+beforeEach(async () => {
+  if (stateDir) await rm(stateDir, { recursive: true, force: true });
+  stateDir = await mkdtemp(join(tmpdir(), "omp-uwu-test-"));
+  notices = [];
+  handlers = {};
+  installExtension();
 });
 
 describe("omp-uwu", () => {
@@ -67,6 +79,14 @@ describe("omp-uwu", () => {
     await command(" ON ", ctx);
     await handlers.message_end({ message: { role: "assistant", stopReason: "stop" } });
     expect(((await handlers.before_agent_start(event(), { agent: { kind: "main" } })) as AgentStartResult)?.systemPrompt).toContain(UWU_PROMPT);
+  });
+
+  test("remembers /uwu off across extension reloads", async () => {
+    await command("off", ctx);
+    handlers = {};
+    installExtension();
+    expect(await handlers.before_agent_start(event(), { agent: { kind: "main" } })).toBeUndefined();
+    expect(await Bun.file(join(stateDir, "omp-uwu.json")).json()).toEqual({ enabled: false });
   });
 
   test("/uwu prompt selects live prompt-based style", async () => {
