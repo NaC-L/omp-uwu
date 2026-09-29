@@ -23,10 +23,11 @@ export const EMOTICONS = [
 	"(♡˙︶˙♡)", "ヽ(♡‿♡)ノ", "(´꒳`)♡", "(ﾉ´ з `)ノ", "ヾ(・ω・*)",
 	"(⌒ω⌒)ﾉ", "(ᵔ⩊ᵔ)", "(=^･ω･^=)", "(ฅ^•ﻌ•^ฅ)", "(ᵕ—ᴗ—)",
 	"(｡•̀ᴗ-)✧", "(づ｡◕‿‿◕｡)づ", "(っ´▽`)っ", "( ˶ˆᗜˆ˵ )", "(๑>◡<๑)",
+	"✨", "💖", "🌸", "🎀",
 ] as const;
 
 /** Tokens treated as emoticons: never counted as words, never rewritten. */
-const EMOTICON_TOKENS = new Set<string>([
+export const EMOTICON_TOKENS: ReadonlySet<string> = new Set<string>([
 	...EMOTICONS,
 	"UwU",
 	"OwO",

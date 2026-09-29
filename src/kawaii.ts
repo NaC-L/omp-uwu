@@ -57,7 +57,7 @@ export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme)
   }
 
   const preset = base.getSymbolPreset();
-  return new ThemeClass(
+  const theme = new ThemeClass(
     fg as Record<ThemeColor, string>,
     bg as Record<ThemeBg, string>,
     base.getColorMode(),
@@ -65,6 +65,15 @@ export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme)
     {},
     { status: base.getSpinnerFrames("status"), activity: base.getSpinnerFrames("activity") },
   );
+  // A nested colored span (a sparkle, an inline code span) ends in a
+  // foreground reset, which would drop the enclosing heading/link color for the
+  // rest of the span. Switch back to the enclosing color there instead.
+  const plainFg = theme.fg.bind(theme);
+  theme.fg = (color, text) => {
+    const open = theme.getFgAnsi(color);
+    return plainFg(color, open === FG_DEFAULT ? text : text.replaceAll(FG_DEFAULT, open));
+  };
+  return theme;
 }
 
 /** A reversible, ephemeral kawaii theme; never edits the user's theme file. */

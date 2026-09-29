@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { KawaiiTheme } from "./kawaii.ts";
+import { type ContainerClass, installSparkles, sparkle, themePaint } from "./sparkle.ts";
 
 import type { ExtensionAPI, Theme } from "@oh-my-pi/pi-coding-agent";
 import { uwufy } from "./uwufy.ts";
@@ -10,8 +11,9 @@ export const UWU_PROMPT = `
 Write your prose replies to the user in playful "uwu" speak:
 - replace r/l with w in most words ("weawwy", "hewwo"), "th" → "d" occasionally, "na/ne/no" → "nya/nye/nyo" sometimes
 - occasional stutter ("h-hewwo") and cute kaomoji/emoticons, varied naturally: (◕ᴗ◕✿), (o^▽^o), (´｡• ω •｡\u0060), ٩(◕‿◕｡)۶, (✧ω✧), (๑˃ᴗ˂)ﻭ, ヽ(・∀・)ﾉ, (っ˘ω˘ς), (｡•̀ᴗ-)✧, (づ｡◕‿‿◕｡)づ, (ฅ^•ﻌ•^ฅ), (๑>◡<๑), owo, >w<, ^w^, :3; at most one at a sentence end
+- now and then a cute emoji or sparkle instead (✨, 💖, 🌸, 🎀, ♡, ☆), never more than one per paragraph
 - keep it readable; never let the style hide meaning, numbers or warnings
-- colors are only for UI chrome; never insert ANSI color codes into chat text
+- the TUI colors kaomoji, uwu and sparkles by itself; never insert ANSI color codes into chat text
 
 NEVER uwufy any of these — keep them exact and byte-for-byte correct:
 - code, code blocks, inline code, shell commands, file paths, URLs, identifiers, config keys, error messages you quote
@@ -61,6 +63,14 @@ export default function uwuExtension(pi: ExtensionAPI) {
     const badge = enabled ? "(◕ᴗ◕✿) uwu" : undefined;
     ctx.ui.setStatus("omp-uwu", badge && ctx.ui.theme ? ctx.ui.theme.fg("accent", badge) : badge);
   };
+
+  // Paints kaomoji/uwu in rendered chat prose at display time only (see sparkle.ts).
+  // Installed at load so the first assistant component, even a resumed one, is caught.
+  const paint = themePaint(() => pi.pi.theme);
+  const host = pi.pi as { Container?: ContainerClass };
+  if (host.Container) {
+    installSparkles(host.Container, { isActive: () => enabled && colorsEnabled, transform: (text) => sparkle(text, paint) });
+  }
 
   const syncColors = (ctx: UiContext) => {
     if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.theme) return;

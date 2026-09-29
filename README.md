@@ -26,6 +26,8 @@ Restart omp. uwu mode is **on** by default in every session.
 
 The palette colors chat markdown and the user-message bubble without putting ANSI codes into message text/history. It is applied as an in-memory TUI theme; components sharing those colors can change too. The host's in-memory theme setter pauses automatic theme detection until omp restarts. The TUI also shows a theme-accent `(◕ᴗ◕✿) uwu` status badge; other clients/plain output are not colorized.
 
+With colors on, the TUI also paints **sparkles** in the agent's chat prose: `uwu`/`owo` get a per-letter pastel rainbow, and kaomoji (listed or not, e.g. `(◕ᴗ◕✿)`, `(ﾉ◕ヮ◕)ﾉ`) and glyphs like `♡ ☆ ✧ ✿` get a pastel tint. This happens at render time through omp's per-message text color transform, which only ever sees plain prose runs, so inline code, code blocks, link targets and the stored message text stay untouched. omp's `AssistantMessageComponent` is not part of the extension API, so the plugin finds it through its shared `Container` base class when the first assistant message is created; if a future omp changes that shape, sparkles are simply skipped and the palette still applies.
+
 ## What gets uwufied, and what doesn't
 
 | uwufied | kept byte-for-byte |
@@ -36,7 +38,7 @@ The palette colors chat markdown and the user-message bubble without putting ANS
 | | Tool-call arguments and file contents the agent writes or edits |
 | | Commit messages and prompts sent to subagents |
 
-Style rules include `r`/`l` → `w`, occasional `th` → `d`, `na/ne/no` → `nya/nye/nyo`, occasional stutter, and a broad rotating selection of kaomoji. The kaomoji selection includes examples from [kaomoji.you](https://kaomoji.you/), such as `٩(◕‿◕｡)۶`, `(ฅ^•ﻌ•^ฅ)`, and `(づ｡◕‿‿◕｡)づ`. Meaning, numbers and warnings must stay readable.
+Style rules include `r`/`l` → `w`, occasional `th` → `d`, `na/ne/no` → `nya/nye/nyo`, occasional stutter, a broad rotating selection of kaomoji, and the odd cute emoji (`✨ 💖 🌸 🎀`). The kaomoji selection includes examples from [kaomoji.you](https://kaomoji.you/), such as `٩(◕‿◕｡)۶`, `(ฅ^•ﻌ•^ฅ)`, and `(づ｡◕‿‿◕｡)づ`. Meaning, numbers and warnings must stay readable.
 
 Here's the same prompt and model, with the mode off and on:
 
