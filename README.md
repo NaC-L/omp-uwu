@@ -5,10 +5,10 @@
 Long sessions with an agent can get a little grey: diffs, stack traces, test output, repeat. omp-uwu is an [omp](https://github.com/can1357/oh-my-pi) extension that makes the agent write its chat replies in playful uwu-speak, while everything that has to be exact stays exact.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/NaC-L/omp-uwu/main/demo/demo.gif" alt="omp streaming an uwu-speak answer about an off-by-one loop, with the corrected code block unchanged" width="784">
+  <img src="https://raw.githubusercontent.com/NaC-L/omp-uwu/main/demo/demo.gif" alt="omp streaming an uwu-speak answer about an off-by-one loop in pastel kawaii colors, with sparkly uwu/owo and the corrected code block unchanged" width="784">
 </p>
 
-The prose is uwufied, but the inline code, numbers and the fixed loop stay exactly as they should be.
+The prose is uwufied and `uwu`/`owo` sparkle, but the inline code, numbers and the fixed loop stay exactly as they should be. This is omp's own chat rendering with `/uwu colors on` over the `dark-sunset` theme.
 
 ## Quick start
 
@@ -141,20 +141,23 @@ On a native client, prose should stay unchanged, with no fallback to prompt styl
 
 ### Re-recording the demos
 
-The streaming GIF and the side-by-side image are rendered from real transcripts in `demo/`. `record.sh` captures one reply with the extension loaded and one without it. It runs in a throwaway agent dir, so your personal rules and extensions don't affect the replies.
+Both replies come from real transcripts in `demo/`. `record.sh` captures one reply with the extension loaded and one without it. It runs in a throwaway agent dir, so your personal rules and extensions don't affect the replies. The side-by-side image is drawn straight from those transcripts.
 
-The dashboard GIF needs no model: `capture.ts` drives the real `/uwu status` component with a scripted key sequence and saves its ANSI output (omp's dark theme) to `dashboard.json`. Edit the script there to change what the GIF shows.
+The two GIFs need no model. `capture.ts` renders omp's real TUI components with the kawaii palette over `dark-sunset` and sparkles installed, and saves their ANSI output:
+
+- `chat.json`: the prompt typed into a user bubble, then the uwu reply streaming into an assistant message.
+- `dashboard.json`: the `/uwu status` card while a scripted key sequence edits it. Edit the script in `capture.ts` to change what the GIF shows.
 
 `render.py` then draws all three:
 
 ```sh
 mkdir -p /tmp/omp-demo && cp ~/.omp/agent/agent.db* /tmp/omp-demo/
 demo/record.sh
-bun demo/capture.ts
+COLORTERM=truecolor bun demo/capture.ts
 uv run --with pillow python demo/render.py
 ```
 
-Model output varies between runs, so re-run `record.sh` until you get a reply that reads well. `capture.ts` is deterministic, so re-run it whenever the dashboard changes.
+Model output varies between runs, so re-run `record.sh` until you get a reply that reads well. `capture.ts` is deterministic, so re-run it whenever the transcripts, the palette or the dashboard change.
 
 The uwu-bench chart is drawn from [`demo/uwu-bench.html`](demo/uwu-bench.html). Edit the HTML, then take a 1536×960 screenshot with headless Chrome:
 

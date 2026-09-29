@@ -42,6 +42,11 @@ UWU = "#f5c2e7"
 PROMPT = "#89b4fa"
 DOTS = ("#f38ba8", "#f9e2af", "#a6e3a1")
 
+# Terminal behind the ANSI captures: a plum night that suits the kawaii palette over dark-sunset.
+TERM_BG = "#1d1321"
+TERM_TITLE_BG = "#150d18"
+TERM_FG = "#f2e4ec"
+
 EMOTICONS = {"uwu", "owo", ">w<", "^w^", ":3", "UwU", "OwO"}
 JS_KEYWORDS = {"let", "const", "var", "for", "while", "if", "return", "function"}
 
@@ -159,10 +164,11 @@ class Canvas:
     def width_for(self, cols: int) -> int:
         return int(cols * self.char_w + 2 * PAD)
 
-    def window(self, width: int, height: int, title: str) -> tuple[Image.Image, ImageDraw.ImageDraw]:
-        img = Image.new("RGB", (width, height), BG)
+    def window(self, width: int, height: int, title: str, bg: str = BG,
+               title_bg: str = TITLE_BG) -> tuple[Image.Image, ImageDraw.ImageDraw]:
+        img = Image.new("RGB", (width, height), bg)
         d = ImageDraw.Draw(img)
-        d.rectangle([0, 0, width, TITLE_H], fill=TITLE_BG)
+        d.rectangle([0, 0, width, TITLE_H], fill=title_bg)
         for i, color in enumerate(DOTS):
             cx = 20 + i * 20
             d.ellipse([cx - 6, TITLE_H / 2 - 6, cx + 6, TITLE_H / 2 + 6], fill=color)
@@ -170,73 +176,18 @@ class Canvas:
         d.text(((width - tw) / 2, TITLE_H / 2), title, font=self.font, fill=DIM, anchor="lm")
         return img, d
 
-    def draw_lines(self, d: ImageDraw.ImageDraw, lines: list[list[Tok]], x0: int, y0: int, width: int,
-                   budget: int | None = None) -> int:
-        """Draw lines, revealing at most `budget` characters. Returns the y after the last line."""
+    def draw_lines(self, d: ImageDraw.ImageDraw, lines: list[list[Tok]], x0: int, y0: int, width: int) -> int:
+        """Draw lines. Returns the y after the last line."""
         y = y0
-        left = budget
         for line in lines:
-            if left is not None and left <= 0:
-                break
             if line and line[0].code_block:
                 d.rectangle([x0 - 8, y - 2, x0 + width - 2 * PAD + 8, y + LINE_H - 2], fill=CODE_BG)
             x = x0
             for tok in line:
-                text = tok.text
-                if left is not None:
-                    text = text[: max(left, 0)]
-                    left -= len(tok.text)
-                if text:
-                    d.text((x, y + LINE_H / 2), text, font=self.font, fill=tok.color, anchor="lm")
+                d.text((x, y + LINE_H / 2), tok.text, font=self.font, fill=tok.color, anchor="lm")
                 x += self.font.getlength(tok.text)
-            if left is not None:
-                left -= 1  # a newline costs one "character" of streaming time
             y += LINE_H
         return y
-
-
-def char_count(lines: list[list[Tok]]) -> int:
-    return sum(sum(len(t.text) for t in line) + 1 for line in lines)
-
-
-def render_gif(c: Canvas, prompt: str, reply: str, out: Path) -> None:
-    cols = 74
-    width = c.width_for(cols)
-    p_lines = prompt_lines(prompt, cols)
-    r_lines = markdown_lines(reply, cols)
-    height = TITLE_H + 2 * PAD + LINE_H * (len(p_lines) + 1 + len(r_lines))
-
-    prompt_total = char_count(p_lines)
-    reply_total = char_count(r_lines)
-    rgb: list[Image.Image] = []
-    durations: list[int] = []
-
-    def frame(prompt_budget: int, reply_budget: int, ms: int) -> None:
-        img, d = c.window(width, height, "omp  ·  omp-uwu on")
-        y = c.draw_lines(d, p_lines, PAD, TITLE_H + PAD, width, budget=prompt_budget) + LINE_H
-        if reply_budget:
-            c.draw_lines(d, r_lines, PAD, y, width, budget=reply_budget)
-        rgb.append(img)
-        durations.append(ms)
-
-    frame(0, 0, 600)
-    for n in range(10, prompt_total + 10, 10):
-        frame(n, 0, 30)
-    frame(prompt_total, 0, 900)
-    for n in range(6, reply_total + 6, 6):
-        frame(prompt_total, n, 40)
-    frame(prompt_total, reply_total, 4500)
-
-    # One palette for every frame keeps colours stable. Seed it with large swatches of
-    # the theme colours so rare ones (keywords, emoticons) survive quantization.
-    theme = (BG, TITLE_BG, CODE_BG, FG, DIM, CODE, KEYWORD, NUMBER, UWU, PROMPT, *DOTS)
-    seed = Image.new("RGB", (width, height + 40 * len(theme)), BG)
-    seed.paste(rgb[-1], (0, 0))
-    for i, color in enumerate(theme):
-        seed.paste(color, (0, height + 40 * i, width, height + 40 * (i + 1)))
-    palette = seed.quantize(colors=128, method=Image.Quantize.MEDIANCUT)
-    frames = [f.quantize(palette=palette, dither=Image.Dither.NONE) for f in rgb]
-    frames[0].save(out, save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True)
 
 
 def render_before_after(c: Canvas, prompt: str, plain: str, uwu: str, out: Path) -> None:
@@ -285,10 +236,12 @@ class Cell:
 
 
 def ansi_cells(line: str) -> list[Cell]:
-    """Parse one SGR-coloured line (256-colour or truecolour) into terminal cells."""
+    """Parse one SGR-coloured line (256-colour or truecolour) into terminal cells; OSC marks are dropped."""
     cells: list[Cell] = []
-    fg, bg, bold = FG, None, False
-    for part in re.split(r"(\x1b\[[0-9;]*m)", line):
+    fg, bg, bold = TERM_FG, None, False
+    for part in re.split(r"(\x1b\[[0-9;]*m|\x1b\][^\x07]*\x07)", line):
+        if part.startswith("\x1b]"):
+            continue
         if part.startswith("\x1b["):
             codes = [int(c) if c else 0 for c in part[2:-1].split(";")]
             i = 0
@@ -305,13 +258,13 @@ def ansi_cells(line: str) -> list[Cell]:
                         bg = color
                     continue
                 if code == 0:
-                    fg, bg, bold = FG, None, False
+                    fg, bg, bold = TERM_FG, None, False
                 elif code == 1:
                     bold = True
                 elif code == 22:
                     bold = False
                 elif code == 39:
-                    fg = FG
+                    fg = TERM_FG
                 elif code == 49:
                     bg = None
                 i += 1
@@ -321,11 +274,13 @@ def ansi_cells(line: str) -> list[Cell]:
     return cells
 
 
-def render_dashboard(c: Canvas, capture: dict, out: Path) -> None:
+def render_ansi(c: Canvas, capture: dict, title: str, out: Path) -> None:
+    """Animate captured ANSI frames in a terminal window; frames with a `key` get a key caption."""
     cols = capture["width"] + 2
     rows = max(len(f["lines"]) for f in capture["frames"])
+    has_keys = any(f.get("key") for f in capture["frames"])
     width = c.width_for(cols)
-    height = TITLE_H + 2 * PAD + LINE_H * (rows + 2)
+    height = TITLE_H + 2 * PAD + LINE_H * (rows + (2 if has_keys else 0))
     bold = ImageFont.truetype(c.font.path, FONT_SIZE)
     if hasattr(bold, "set_variation_by_name"):
         try:
@@ -339,7 +294,7 @@ def render_dashboard(c: Canvas, capture: dict, out: Path) -> None:
     rgb: list[Image.Image] = []
     durations: list[int] = []
     for f in capture["frames"]:
-        img, d = c.window(width, height, "omp  ·  /uwu status")
+        img, d = c.window(width, height, title, TERM_BG, TERM_TITLE_BG)
         y = TITLE_H + PAD
         for line in f["lines"]:
             col = 1
@@ -355,13 +310,13 @@ def render_dashboard(c: Canvas, capture: dict, out: Path) -> None:
                         d.text((x, y + LINE_H / 2), cell.char, font=bold if cell.bold else c.font, fill=cell.fg, anchor="lm")
                 col += span
             y += LINE_H
-        if f["key"]:
+        if f.get("key"):
             label = f"key  {key_names.get(f['key'], f['key'])}"
             d.text((PAD + c.char_w, height - PAD - LINE_H / 2), label, font=bold, fill=UWU, anchor="lm")
         rgb.append(img)
         durations.append(f["ms"])
 
-    # Build one palette from every frame so chip highlights and the emoji keep stable colours.
+    # Build one palette from every frame so rare colours (sparkles, chips, emoji) stay stable.
     mosaic = Image.new("RGB", (width, height * len(rgb)))
     for i, frame in enumerate(rgb):
         mosaic.paste(frame, (0, height * i))
@@ -379,11 +334,12 @@ def main() -> None:
     prompt = (HERE / "prompt.txt").read_text(encoding="utf-8")
     uwu = (HERE / "uwu.txt").read_text(encoding="utf-8")
     plain = (HERE / "plain.txt").read_text(encoding="utf-8")
+    chat = json.loads((HERE / "chat.json").read_text(encoding="utf-8"))
     dashboard = json.loads((HERE / "dashboard.json").read_text(encoding="utf-8"))
 
-    render_gif(c, prompt, uwu, HERE / "demo.gif")
+    render_ansi(c, chat, "omp  ·  uwu + kawaii colors", HERE / "demo.gif")
     render_before_after(c, prompt, plain, uwu, HERE / "before-after.png")
-    render_dashboard(c, dashboard, HERE / "dashboard.gif")
+    render_ansi(c, dashboard, "omp  ·  /uwu status", HERE / "dashboard.gif")
     for name in ("demo.gif", "before-after.png", "dashboard.gif"):
         print(f"{name}: {(HERE / name).stat().st_size / 1024:.0f} KiB")
 

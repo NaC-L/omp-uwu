@@ -1,0 +1,1133 @@
+{
+ "theme": "dark-sunset",
+ "width": 76,
+ "frames": [
+  {
+   "ms": 600,
+   "lines": []
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick co\u001b[39m                                                                   \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual\u001b[39m                                                           \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual questio\u001b[39m                                                   \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no fi\u001b[39m                                           \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files invo\u001b[39m                                   \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in\u001b[39m                           \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most\u001b[39m                   \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short\u001b[39m           \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short sentenc\u001b[39m   \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why \u001b[39m                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `fo\u001b[39m                                                    \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `for (let i\u001b[39m                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `for (let i = 0; i \u001b[39m                                    \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `for (let i = 0; i <= arr.l\u001b[39m                            \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `for (let i = 0; i <= arr.length; i\u001b[39m                    \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `for (let i = 0; i <= arr.length; i++) sum \u001b[39m            \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does `for (let i = 0; i <= arr.length; i++) sum += arr[i\u001b[39m    \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mretu\u001b[39m                                                                       \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? \u001b[39m                                                               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then sho\u001b[39m                                                       \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the co\u001b[39m                                               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected \u001b[39m                                       \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in \u001b[39m                               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 35,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js cod\u001b[39m                       \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 900,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007"
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The `<                                                                     "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m mak                                                                 "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the                                                           "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop                                                      "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun on                                               "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extw                                         "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time                                   "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so o                             "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast p                 "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass `i           "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equa       "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws `ar "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " `arr.leng                                                                  "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m an                                                              "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and `arr                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m i                                                    "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is `und                                              "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is `undefined                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m.                                    "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Addin                              "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding `und                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding `undefined                  "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a              "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumb        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew giv  "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives `Na                                                                  "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, an                                                              "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and `NaN                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m pois                                                    "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons ev                                              "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy wa                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew ad                                  "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition                            "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so `                      "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m e                  "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up            "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just u                                                                     "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m                                                                 "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so th                                                           "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the inde                                                     "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stop                                               "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at `                                         "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at `arr.le                                   "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at `arr.length -                             "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m ^w                         "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        ",
+    "",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;255;120;94mfo\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;201;189;208m.\u001b[39mle",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;201;189;208m.\u001b[39mlength\u001b[38;2;179;168;186m;\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;201;189;208m.\u001b[39mlength\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m\u001b[38;2;124;75;229m++\u001b[39m\u001b[38;2;179;168;186m)\u001b[39m \u001b[38;2;255;120;94ms\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;201;189;208m.\u001b[39mlength\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m\u001b[38;2;124;75;229m++\u001b[39m\u001b[38;2;179;168;186m)\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m+=\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 45,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;201;189;208m.\u001b[39mlength\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m\u001b[38;2;124;75;229m++\u001b[39m\u001b[38;2;179;168;186m)\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m+=\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;179;168;186m[\u001b[39m\u001b[38;2;255;120;94mi\u001b[39m\u001b[38;2;179;168;186m]\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  },
+  {
+   "ms": 5000,
+   "lines": [
+    "\u001b]133;A\u0007\u001b[48;2;58;36;51m                                                                            \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mQuick conceptual question, no files involved: in at most 3 short           \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231msentences, why does \u001b[39m\u001b[38;2;143;232;195mfor (let i = 0; i <= arr.length; i++) sum += arr[i];\u001b[39m\u001b[38;2;229;229;231m\u001b[38;2;229;229;231m   \u001b[49m",
+    "\u001b[48;2;58;36;51m \u001b[38;2;229;229;231mreturn NaN? Then show the corrected loop in a js code block.\u001b[39m               \u001b[49m",
+    "\u001b[48;2;58;36;51m                                                                            \u001b[49m\u001b]133;B\u0007\u001b]133;C\u0007\u001b]133;D;0\u0007",
+    "",
+    " The \u001b[38;2;143;232;195m<=\u001b[39m makes the loop wun one extwa time, so on the wast pass \u001b[38;2;143;232;195mi\u001b[39m equaws     ",
+    " \u001b[38;2;143;232;195marr.length\u001b[39m and \u001b[38;2;143;232;195marr[i]\u001b[39m is \u001b[38;2;143;232;195mundefined\u001b[39m \u001b[38;2;143;232;195mu\u001b[39m\u001b[38;2;255;179;138mw\u001b[39m\u001b[38;2;255;158;216mu\u001b[39m. Adding \u001b[38;2;143;232;195mundefined\u001b[39m to a nyumbew      ",
+    " gives \u001b[38;2;143;232;195mNaN\u001b[39m, and \u001b[38;2;143;232;195mNaN\u001b[39m poisons evewy watew addition, so \u001b[38;2;143;232;195msum\u001b[39m ends up \u001b[38;2;143;232;195mNaN\u001b[39m \u001b[38;2;255;158;216mo\u001b[39m\u001b[38;2;203;184;239mw\u001b[39m\u001b[38;2;255;143;207mo\u001b[39m.   ",
+    " Just use \u001b[38;2;143;232;195m<\u001b[39m so the index stops at \u001b[38;2;143;232;195marr.length - 1\u001b[39m \u001b[38;2;255;143;207m^w^\u001b[39m                        ",
+    "                                                                            ",
+    " \u001b[38;2;185;154;202m```js\u001b[39m                                                                      ",
+    "\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    "\u001b[38;2;124;75;229mfor\u001b[39m \u001b[38;2;179;168;186m(\u001b[39m\u001b[38;2;124;75;229mlet\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m=\u001b[39m \u001b[38;2;255;184;158m0\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m \u001b[38;2;124;75;229m<\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;201;189;208m.\u001b[39mlength\u001b[38;2;179;168;186m;\u001b[39m \u001b[38;2;255;120;94mi\u001b[39m\u001b[38;2;124;75;229m++\u001b[39m\u001b[38;2;179;168;186m)\u001b[39m \u001b[38;2;255;120;94msum\u001b[39m \u001b[38;2;124;75;229m+=\u001b[39m \u001b[38;2;255;120;94marr\u001b[39m\u001b[38;2;179;168;186m[\u001b[39m\u001b[38;2;255;120;94mi\u001b[39m\u001b[38;2;179;168;186m]\u001b[39m\u001b[38;2;179;168;186m;\u001b[39m",
+    " \u001b[38;2;185;154;202m```\u001b[39m                                                                        "
+   ]
+  }
+ ]
+}
