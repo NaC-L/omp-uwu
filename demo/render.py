@@ -1,22 +1,27 @@
-"""Render the README media from real omp transcripts.
+"""Render the README media.
 
-Inputs (all in this directory, captured with `record.sh`):
-  prompt.txt  the user prompt
-  uwu.txt     omp's reply with the extension loaded
-  plain.txt   omp's reply without it
+Inputs (all in this directory):
+  prompt.txt      the user prompt                      (record.sh)
+  uwu.txt         omp's reply with the extension loaded  (record.sh)
+  plain.txt       omp's reply without it                 (record.sh)
+  dashboard.json  ANSI frames of the real `/uwu status` card (capture.ts)
 
 Outputs:
   demo.gif          the uwu reply streaming into a terminal window
   before-after.png  both replies side by side
+  dashboard.gif     the `/uwu status` dashboard being edited with the keyboard
 
 Usage:
+  bun demo/capture.ts
   uv run --with pillow python demo/render.py [--font path/to/mono.ttf]
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import re
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -256,6 +261,115 @@ def render_before_after(c: Canvas, prompt: str, plain: str, uwu: str, out: Path)
     img.save(out, optimize=True)
 
 
+def xterm_rgb(n: int) -> str:
+    """Colour of xterm-256 index `n`."""
+    base = ("#000000", "#800000", "#008000", "#808000", "#000080", "#800080", "#008080", "#c0c0c0",
+            "#808080", "#ff0000", "#00ff00", "#ffff00", "#0000ff", "#ff00ff", "#00ffff", "#ffffff")
+    if n < 16:
+        return base[n]
+    if n < 232:
+        steps = (0, 95, 135, 175, 215, 255)
+        n -= 16
+        return "#%02x%02x%02x" % (steps[n // 36], steps[n // 6 % 6], steps[n % 6])
+    v = 8 + (n - 232) * 10
+    return "#%02x%02x%02x" % (v, v, v)
+
+
+@dataclass
+class Cell:
+    char: str
+    fg: str
+    bg: str | None
+    bold: bool
+    wide: bool
+
+
+def ansi_cells(line: str) -> list[Cell]:
+    """Parse one SGR-coloured line (256-colour or truecolour) into terminal cells."""
+    cells: list[Cell] = []
+    fg, bg, bold = FG, None, False
+    for part in re.split(r"(\x1b\[[0-9;]*m)", line):
+        if part.startswith("\x1b["):
+            codes = [int(c) if c else 0 for c in part[2:-1].split(";")]
+            i = 0
+            while i < len(codes):
+                code = codes[i]
+                if code in (38, 48):
+                    if codes[i + 1] == 5:
+                        color, i = xterm_rgb(codes[i + 2]), i + 3
+                    else:
+                        color, i = "#%02x%02x%02x" % tuple(codes[i + 2:i + 5]), i + 5
+                    if code == 38:
+                        fg = color
+                    else:
+                        bg = color
+                    continue
+                if code == 0:
+                    fg, bg, bold = FG, None, False
+                elif code == 1:
+                    bold = True
+                elif code == 22:
+                    bold = False
+                elif code == 39:
+                    fg = FG
+                elif code == 49:
+                    bg = None
+                i += 1
+            continue
+        for ch in part:
+            cells.append(Cell(ch, fg, bg, bold, unicodedata.east_asian_width(ch) in "WF"))
+    return cells
+
+
+def render_dashboard(c: Canvas, capture: dict, out: Path) -> None:
+    cols = capture["width"] + 2
+    rows = max(len(f["lines"]) for f in capture["frames"])
+    width = c.width_for(cols)
+    height = TITLE_H + 2 * PAD + LINE_H * (rows + 2)
+    bold = ImageFont.truetype(c.font.path, FONT_SIZE)
+    if hasattr(bold, "set_variation_by_name"):
+        try:
+            bold.set_variation_by_name("Bold")
+        except (OSError, ValueError):
+            bold = c.font
+    emoji_path = Path("C:/Windows/Fonts/seguiemj.ttf")
+    emoji = ImageFont.truetype(str(emoji_path), FONT_SIZE - 2) if emoji_path.exists() else c.font
+    key_names = {"down": "↓", "up": "↑", "left": "←", "right": "→", "tab": "Tab"}
+
+    rgb: list[Image.Image] = []
+    durations: list[int] = []
+    for f in capture["frames"]:
+        img, d = c.window(width, height, "omp  ·  /uwu status")
+        y = TITLE_H + PAD
+        for line in f["lines"]:
+            col = 1
+            for cell in ansi_cells(line):
+                x = PAD + col * c.char_w
+                span = 2 if cell.wide else 1
+                if cell.bg:
+                    d.rectangle([x, y, x + span * c.char_w, y + LINE_H - 1], fill=cell.bg)
+                if cell.char != " ":
+                    if cell.wide:
+                        d.text((x, y + LINE_H / 2), cell.char, font=emoji, anchor="lm", embedded_color=True)
+                    else:
+                        d.text((x, y + LINE_H / 2), cell.char, font=bold if cell.bold else c.font, fill=cell.fg, anchor="lm")
+                col += span
+            y += LINE_H
+        if f["key"]:
+            label = f"key  {key_names.get(f['key'], f['key'])}"
+            d.text((PAD + c.char_w, height - PAD - LINE_H / 2), label, font=bold, fill=UWU, anchor="lm")
+        rgb.append(img)
+        durations.append(f["ms"])
+
+    # Build one palette from every frame so chip highlights and the emoji keep stable colours.
+    mosaic = Image.new("RGB", (width, height * len(rgb)))
+    for i, frame in enumerate(rgb):
+        mosaic.paste(frame, (0, height * i))
+    palette = mosaic.quantize(colors=128, method=Image.Quantize.MEDIANCUT)
+    frames = [f.quantize(palette=palette, dither=Image.Dither.NONE) for f in rgb]
+    frames[0].save(out, save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--font", default=None)
@@ -265,10 +379,12 @@ def main() -> None:
     prompt = (HERE / "prompt.txt").read_text(encoding="utf-8")
     uwu = (HERE / "uwu.txt").read_text(encoding="utf-8")
     plain = (HERE / "plain.txt").read_text(encoding="utf-8")
+    dashboard = json.loads((HERE / "dashboard.json").read_text(encoding="utf-8"))
 
     render_gif(c, prompt, uwu, HERE / "demo.gif")
     render_before_after(c, prompt, plain, uwu, HERE / "before-after.png")
-    for name in ("demo.gif", "before-after.png"):
+    render_dashboard(c, dashboard, HERE / "dashboard.gif")
+    for name in ("demo.gif", "before-after.png", "dashboard.gif"):
         print(f"{name}: {(HERE / name).stat().st_size / 1024:.0f} KiB")
 
 

@@ -37,6 +37,10 @@ Selecting a style also turns uwu on. In prompt style, `/uwu preview` is a determ
 
 ### The `/uwu status` dashboard
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/NaC-L/omp-uwu/main/demo/dashboard.gif" alt="The /uwu status dashboard: arrow keys switch style and intensity while the live preview updates, then Tab opens the Compatibility tab" width="620">
+</p>
+
 - **Controls** tab: switches, style/level/locale chips, an intensity meter and a live sample.
 - **Compatibility** tab: what omp has actually shown it supports in this session (rewrite hook, display hook, fallbacks). It reports observations, not guarantees.
 - ↑/↓ moves focus, ←/→ or Enter/Space changes a value, Tab switches tabs.
@@ -135,17 +139,22 @@ For an interactive smoke check, start `omp -e ./src/index.ts` with an isolated t
 
 On a native client, prose should stay unchanged, with no fallback to prompt styling.
 
-### Re-recording the demo
+### Re-recording the demos
 
-The GIF and the side-by-side image are rendered from real transcripts in `demo/`. `record.sh` captures one reply with the extension loaded and one without it. It runs in a throwaway agent dir, so your personal rules and extensions don't affect the replies. `render.py` then draws both images:
+The streaming GIF and the side-by-side image are rendered from real transcripts in `demo/`. `record.sh` captures one reply with the extension loaded and one without it. It runs in a throwaway agent dir, so your personal rules and extensions don't affect the replies.
+
+The dashboard GIF needs no model: `capture.ts` drives the real `/uwu status` component with a scripted key sequence and saves its ANSI output (omp's dark theme) to `dashboard.json`. Edit the script there to change what the GIF shows.
+
+`render.py` then draws all three:
 
 ```sh
 mkdir -p /tmp/omp-demo && cp ~/.omp/agent/agent.db* /tmp/omp-demo/
 demo/record.sh
+bun demo/capture.ts
 uv run --with pillow python demo/render.py
 ```
 
-Model output varies between runs, so re-run `record.sh` until you get a reply that reads well.
+Model output varies between runs, so re-run `record.sh` until you get a reply that reads well. `capture.ts` is deterministic, so re-run it whenever the dashboard changes.
 
 The uwu-bench chart is drawn from [`demo/uwu-bench.html`](demo/uwu-bench.html). Edit the HTML, then take a 1536×960 screenshot with headless Chrome:
 
