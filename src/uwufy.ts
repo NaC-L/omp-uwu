@@ -3,7 +3,7 @@
  *
  * Only natural-language words are touched. Everything that has to stay exact is
  * left byte-for-byte alone: fenced/indented code, math blocks, inline code,
- * URLs and link targets, HTML tags, double-quoted spans, and any token that
+ * URLs and link targets, HTML tags, quoted spans, and any token that
  * looks like an identifier, path, number, flag, acronym, or warning word.
  *
  * Every "sometimes" decision is keyed on the word's position (paragraph,
@@ -13,6 +13,14 @@
  * That matters because rewritten replies go back into the model's context, and
  * the model may start answering in uwu-speak on its own.
  */
+
+export type UwuLevel = "low" | "mid" | "max";
+export type UwuLocale = "auto" | "en" | "tr";
+
+export interface UwuOptions {
+	level?: UwuLevel;
+	locale?: UwuLocale;
+}
 
 /** Emoticons the rewriter appends at sentence ends. */
 export const EMOTICONS = [
@@ -38,6 +46,11 @@ export const EMOTICON_TOKENS: ReadonlySet<string> = new Set<string>([
 	"<3",
 	"x3",
 ]);
+
+const EMOTICON_PATTERN = [...EMOTICON_TOKENS]
+	.map((token) => token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+	.join("|");
+const EMOTICON_AHEAD = new RegExp(String.raw`^\s+(?:${EMOTICON_PATTERN})(?=\s|$)`, "iu");
 
 /** Words that carry meaning a reader must not miss. Kept exact. */
 const KEEP_WORDS = new Set([
@@ -83,11 +96,22 @@ const KEEP_WORDS = new Set([
 
 const TH_WORDS = new Set(["the", "this", "that", "these", "those", "them", "then", "there", "their", "they", "than"]);
 
-// Probabilities for the "sometimes" transforms.
-const P_TH = 0.35;
-const P_NY = 0.5;
-const P_STUTTER = 0.12;
-const P_EMOTICON = 0.3;
+// Mid retains the original probabilities; low also softens the r/l rewrite.
+const INTENSITY = {
+	low: { rl: 0.4, th: 0.15, ny: 0.2, stutter: 0.04, emoticon: 0.1 },
+	mid: { rl: 1, th: 0.35, ny: 0.5, stutter: 0.12, emoticon: 0.3 },
+	max: { rl: 1, th: 0.75, ny: 0.85, stutter: 0.25, emoticon: 0.6 },
+} as const satisfies Record<UwuLevel, { rl: number; th: number; ny: number; stutter: number; emoticon: number }>;
+
+const TURKISH_KEEP_WORDS: Record<string, true> = { hayır: true, asla: true, hiç: true, hiçbir: true, sakın: true };
+// Conservative lexical guards, not a morphological analyzer. Keep common
+// case/possessive forms and conjugations (including negative deletion forms).
+const TURKISH_CRITICAL = [
+	/^değil[\p{L}\p{M}]*$/u,
+	/^yok[\p{L}\p{M}]*$/u,
+	/^(?:hata|uyarı)(?:lar|ler)?(?:[ıiuü]?m(?:[ıiuü]z)?|[ıiuü]?n(?:[ıiuü]z)?|s?[ıiuü])?(?:[ny]?[ıiuüae]|n?[dt][ae]n?|n?[ıiuü]n|y?l[ae]|s[ıiuü]z|l[ıiuü])?(?:ki)?(?:(?:[dt][ıiuü]|y[dt][ıiuü]|ym[ıiuü]ş|y[ıiuü]|s[ıiuü]n)[\p{L}\p{M}]*)?$/u,
+	/^sil(?:e(?:r|ce[kğ]|lim|bil|me|mi)[\p{L}\p{M}]*|i(?:n|yor|ver|p)[\p{L}\p{M}]*|(?:me|mi|di|se|sin)[\p{L}\p{M}]*)?$/u,
+];
 
 /**
  * Inline spans that are never rewritten. Only the first alternative captures,
@@ -95,15 +119,20 @@ const P_EMOTICON = 0.3;
  */
 const PROTECTED_INLINE = new RegExp(
 	[
-		String.raw`(\`+)[\s\S]*?\1(?!\`)`, // code span
-		String.raw`\`.*$`, // unmatched backtick: keep the rest of the line
+		"(`+)[\\s\\S]*?\\1(?!`)", // code span
+		"`.*$", // unmatched backtick: keep the rest of the line
 		String.raw`\]\([^)\s]*(?:\s+"[^"]*")?\)`, // markdown link target
 		String.raw`<\/?[A-Za-z][^>\n]*>`, // HTML tag or autolink
 		String.raw`\b(?:[a-z][a-z0-9+.-]*:\/\/|www\.)\S*`, // bare URL
 		String.raw`"[^"\n]*"`, // "quoted text"
 		String.raw`“[^”\n]*”`, // “quoted text”
+		// Word boundaries distinguish quote delimiters from we're / they're.
+		String.raw`(?<![\p{L}\p{M}\p{N}_])'(?:[^'\n]|'(?=[\p{L}\p{M}\p{N}_]))*'(?![\p{L}\p{M}\p{N}_])`,
+		String.raw`(?<![\p{L}\p{M}\p{N}_])‘(?:[^’\n]|’(?=[\p{L}\p{M}\p{N}_]))*’(?![\p{L}\p{M}\p{N}_])`,
+		// Multi-token kaomoji must not change the word-position seed on re-runs.
+		String.raw`(?<!\S)(?:${EMOTICON_PATTERN})(?!\S)`,
 	].join("|"),
-	"gi",
+	"giu",
 );
 
 const FENCE_OPEN = /^ {0,3}(`{3,}|~{3,})/;
@@ -129,8 +158,25 @@ interface ProseLine {
 	decorate: boolean;
 }
 
-/** Rewrite the prose of a markdown string in uwu-speak. */
-export function uwufy(text: string): string {
+/** Rewrite markdown prose. Defaults to the original mid intensity and auto locale. */
+export function uwufy(text: string, options: UwuOptions = {}): string {
+	return rewriteText(text, options, true);
+}
+
+/**
+ * Rewrite a render-time prose run without adding stutters or emoticons.
+ * Quoted spans, identifiers and markdown protected surfaces still stay exact.
+ * Positions reset per supplied run; changing renderer fragment boundaries can
+ * change probabilistic choices. This is a lexical rewriter, not a translator.
+ * Only balanced quotes contained in one supplied line/run are guarded; callers
+ * must not split quoted or technical spans across independently rewritten runs.
+ */
+export function uwufyProse(text: string, options: UwuOptions = {}): string {
+	return rewriteText(text, options, false);
+}
+
+function rewriteText(text: string, options: UwuOptions, decorate: boolean): string {
+	const resolved: Required<UwuOptions> = { level: options.level ?? "mid", locale: options.locale ?? "auto" };
 	const lines = text.split("\n");
 	const kinds = classifyLines(lines);
 
@@ -147,7 +193,7 @@ export function uwufy(text: string): string {
 			current = [];
 			paragraphs.push(current);
 		}
-		current.push({ index, decorate: !heading && !TABLE_ROW.test(line) });
+		current.push({ index, decorate: decorate && !heading && !TABLE_ROW.test(line) });
 		if (heading) current = undefined;
 	}
 
@@ -157,7 +203,7 @@ export function uwufy(text: string): string {
 		// which keeps them varied between paragraphs yet stable across re-runs.
 		const wordCount = walkParagraph(lines, paragraph, () => undefined);
 		const seed = `${paragraphIndex}|${wordCount}`;
-		walkParagraph(lines, paragraph, (event) => rewriteToken(event, seed), out);
+		walkParagraph(lines, paragraph, (event) => rewriteToken(event, seed, resolved), out);
 	}
 	return out.join("\n");
 }
@@ -203,7 +249,7 @@ function classifyLines(lines: string[]): LineKind[] {
 
 interface TokenEvent {
 	token: string;
-	/** Text after the token within its prose segment, for emoticon lookahead. */
+	/** Text after the token on its full line, including protected emoticons. */
 	rest: string;
 	/** Whether the segment ends the line (nothing protected follows it). */
 	lineEnd: boolean;
@@ -230,14 +276,14 @@ function walkParagraph(
 		const line = lines[index] ?? "";
 		let rebuilt = "";
 		let cursor = 0;
-		const segments: Array<{ prose: boolean; text: string }> = [];
+		const segments: Array<{ prose: boolean; text: string; start: number }> = [];
 		for (const match of line.matchAll(PROTECTED_INLINE)) {
 			const start = match.index ?? 0;
-			if (start > cursor) segments.push({ prose: true, text: line.slice(cursor, start) });
-			segments.push({ prose: false, text: match[0] });
+			if (start > cursor) segments.push({ prose: true, text: line.slice(cursor, start), start: cursor });
+			segments.push({ prose: false, text: match[0], start });
 			cursor = start + match[0].length;
 		}
-		if (cursor < line.length) segments.push({ prose: true, text: line.slice(cursor) });
+		if (cursor < line.length) segments.push({ prose: true, text: line.slice(cursor), start: cursor });
 
 		for (const [segmentIndex, segment] of segments.entries()) {
 			if (!segment.prose) {
@@ -253,7 +299,7 @@ function walkParagraph(
 				if (isWord) {
 					replacement = visit({
 						token,
-						rest: segment.text.slice(offset + token.length),
+						rest: line.slice(segment.start + offset + token.length),
 						lineEnd,
 						decorate,
 						sentence,
@@ -275,24 +321,25 @@ function walkParagraph(
 	return word;
 }
 
-function rewriteToken(event: TokenEvent, seed: string): string {
+function rewriteToken(event: TokenEvent, seed: string, options: Required<UwuOptions>): string {
+	const intensity = INTENSITY[options.level];
 	const [, lead = "", core = "", trail = ""] = TOKEN_PARTS.exec(event.token) ?? [];
 	const key = `${seed}|${event.sentence}|${event.word}`;
 	let result = event.token;
 
-	if (!isKeptWord(core)) {
+	if (!isKeptWord(core, options.locale)) {
 		let word = core;
-		if (TH_WORDS.has(word.toLowerCase()) && roll(`${key}|th`) < P_TH) {
+		if (TH_WORDS.has(word.toLowerCase()) && roll(`${key}|th`) < intensity.th) {
 			word = (word[0] === "T" ? "D" : "d") + word.slice(2);
 		}
-		word = word.replace(/[rl]/g, "w").replace(/[RL]/g, "W");
-		if (roll(`${key}|ny`) < P_NY) word = word.replace(/([nN])(?=[aeo])/g, "$1y");
+		if (roll(`${key}|rl`) < intensity.rl) word = word.replace(/[rl]/g, "w").replace(/[RL]/g, "W");
+		if (roll(`${key}|ny`) < intensity.ny) word = word.replace(/([nN])(?=[aeo])/g, "$1y");
 		if (
 			event.decorate &&
 			event.wordInSentence === 0 &&
 			word.length >= 3 &&
 			!STUTTERED.test(word) &&
-			roll(`${key}|stutter`) < P_STUTTER
+			roll(`${key}|stutter`) < intensity.stutter
 		) {
 			word = `${word[0]}-${word}`;
 		}
@@ -304,8 +351,8 @@ function rewriteToken(event: TokenEvent, seed: string): string {
 		event.decorate &&
 		SENTENCE_END.test(trail) &&
 		(/^\s/.test(event.rest) || (event.rest === "" && event.lineEnd)) &&
-		!EMOTICON_TOKENS.has(/^\s+(\S+)/.exec(event.rest)?.[1] ?? "") &&
-		roll(`${seed}|${event.sentence}|emoticon`) < P_EMOTICON
+		!EMOTICON_AHEAD.test(event.rest) &&
+		roll(`${seed}|${event.sentence}|emoticon`) < intensity.emoticon
 	) {
 		result += ` ${EMOTICONS[Math.floor(roll(`${seed}|${event.sentence}|pick`) * EMOTICONS.length)]}`;
 	}
@@ -313,8 +360,12 @@ function rewriteToken(event: TokenEvent, seed: string): string {
 }
 
 /** Acronyms, camelCase names, flags and meaning-critical words stay exact. */
-function isKeptWord(core: string): boolean {
+function isKeptWord(core: string, locale: UwuLocale): boolean {
 	if (KEEP_WORDS.has(core.toLowerCase().replaceAll("’", "'"))) return true;
+	if (locale !== "en") {
+		const turkish = core.normalize("NFC").toLocaleLowerCase("tr");
+		if (Object.hasOwn(TURKISH_KEEP_WORDS, turkish) || TURKISH_CRITICAL.some((pattern) => pattern.test(turkish))) return true;
+	}
 	if (core.endsWith("-") || core.includes("--")) return true;
 	if (/\p{Ll}\p{Lu}/u.test(core)) return true; // camelCase, GitHub, iOS
 	const letters = core.replace(/[^\p{L}]/gu, "");

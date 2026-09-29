@@ -4,7 +4,7 @@ import { KawaiiTheme } from "./kawaii.ts";
 import { type ContainerClass, installSparkles, sparkle, themePaint } from "./sparkle.ts";
 
 import type { ExtensionAPI, Theme } from "@oh-my-pi/pi-coding-agent";
-import { uwufy } from "./uwufy.ts";
+import { type UwuLevel, type UwuLocale, uwufy, uwufyProse } from "./uwufy.ts";
 
 export const UWU_PROMPT = `
 # uwu mode (display style only)
@@ -18,8 +18,33 @@ Write your prose replies to the user in playful "uwu" speak:
 NEVER uwufy any of these — keep them exact and byte-for-byte correct:
 - code, code blocks, inline code, shell commands, file paths, URLs, identifiers, config keys, error messages you quote
 - tool call arguments, file contents the agent writes or edits, commit messages and prompts sent to subagents
+- English negations, warnings and errors; in auto/tr also Turkish negations, warnings and errors (including inflected forms)
 The style applies only to natural-language chat text shown to the user. Task quality and correctness are unchanged.
 `.trim();
+
+type UwuStyle = "rewrite" | "prompt" | "display";
+const USAGE = "Usage: /uwu [on|off|rewrite|prompt|display|level low|mid|max|locale auto|en|tr|status|preview <text>|colors [on|off]]";
+
+function stylePrompt(level: UwuLevel, locale: UwuLocale): string {
+  let prompt = UWU_PROMPT;
+  if (level === "low") {
+    prompt = prompt
+      .replace('replace r/l with w in most words ("weawwy", "hewwo"), "th" → "d" occasionally, "na/ne/no" → "nya/nye/nyo" sometimes',
+        'use a light, mostly unchanged style: rarely replace r/l with w; very rarely use "th" → "d" or "na/ne/no" → "nya/nye/nyo"')
+      .replace('occasional stutter ("h-hewwo") and cute kaomoji/emoticons', 'very rare stutter ("h-hewwo") and cute kaomoji/emoticons');
+  } else if (level === "max") {
+    prompt = prompt
+      .replace('replace r/l with w in most words ("weawwy", "hewwo"), "th" → "d" occasionally, "na/ne/no" → "nya/nye/nyo" sometimes',
+        'use a stronger but readable style: replace r/l with w in ordinary words; frequently use "th" → "d" and "na/ne/no" → "nya/nye/nyo"')
+      .replace('occasional stutter ("h-hewwo") and cute kaomoji/emoticons', 'more frequent stutter ("h-hewwo") and cute kaomoji/emoticons');
+  }
+  if (locale === "en") {
+    prompt = prompt.replace("in auto/tr also Turkish negations, warnings and errors (including inflected forms)", "English-focused style and critical-word protection");
+  } else if (locale === "tr") {
+    prompt += "\nUse Turkish-aware prose styling and protect Turkish critical words/inflections; English critical words remain protected. Do not translate the reply.";
+  }
+  return prompt;
+}
 
 type RewriteEvent = {
   message: { role: string; content: Array<{ type: string; text?: string; [key: string]: unknown }> };
@@ -39,7 +64,11 @@ export default function uwuExtension(pi: ExtensionAPI) {
   let enabled = true;
   let colorsEnabled = false;
   let stateReady: Promise<void> | undefined;
-  let style: "rewrite" | "prompt" = "rewrite";
+  let style: UwuStyle = "rewrite";
+  let level: UwuLevel = "mid";
+  let locale: UwuLocale = "auto";
+  let subagentTurn = false;
+  let renderAllowed = true;
   let hookSupport: boolean | undefined;
   let promptAddedThisTurn = false;
   let notifiedFallback = false;
@@ -52,11 +81,14 @@ export default function uwuExtension(pi: ExtensionAPI) {
         if (typeof state !== "object" || state === null) return;
         if ("enabled" in state && typeof state.enabled === "boolean") enabled = state.enabled;
         if ("colors" in state && typeof state.colors === "boolean") colorsEnabled = state.colors;
+        if ("style" in state && (state.style === "rewrite" || state.style === "prompt" || state.style === "display")) style = state.style;
+        if ("level" in state && (state.level === "low" || state.level === "mid" || state.level === "max")) level = state.level;
+        if ("locale" in state && (state.locale === "auto" || state.locale === "en" || state.locale === "tr")) locale = state.locale;
       })
       .catch(() => {});
     return stateReady;
   };
-  const saveState = () => writeFile(statePath, `${JSON.stringify({ enabled, colors: colorsEnabled }, null, 2)}\n`, "utf8");
+  const saveState = () => writeFile(statePath, `${JSON.stringify({ enabled, colors: colorsEnabled, style, level, locale }, null, 2)}\n`, "utf8");
 
   const updateBadge = (ctx: UiContext) => {
     if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.setStatus) return;
@@ -64,13 +96,17 @@ export default function uwuExtension(pi: ExtensionAPI) {
     ctx.ui.setStatus("omp-uwu", badge && ctx.ui.theme ? ctx.ui.theme.fg("accent", badge) : badge);
   };
 
-  // Paints kaomoji/uwu in rendered chat prose at display time only (see sparkle.ts).
-  // Installed at load so the first assistant component, even a resumed one, is caught.
+  // Display and sparkle composition share the host's per-prose ANSI hook.
+  // Prose is transformed before Markdown wrapping; no message/history changes.
   const paint = themePaint(() => pi.pi.theme);
   const host = pi.pi as { Container?: ContainerClass };
-  if (host.Container) {
-    installSparkles(host.Container, { isActive: () => enabled && colorsEnabled, transform: (text) => sparkle(text, paint) });
-  }
+  const rendering = host.Container && installSparkles(host.Container, {
+    isActive: () => renderAllowed && enabled && (style === "display" || colorsEnabled),
+    transform: (text) => {
+      const prose = style === "display" ? uwufyProse(text, { level, locale }) : text;
+      return colorsEnabled ? sparkle(prose, paint) : prose;
+    },
+  });
 
   const syncColors = (ctx: UiContext) => {
     if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.theme) return;
@@ -79,38 +115,43 @@ export default function uwuExtension(pi: ExtensionAPI) {
   };
 
   pi.registerCommand("uwu", {
-    description: "UwU chat style and mode (usage: /uwu [on|off|prompt|rewrite|colors [on|off]])",
+    description: "UwU style, intensity, locale and experimental display (use /uwu status)",
     handler: async (args, rawCtx) => {
       await loadState();
       const ctx = rawCtx as UiContext;
-      const arg = String(args ?? "").trim().toLowerCase();
-      if (arg.startsWith("colors")) {
-        const option = arg.slice("colors".length).trim();
-        if (option === "on") colorsEnabled = true;
-        else if (option === "off") colorsEnabled = false;
-        else if (!option) colorsEnabled = !colorsEnabled;
-        else {
-          ctx.ui?.notify("Usage: /uwu [on|off|prompt|rewrite|colors [on|off]]", "info");
-          return;
-        }
-        try {
-          await saveState();
-        } catch {
-          ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
-        }
-        syncColors(ctx);
-        updateBadge(ctx);
-        ctx.ui?.notify(`kawaii chat colors ${colorsEnabled ? "on" : "off"}${colorsEnabled && !enabled ? " (active when uwu mode is on)" : ""}`, "info");
+      if (ctx.agent?.kind === "sub") return;
+      const input = String(args ?? "").trim();
+      const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input);
+      const arg = (match?.[1] ?? "").toLowerCase();
+      const option = (match?.[2] ?? "").trim();
+      const value = option.toLowerCase();
+      if (arg === "status" && !option) {
+        const display = !host.Container ? "unavailable (no Container)" : rendering?.isSupported() ? "ANSI hook detected" : "pending component discovery";
+        ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${hookSupport === undefined ? "unknown" : hookSupport ? "detected" : "not observed"}; display=${display}; native/client display=unsupported; prompt fallback=${enabled && style === "rewrite" && hookSupport !== true ? "on" : "off"}`, "info");
         return;
       }
-      if (arg === "prompt" || arg === "rewrite") {
+      if (arg === "preview") {
+        if (!option) {
+          ctx.ui?.notify(USAGE, "info");
+          return;
+        }
+        ctx.ui?.notify(style === "display" ? uwufyProse(option, { level, locale }) : uwufy(option, { level, locale }), "info");
+        return;
+      }
+      if (arg === "colors" && (value === "on" || value === "off" || !value)) {
+        colorsEnabled = value ? value === "on" : !colorsEnabled;
+      } else if (arg === "level" && (value === "low" || value === "mid" || value === "max")) {
+        level = value;
+      } else if (arg === "locale" && (value === "auto" || value === "en" || value === "tr")) {
+        locale = value;
+      } else if (!option && (arg === "prompt" || arg === "rewrite" || arg === "display")) {
         style = arg;
         enabled = true;
-      } else if (arg === "on") enabled = true;
-      else if (arg === "off") enabled = false;
-      else if (!arg) enabled = !enabled;
+      } else if (!option && arg === "on") enabled = true;
+      else if (!option && arg === "off") enabled = false;
+      else if (!input) enabled = !enabled;
       else {
-        ctx.ui?.notify("Usage: /uwu [on|off|prompt|rewrite|colors [on|off]]", "info");
+        ctx.ui?.notify(USAGE, "info");
         return;
       }
       try {
@@ -118,9 +159,18 @@ export default function uwuExtension(pi: ExtensionAPI) {
       } catch {
         ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
       }
+      renderAllowed = ctx.mode === "tui";
       syncColors(ctx);
+      rendering?.refresh();
       updateBadge(ctx);
-      ctx.ui?.notify(enabled ? `uwu mode ${style === "rewrite" ? "rewrite" : "prompt"}! (◕ᴗ◕✿)` : "uwu mode off", "info");
+      if (arg === "colors") {
+        ctx.ui?.notify(`kawaii chat colors ${colorsEnabled ? "on" : "off"}${colorsEnabled && !enabled ? " (active when uwu mode is on)" : ""}`, "info");
+      } else {
+        ctx.ui?.notify(enabled ? `uwu mode ${style}; level=${level}; locale=${locale}! (◕ᴗ◕✿)` : "uwu mode off", "info");
+      }
+      if (enabled && style === "display") {
+        ctx.ui?.notify(`Experimental display: ANSI TUI prose only; ${!host.Container ? "render hook unavailable" : rendering?.isSupported() ? "render hook detected" : "awaiting assistant component discovery"}. Native/client rendering is unsupported; history stays unchanged and no prompt fallback is used.`, "info");
+      }
     },
   });
 
@@ -128,6 +178,8 @@ export default function uwuExtension(pi: ExtensionAPI) {
     await loadState();
     const ctx = rawCtx as UiContext;
     syncColors(ctx);
+    renderAllowed = ctx.mode === "tui" && ctx.agent?.kind !== "sub";
+    rendering?.refresh();
     updateBadge(ctx);
   });
 
@@ -135,27 +187,29 @@ export default function uwuExtension(pi: ExtensionAPI) {
     await loadState();
     promptAddedThisTurn = false;
     const ctx = rawCtx as UiContext;
-    if (ctx.agent?.kind === "sub") return undefined;
+    subagentTurn = ctx.agent?.kind === "sub";
+    if (subagentTurn) return undefined;
     // Start with the prompt until this host proves it has the finalized hook.
     // That styles the first reply on both old and new omp versions.
-    const needsPrompt = style === "prompt" || hookSupport !== true;
+    const needsPrompt = style === "prompt" || (style === "rewrite" && hookSupport !== true);
     if (!enabled || !needsPrompt) return undefined;
     promptAddedThisTurn = true;
-    return { systemPrompt: [...event.systemPrompt, UWU_PROMPT] };
+    return { systemPrompt: [...event.systemPrompt, stylePrompt(level, locale)] };
   });
 
 
   // The hook is newer than the bundled 18.4.3 types, so register structurally.
   // ExtensionAPI.on stores event names as strings; old hosts simply never emit it.
-  (pi.on as unknown as (name: string, handler: (event: RewriteEvent) => unknown) => void)(
+  (pi.on as unknown as (name: string, handler: (event: RewriteEvent, ctx?: UiContext) => unknown) => void)(
     "assistant_message",
-    (event) => {
+    (event, ctx) => {
+      if (ctx?.agent?.kind === "sub" || (!ctx?.agent && subagentTurn)) return;
       hookSupport = true;
       if (!enabled || style !== "rewrite" || promptAddedThisTurn || event.message.role !== "assistant") return;
       let changed = false;
       const content = event.message.content.map((block) => {
         if (block.type !== "text" || typeof block.text !== "string") return block;
-        const text = uwufy(block.text);
+        const text = uwufy(block.text, { level, locale });
         if (text === block.text) return block;
         changed = true;
         return { ...block, text };
@@ -164,7 +218,9 @@ export default function uwuExtension(pi: ExtensionAPI) {
     },
   );
 
-  pi.on("message_end", (rawEvent) => {
+  pi.on("message_end", (rawEvent, rawCtx) => {
+    const ctx = rawCtx as UiContext | undefined;
+    if (ctx?.agent?.kind === "sub" || (!ctx?.agent && subagentTurn)) return;
     const message = (rawEvent as MessageEndEvent).message;
     if (message.role === "assistant" && message.stopReason !== "aborted" && message.stopReason !== "error" && hookSupport === undefined) {
       hookSupport = false;

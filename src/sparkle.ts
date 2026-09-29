@@ -93,17 +93,29 @@ export interface ContainerClass {
 }
 
 export interface SparkleControl {
-	/** Whether new/updated assistant messages should be painted. */
+	/** Whether assistant prose should be transformed (independent of colors). */
 	isActive(): boolean;
-	/** Stable transform identity; Markdown caches renders by it. */
 	transform: ColorTransform;
 }
 
-/** Process-wide state, so extension reloads swap the control instead of re-patching. */
+export interface SparkleInstallation {
+	/** Discovery proves only the ANSI render hook, not native/client rendering. */
+	isSupported(): boolean;
+	/** Refresh existing components, including when no theme change occurs. */
+	refresh(): void;
+	/** Restore host methods; useful for isolated integration tests. */
+	dispose(): void;
+}
+
+/** Shared per host Container, so reloads replace controls without double patches. */
 interface Registry {
-	control?: SparkleControl;
+	control: SparkleControl;
+	transform: ColorTransform;
 	assistant?: AssistantPrototype;
-	watching?: boolean;
+	components: Set<WeakRef<object & { invalidate?: () => void }>>;
+	seen: WeakSet<object>;
+	restoreAssistant?: () => void;
+	restoreWatch?: () => void;
 }
 const REGISTRY = Symbol.for("omp-uwu.sparkles");
 
@@ -139,18 +151,25 @@ function patchAssistant(proto: AssistantPrototype, registry: Registry): void {
 		applied.delete(this);
 		originalSet.call(this, transform);
 	};
-	// Theme changes re-enter updateContent through invalidate(), so toggling
-	// colors repaints existing messages too.
 	proto.updateContent = function (this: object, ...args: unknown[]) {
+		if (!registry.seen.has(this)) {
+			registry.seen.add(this);
+			registry.components.add(new WeakRef(this));
+		}
 		if (!hostTransforms.has(this)) {
-			const control = registry.control;
-			const wanted = control?.isActive() ? control.transform : undefined;
+			const wanted = registry.control.isActive() ? registry.transform : undefined;
 			if (applied.get(this) !== wanted) {
 				applied.set(this, wanted);
 				originalSet.call(this, wanted);
 			}
 		}
 		return originalUpdate.apply(this, args);
+	};
+	const patchedSet = proto.setTextColorTransform;
+	const patchedUpdate = proto.updateContent;
+	registry.restoreAssistant = () => {
+		if (proto.setTextColorTransform === patchedSet) proto.setTextColorTransform = originalSet;
+		if (proto.updateContent === patchedUpdate) proto.updateContent = originalUpdate;
 	};
 }
 
@@ -164,24 +183,51 @@ function patchAssistant(proto: AssistantPrototype, registry: Registry): void {
  * update. So `addChild` is watched until the first assistant component shows
  * up, its prototype is patched, and the watch is removed again.
  */
-export function installSparkles(Container: ContainerClass, control: SparkleControl): void {
-	const holder = globalThis as { [REGISTRY]?: Registry };
-	const registry = (holder[REGISTRY] ??= {});
+export function installSparkles(Container: ContainerClass, control: SparkleControl): SparkleInstallation {
+	const containerProto = Container.prototype as ContainerClass["prototype"] & { [REGISTRY]?: Registry };
+	const registry = (containerProto[REGISTRY] ??= {
+		control,
+		transform: (text: string) => control.transform(text),
+		components: new Set(),
+		seen: new WeakSet(),
+	});
 	registry.control = control;
-	if (registry.assistant || registry.watching) return;
-
-	registry.watching = true;
-	const containerProto = Container.prototype;
-	const originalAdd = containerProto.addChild;
-	const watch = function (this: object, child: unknown) {
-		const assistant = findAssistantPrototype(this) ?? findAssistantPrototype(child);
-		if (assistant) {
-			if (containerProto.addChild === watch) containerProto.addChild = originalAdd;
-			registry.watching = false;
-			registry.assistant = assistant;
-			patchAssistant(assistant, registry);
+	const refresh = () => {
+		// A new identity also drops the host's stable-row and Markdown caches.
+		registry.transform = (text) => registry.control.transform(text);
+		for (const ref of registry.components) {
+			const component = ref.deref();
+			if (component) component.invalidate?.();
+			else registry.components.delete(ref);
 		}
-		return originalAdd.call(this, child);
 	};
-	containerProto.addChild = watch;
+	if (!registry.assistant && !registry.restoreWatch) {
+		const originalAdd = containerProto.addChild;
+		const watch = function (this: object, child: unknown) {
+			const assistant = findAssistantPrototype(this) ?? findAssistantPrototype(child);
+			if (assistant) {
+				registry.restoreWatch?.();
+				registry.restoreWatch = undefined;
+				registry.assistant = assistant;
+				patchAssistant(assistant, registry);
+			}
+			return originalAdd.call(this, child);
+		};
+		registry.restoreWatch = () => {
+			if (containerProto.addChild === watch) containerProto.addChild = originalAdd;
+		};
+		containerProto.addChild = watch;
+	}
+	refresh();
+	return {
+		isSupported: () => registry.assistant !== undefined,
+		refresh,
+		dispose: () => {
+			registry.control = { isActive: () => false, transform: (text) => text };
+			refresh();
+			registry.restoreWatch?.();
+			registry.restoreAssistant?.();
+			delete containerProto[REGISTRY];
+		},
+	};
 }
