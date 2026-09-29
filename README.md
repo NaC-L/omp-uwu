@@ -1,33 +1,80 @@
-# OMP UwU
+# omp-uwu
 
-A tiny [Oh My Pi (OMP)](https://github.com/oh-my-pi/oh-my-pi) extension that asks the assistant to phrase its natural-language replies in playful uwu-speak. It aims to leave code, commands, paths, URLs, identifiers, and tool inputs unchanged.
+**Your coding agent, but it says "hewwo" (◕ᴗ◕✿)**
 
-> **How it works:** OMP extensions do not have a supported hook for rewriting the text already rendered in the chat. This extension adds a style instruction to the system prompt before a request. The model follows that instruction, so the transformation is not guaranteed, and the instruction uses a small amount of context. It does not modify the assistant's response after generation.
+Long sessions with an agent can get a little grey: diffs, stack traces, test output, repeat. omp-uwu is an [omp](https://github.com/can1357/oh-my-pi) extension that makes the agent write its chat replies in playful uwu-speak, while everything that has to be exact stays exact.
 
-## Install
+> I've fixed the bug in `src/parser.ts` and all 42 tests pass uwu.
+> The pwobwem was an off-by-one in de woop, nyow it checks `i < len` instead of `i <= len` >w<
 
-### Copy the extension file
+The prose is uwufied, but the file path, identifiers, code and numbers are not.
 
-1. Download [`uwu.ts`](./uwu.ts) from this repository.
-2. Put it in OMP's auto-discovered extensions folder:
-   - **Windows:** `%USERPROFILE%\.omp\agent\extensions\uwu.ts`
-   - **macOS/Linux:** `~/.omp/agent/extensions/uwu.ts`
-3. Start or restart OMP so it loads the extension.
+## Quick start
 
-Create the `extensions` directory first if it does not exist. Alternatively, pass the file explicitly when launching OMP with `--extension /path/to/uwu.ts`.
+```sh
+omp plugin install omp-uwu
+```
 
-## Usage
+Restart omp. uwu mode is **on** by default in every session.
 
-UwU mode is enabled by default for each OMP session where the extension loads.
+- `/uwu` toggles it
+- `/uwu on` / `/uwu off` sets it explicitly
 
-- `/uwu` — toggle the mode on or off
-- `/uwu on` — enable it
-- `/uwu off` — disable it
+## What gets uwufied, and what doesn't
 
-The setting is session-local and resets to enabled in a new session.
+| uwufied | kept byte-for-byte |
+|---|---|
+| Natural-language chat replies to you | Code blocks and inline code |
+| | Shell commands, file paths, URLs |
+| | Identifiers, config keys, quoted error messages |
+| | Tool-call arguments and file contents the agent writes or edits |
+| | Commit messages and prompts sent to subagents |
 
-## Notes
+Style rules the agent follows: `r`/`l` → `w` in most words, `th` → `d` sometimes, `na/ne/no` → `nya/nye/nyo` sometimes, the occasional stutter (`h-hewwo`), and at most one emoticon per sentence (`uwu`, `owo`, `>w<`, `^w^`, `:3`). Meaning, numbers and warnings must stay readable.
 
-- This extension changes the model's requested writing style; it does not alter conversation history or rewrite generated text.
-- It tells the model not to uwufy code, commands, file contents, paths, URLs, identifiers, or tool arguments. As this is a prompt instruction, follow-through depends on the model.
-- The extension uses OMP's `ExtensionAPI` from `@oh-my-pi/pi-coding-agent` and the `before_agent_start` event.
+## How it works
+
+omp has no extension hook for rewriting assistant text after it's generated. The `message_end` event only gets a detached copy of the message. So omp-uwu asks the model instead: on `before_agent_start` it adds a short style instruction to the end of the system prompt.
+
+This has some consequences:
+
+- **It depends on the model.** Most models follow it well, but the style isn't guaranteed. If code ever comes back uwufied, open an issue with the model name.
+- **History stays clean.** Nothing is rewritten after generation, so session history, compaction and tools see exactly what the model wrote.
+- **Small cost.** The instruction adds roughly 200 tokens to the system prompt while the mode is on. `/uwu off` removes it from the next request.
+- **Session-local toggle.** The on/off state isn't saved. Each new session starts with uwu mode on.
+
+## Install options
+
+```sh
+omp plugin install omp-uwu          # from npm (recommended)
+omp plugin install omp-uwu@0.1.0    # pin a version
+omp plugin uninstall omp-uwu        # remove
+```
+
+If you copied a loose `uwu.ts` into `~/.omp/agent/extensions/` earlier, delete it after installing the plugin. Otherwise `/uwu` is registered twice.
+
+## Development
+
+```sh
+bun install
+bun run check          # tsc against the omp package types
+bun test
+omp plugin link .      # use this checkout instead of the installed copy
+omp -e ./src/index.ts  # or load it for a single run
+```
+
+### Releasing
+
+CI (`.github/workflows/ci.yml`) runs `check` and the tests on pushes to `main` and on pull requests. Pushing a `v*` tag runs them again, checks that the tag matches `version` in `package.json`, and publishes to npm with provenance (`.github/workflows/publish.yml`).
+
+```sh
+# bump "version" in package.json, commit, then:
+git tag v0.1.1
+git push origin main v0.1.1
+```
+
+The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu`, and workflow `publish.yml`.
+
+## License
+
+MIT

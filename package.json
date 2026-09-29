@@ -1,0 +1,36 @@
+{
+  "name": "omp-uwu",
+  "version": "0.1.0",
+  "description": "omp extension: the agent answers in uwu-speak, while code, paths and commands stay byte-for-byte exact",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "omp",
+    "oh-my-pi",
+    "omp-plugin",
+    "uwu"
+  ],
+  "homepage": "https://github.com/NaC-L/omp-uwu#readme",
+  "bugs": "https://github.com/NaC-L/omp-uwu/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaC-L/omp-uwu.git"
+  },
+  "files": [
+    "src"
+  ],
+  "omp": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@oh-my-pi/pi-coding-agent": "18.4.3",
+    "@types/bun": "latest",
+    "typescript": "^5.9.0"
+  }
+}
