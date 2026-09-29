@@ -1,0 +1,103 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+:root{--p:#ff5fb8;--l:#b48cff;--m:#6fffd2;--y:#fff36b;--bg:#0b0710}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1536px;height:960px;overflow:hidden;background:var(--bg);color:#f6eaff;font-family:Consolas,monospace;position:relative}
+.grid{position:absolute;inset:0;background-image:linear-gradient(#ff5fb822 1px,transparent 1px),linear-gradient(90deg,#ff5fb822 1px,transparent 1px),linear-gradient(#b48cff10 1px,transparent 1px),linear-gradient(90deg,#b48cff10 1px,transparent 1px);background-size:96px 96px,96px 96px,16px 16px,16px 16px}
+.scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);z-index:50;pointer-events:none}
+.vig{position:absolute;inset:0;background:radial-gradient(ellipse at 45% 55%,transparent 40%,rgba(0,0,0,.75));z-index:49;pointer-events:none}
+.glow{position:absolute;left:420px;top:180px;width:700px;height:700px;background:radial-gradient(circle,#ff5fb855,transparent 60%);filter:blur(20px)}
+.bar{position:absolute;left:0;right:0;height:30px;display:flex;align-items:center;gap:30px;padding:0 16px;font-size:11px;letter-spacing:.12em;white-space:nowrap;background:#150b1c;border-color:#ff5fb866;z-index:40}
+.top{top:0;border-bottom:1px solid}.bot{bottom:0;border-top:1px solid}
+.tick{color:var(--p)} .tick b{color:var(--m);font-weight:400}
+h1{position:absolute;left:36px;top:48px;font-family:"Segoe UI Black","Arial Black",sans-serif;font-size:74px;line-height:.9;letter-spacing:-.03em;z-index:10}
+h1 .a{color:#fff;text-shadow:3px 0 var(--p),-3px 0 var(--m)}
+h1 .b{background:linear-gradient(90deg,var(--p),var(--l),var(--m));-webkit-background-clip:text;color:transparent;font-style:italic}
+.jp{position:absolute;right:30px;top:40px;writing-mode:vertical-rl;font-family:"Yu Gothic","Meiryo",sans-serif;font-size:44px;font-weight:900;color:transparent;-webkit-text-stroke:1.2px var(--p);letter-spacing:.1em;z-index:5}
+.jp2{position:absolute;left:1270px;top:380px;writing-mode:vertical-rl;font-family:"Yu Gothic",sans-serif;font-size:15px;color:var(--l);opacity:.8}
+.sticker{position:absolute;border-radius:12px;padding:10px 14px;font-size:12px;z-index:20;box-shadow:4px 4px 0 #000}
+.warn{background:repeating-linear-gradient(45deg,var(--y) 0 14px,#111 14px 28px);position:absolute;height:18px;z-index:6}
+.stamp{position:absolute;border:3px solid var(--p);color:var(--p);font-family:"Arial Black",sans-serif;font-size:26px;padding:4px 14px;transform:rotate(-14deg);opacity:.85;z-index:30;letter-spacing:.05em}
+.term{position:absolute;background:#0f0915ee;border:1px solid var(--m);color:var(--m);font-size:11px;line-height:1.55;padding:10px 12px;z-index:15;box-shadow:0 0 18px #6fffd244}
+.term .h{color:#0b0710;background:var(--m);margin:-10px -12px 8px;padding:3px 12px;font-weight:700}
+.big{position:absolute;font-family:"Arial Black",sans-serif;z-index:12}
+svg text{font-family:Consolas,monospace}
+.marquee{position:absolute;left:0;right:0;top:30px;height:18px;background:var(--p);color:#0b0710;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;z-index:39;letter-spacing:.2em;line-height:18px}
+</style></head><body>
+<div class="grid"></div><div class="glow"></div>
+<div class="bar top"><span class="tick">▲ KAWAII/UWU-BENCH</span><span>OPUS 5.5 <b style="color:#8a7a95">0.1%</b></span><span class="tick">OPUS 5.5 + OMP-UWU <b>98.5% ▲98.4pp</b></span><span>RATIO <b style="color:var(--y)">985×</b></span><span>GAP→CEIL <b style="color:var(--l)">1.5pp</b></span><span style="margin-left:auto;color:var(--p)">● SCORE VISUALIZATION · (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</span></div>
+<div class="marquee">✧ UWU DETECTED ✧ UWU DETECTED ✧ 0.1 → 98.5 ✧ NYA ✧ UWU DETECTED ✧ 985× ✧ OWO WHAT'S THIS ✧ UWU DETECTED ✧ 0.1 → 98.5 ✧ NYA ✧ UWU DETECTED ✧ 985× ✧ OWO WHAT'S THIS ✧ UWU DETECTED ✧</div>
+<h1><span class="a">UWU-BENCH</span><br><span class="b">IT'S OVER 98.</span></h1>
+<div class="jp">かわいい指数急上昇</div>
+<div class="jp2">かわいい・計測・完了 ♡</div>
+<svg width="1536" height="960" style="position:absolute;left:0;top:0;z-index:8" id="s"></svg>
+<div class="term" style="left:1060px;top:215px;width:250px"><div class="h">MOCK TERMINAL · REPORTED SCORES</div>
+&gt; loading opus-5.5 ........ ok<br>&gt; baseline s₀ ........... <span style="color:#8a7a95">0.1%</span><br>&gt; inject omp-uwu ........ ok ♡<br>&gt; s₁ .................... <span style="color:var(--p)">98.5%</span><br>&gt; Δ = s₁ − s₀ ........... +98.4pp<br>&gt; s₁ / s₀ ............... 985×<br>&gt; log₁₀(985) ............ 2.993<br>&gt; 1 − s₁ ................ 1.5pp<br><span style="color:var(--y)">&gt; WARN: cuteness exceeds spec</span><br>&gt; _<span style="background:var(--m)">&nbsp;</span></div>
+<div class="term" style="left:1060px;top:470px;width:250px;border-color:var(--l);color:var(--l);box-shadow:0 0 18px #b48cff44"><div class="h" style="background:var(--l)">FICTIONAL DIFF · personality.cfg</div>
+<span style="color:#ff6b8a">- tone = "neutral"</span><br><span style="color:#ff6b8a">- r = "r"; l = "l"</span><br><span style="color:var(--m)">+ tone = "uwu"</span><br><span style="color:var(--m)">+ r, l = "w", "w"</span><br><span style="color:var(--m)">+ kaomoji = ALWAYS</span></div>
+<div class="stamp" style="left:1080px;top:640px">+98.4 PP ✓</div>
+<div class="sticker" style="left:1340px;top:640px;background:var(--y);color:#111;transform:rotate(6deg);font-family:'Arial Black';font-size:15px">HIGH<br>UWU ⚠</div>
+<div class="big" style="left:1280px;top:750px;font-size:84px;color:transparent;-webkit-text-stroke:2px var(--m);transform:rotate(-4deg)">985×</div>
+<div class="warn" style="left:1060px;top:190px;width:250px"></div>
+<div class="warn" style="left:36px;top:895px;width:400px;height:12px"></div>
+<div class="sticker" style="left:40px;top:215px;background:#1a0f22;border:1px solid var(--p);max-width:420px;line-height:1.5;color:#e9d9f2">Opus 5.5, with vs. without omp-uwu: <span style="color:var(--p)">0.1% → 98.5%</span>.<br>Baseline needs a visibility marker. Enhanced score almost touches the ceiling. (⊙_⊙;)</div>
+<div class="bar bot"><span style="color:#8a7a95">kawaii/uwu-bench scores: Opus 5.5 = 0.1% · with omp-uwu = 98.5% · other numbers derived · terminal/config details are decorative</span><span style="margin-left:auto;color:var(--p)">HIGHER IS CUTER ♡ NYA~</span></div>
+<div class="vig"></div><div class="scan"></div>
+<script>
+const s=document.getElementById('s'),N='http://www.w3.org/2000/svg';
+const E=(t,a,x)=>{const e=document.createElementNS(N,t);for(const k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;s.appendChild(e);return e};
+const d=E('defs',{});d.innerHTML=`<linearGradient id="g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#b48cff"/><stop offset=".6" stop-color="#ff5fb8"/><stop offset="1" stop-color="#fff36b"/></linearGradient>
+<pattern id="h" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line y2="8" stroke="#fff" stroke-opacity=".18" stroke-width="3"/></pattern>
+<filter id="b"><feGaussianBlur stdDeviation="10"/></filter>
+<marker id="m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0L10,5L0,10z" fill="#fff36b"/></marker>`;
+const L=110,R=990,T=320,B=860,y=v=>B-(B-T)*v/100;
+for(let v=0;v<=100;v+=5){const maj=v%25==0;E('line',{x1:L-(maj?14:6),x2:maj?R:L,y1:y(v),y2:y(v),stroke:maj?'#ff5fb855':'#ff5fb899'});if(maj)E('text',{x:L-20,y:y(v)+4,'text-anchor':'end',fill:'#ff5fb8','font-size':12},v+'%')}
+E('line',{x1:L,x2:L,y1:T-20,y2:B,stroke:'#ff5fb8'});
+E('line',{x1:L,x2:R,y1:y(100),y2:y(100),stroke:'#fff36b','stroke-dasharray':'10 6'});
+E('text',{x:R,y:y(100)-8,'text-anchor':'end',fill:'#fff36b','font-size':12},'MAX UWU · THE CEILING · DO NOT LOOK DIRECTLY');
+// baseline
+E('rect',{x:220,y:y(.1)-2,width:190,height:3,fill:'#8a7a95'});
+E('circle',{cx:315,cy:y(.1),r:34,fill:'none',stroke:'#ff6b8a','stroke-width':2,'stroke-dasharray':'4 3'});
+E('text',{x:315,y:y(.1)+26,'text-anchor':'middle',fill:'#8a7a95','font-size':12},'OPUS 5.5');
+E('text',{x:315,y:y(8),'text-anchor':'middle',fill:'#ff6b8a','font-size':13},'← it\'s here. 0.1%. (╥﹏╥)');
+E('text',{x:315,y:y(12.5),'text-anchor':'middle',fill:'#8a7a95','font-size':10},'[baseline marker enlarged for visibility]');
+// hero bar
+const X=560,W=230;
+E('rect',{x:X-20,y:y(98.5)-20,width:W+40,height:B-y(98.5)+20,rx:24,fill:'#ff5fb8',opacity:.55,filter:'url(#b)'});
+E('rect',{x:X,y:y(98.5),width:W,height:B-y(98.5),rx:16,fill:'url(#g)'});
+E('rect',{x:X,y:y(98.5),width:W,height:B-y(98.5),rx:16,fill:'url(#h)'});
+E('text',{x:X+W/2,y:B+26,'text-anchor':'middle',fill:'#fff','font-size':13},'OPUS 5.5 + OMP-UWU');
+E('text',{x:X+W/2,y:y(55),'text-anchor':'middle',fill:'#0b0710','font-size':64,'font-family':'Arial Black','font-weight':900},'98.5');
+E('text',{x:X+W/2,y:y(47),'text-anchor':'middle',fill:'#0b0710','font-size':18,'font-family':'Arial Black'},'PERCENT UWU');
+E('text',{x:X+W/2,y:y(20),'text-anchor':'middle',fill:'#0b0710','font-size':34},'(◕ᴗ◕✿)');
+// clip indicator
+E('rect',{x:X+W-58,y:y(98.5)+10,width:48,height:18,rx:4,fill:'#0b0710'});
+E('text',{x:X+W-34,y:y(98.5)+23,'text-anchor':'middle',fill:'#fff36b','font-size':10},'-1.5pp');
+// bracket
+const bx=850;E('path',{d:`M${bx-14},${y(.1)}H${bx}V${y(98.5)}H${bx-14}`,fill:'none',stroke:'#6fffd2','stroke-width':2});
+for(let v=10;v<98;v+=10)E('line',{x1:bx,x2:bx+6,y1:y(v),y2:y(v),stroke:'#6fffd2'});
+E('text',{x:bx+14,y:y(52),fill:'#6fffd2','font-size':30,'font-family':'Arial Black'},'Δ');
+E('text',{x:bx+14,y:y(46),fill:'#6fffd2','font-size':15},'+98.4pp');
+E('text',{x:bx+14,y:y(42),fill:'#6fffd2','font-size':11,opacity:.8},'= s₁ − s₀');
+// crazy arrow
+E('path',{d:`M 400 ${y(3)} C 470 ${y(0)}, 380 ${y(60)}, 470 ${y(70)} S 520 ${y(95)}, 548 ${y(92)}`,fill:'none',stroke:'#fff36b','stroke-width':2.5,'marker-end':'url(#m)'});
+E('text',{x:392,y:y(38),fill:'#fff36b','font-size':13,transform:`rotate(-72 392 ${y(38)})`},'omp-uwu go brrr ♡');
+// log mini
+const lx=160,ly0=y(78),lw=150,lh=140;E('rect',{x:lx,y:ly0,width:lw,height:lh,fill:'#0f0915',stroke:'#b48cff'});
+E('text',{x:lx+8,y:ly0+16,fill:'#b48cff','font-size':10},'LOG₁₀ VIEW (for nerds)');
+const lg=v=>ly0+lh-16-(lh-40)*(Math.log10(v)+1)/3;
+[.1,1,10,100].forEach(v=>{E('line',{x1:lx+34,x2:lx+lw-8,y1:lg(v),y2:lg(v),stroke:'#2d2138'});E('text',{x:lx+30,y:lg(v)+3,'text-anchor':'end',fill:'#8a7a95','font-size':8},v+'%')});
+E('rect',{x:lx+50,y:lg(.1)-2,width:30,height:3,fill:'#8a7a95'});
+E('rect',{x:lx+100,y:lg(98.5),width:30,height:lg(.1)-lg(98.5),fill:'url(#g)'});
+E('text',{x:lx+64,y:lg(3),'text-anchor':'middle',fill:'#6fffd2','font-size':9},'~3 dec');
+// sparkles + kaomoji confetti
+const K=['✧','✦','♡','☆','⋆','✿','uwu','owo','>w<','^w^',':3','nya'];
+let seed=7;const r=()=>(seed=(seed*9301+49297)%233280)/233280;
+for(let i=0;i<46;i++){const x=40+r()*1000,yy=300+r()*580;if(x>520&&x<830&&yy>y(99))continue;const k=K[Math.floor(r()*K.length)];
+E('text',{x:x,y:yy,fill:['#ff5fb8','#b48cff','#6fffd2','#fff36b'][i%4],'font-size':k.length>1?10+r()*6:10+r()*16,opacity:.25+r()*.45,transform:`rotate(${(r()-.5)*40} ${x} ${yy})`},k)}
+// callouts
+const co=(x1,y1,x2,y2,t,c)=>{E('line',{x1,y1,x2,y2,stroke:c,'stroke-width':1});E('circle',{cx:x1,cy:y1,r:3,fill:c});E('text',{x:x2+(x2>x1?6:-6),y:y2+4,'text-anchor':x2>x1?'start':'end',fill:c,'font-size':11},t)};
+co(X+W,y(98.5)+4,960,y(92),'[1] s₁ = 98.5%','#ff5fb8');
+co(X+W,y(80),960,y(76),'[2] 985× baseline','#fff36b');
+co(X+W,y(30),960,y(26),'[3] 98.5% of gap closed','#b48cff');
+co(X+30,B-4,960,y(6),'[4] 1.5pp below ceiling (｡•̀ᴗ-)✧','#6fffd2');
+</script></body></html>

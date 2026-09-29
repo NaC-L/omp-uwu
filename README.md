@@ -43,6 +43,14 @@ Here's the same prompt and model, with the mode off and on:
 
 These are real, unedited replies from `anthropic/claude-opus-5-5`, rendered as images. Both code blocks are identical byte for byte. The transcripts are in [`demo/`](demo).
 
+### kawaii/uwu-bench
+
+On kawaii/uwu-bench, Opus 5.5 scores 0.1% on its own and 98.5% with omp-uwu enabled:
+
+![kawaii/uwu-bench: Opus 5.5 scores 0.1%, Opus 5.5 with omp-uwu scores 98.5%](https://raw.githubusercontent.com/NaC-L/omp-uwu/main/demo/uwu-bench.png)
+
+Only the two scores come from the benchmark run. The other numbers on the chart are computed from them, and the terminal and config panels are decoration.
+
 ## How it works
 
 On the first turn, omp-uwu uses the prompt style until the host demonstrates support for the awaited `assistant_message` hook; after that, the default **rewrite** style deterministically uwufies finalized assistant text before it is added to history and context. This first-turn check makes the experience work on both older and newer omp builds. Only text in existing text blocks is changed; code/tool blocks and their metadata stay untouched. Rewrites are markdown-aware and preserve fenced/inline code, URLs, paths, numbers, quoted text, identifiers, and safety-critical words.
@@ -84,6 +92,12 @@ uv run --with pillow python demo/render.py
 ```
 
 Model output varies between runs, so re-run `record.sh` until you get a reply that reads well.
+
+The uwu-bench chart is drawn from [`demo/uwu-bench.html`](demo/uwu-bench.html). Edit the HTML, then take a 1536×960 screenshot with headless Chrome:
+
+```sh
+chrome --headless=new --hide-scrollbars --window-size=1536,960 --screenshot="$PWD/demo/uwu-bench.png" "file://$PWD/demo/uwu-bench.html"
+```
 
 ### Releasing
 
