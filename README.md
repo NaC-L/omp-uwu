@@ -16,22 +16,42 @@ The prose is uwufied, but the inline code, numbers and the fixed loop stay exact
 omp plugin install omp-uwu
 ```
 
-Restart omp. Defaults are **on**, **rewrite**, **mid**, **auto**, with colors **off** (unless saved preferences say otherwise).
+Restart omp. uwu starts **on**, in **rewrite** style, at **mid** intensity with **auto** locale and colors **off**. Settings persist in `~/.omp/agent/omp-uwu.json`.
 
-- `/uwu` toggles it
-- `/uwu on` / `/uwu off` sets it explicitly
-- `/uwu rewrite` uses omp's finalized-message rewrite hook when available
-- `/uwu prompt` asks the model to write in uwu style while it streams
-- `/uwu display` explicitly opts into **experimental, ANSI-TUI-only** display styling; never changes history or adds a prompt
-- `/uwu level low` / `/uwu level mid` / `/uwu level max` selects light, standard or stronger intensity
-- `/uwu locale auto` / `/uwu locale en` / `/uwu locale tr` selects critical-word protection and prompt language guidance
-- `/uwu status` opens a compact, host-themed TUI dashboard: **Controls** has switches, preset chips, an intensity meter and a live sample; **Compatibility** reports observed capabilities, not a support guarantee. ↑/↓ focuses a control, ←/→ or Enter/Space edits it, and Tab switches tabs. **Enter on Save** applies the draft once; **Esc cancels** without changing settings, colors or history. Navigation never saves. Other modes or hosts without custom UI keep the original plain summary.
-- `/uwu preview <text>` shows a deterministic sample with its original case, without changing any settings—even if uwu is off
-- `/uwu colors on` / `/uwu colors off` enables or disables the optional kawaii palette (off by default; preference persists)
+The easiest way to change them is `/uwu status`, an interactive dashboard (see below). Every setting also has a command:
 
-The palette colors chat markdown and the user-message bubble without putting ANSI codes into message text/history. It is applied as an in-memory TUI theme; components sharing those colors can change too. The host's in-memory theme setter pauses automatic theme detection until omp restarts. The TUI also shows a theme-accent `(◕ᴗ◕✿) uwu` status badge; other clients/plain output are not colorized.
+| Command | What it does |
+|---|---|
+| `/uwu` | Toggle uwu on/off |
+| `/uwu on` · `/uwu off` | Turn it on or off explicitly |
+| `/uwu rewrite` | Rewrite finished replies deterministically (default) |
+| `/uwu prompt` | Ask the model to write in uwu while it streams |
+| `/uwu display` | **Experimental:** style prose only on screen, in the ANSI TUI |
+| `/uwu level low\|mid\|max` | Light, standard or strong intensity |
+| `/uwu locale auto\|en\|tr` | Which critical words to protect (never translates) |
+| `/uwu colors [on\|off]` | Kawaii palette and sparkles (toggles without an argument) |
+| `/uwu preview <text>` | Show a sample with the current settings, without changing anything |
+| `/uwu status` | Open the dashboard (plain one-line summary outside the TUI) |
 
-With colors on, the ANSI TUI also paints **sparkles** in the agent's chat prose: `uwu`/`owo` get a per-letter pastel rainbow, and kaomoji (listed or not, e.g. `(◕ᴗ◕✿)`, `(ﾉ◕ヮ◕)ﾉ`) and glyphs like `♡ ☆ ✧ ✿` get a pastel tint. This happens at render time through omp's per-message text color transform, so inline code, code blocks, link targets and stored message text stay untouched. Display styling works independently of colors; when both are on, prose is transformed first, then painted. A host-owned transform (such as live-voice transcript coloring) wins over both. omp's `AssistantMessageComponent` is not public extension API, so the plugin discovers it through the shared `Container` base class. If discovery is unavailable, display/sparkles do nothing; the palette can still apply. There is **no silent prompt fallback for display**.
+Selecting a style also turns uwu on. In prompt style, `/uwu preview` is a deterministic approximation, not a prediction of what the model will write.
+
+### The `/uwu status` dashboard
+
+- **Controls** tab: switches, style/level/locale chips, an intensity meter and a live sample.
+- **Compatibility** tab: what omp has actually shown it supports in this session (rewrite hook, display hook, fallbacks). It reports observations, not guarantees.
+- ↑/↓ moves focus, ←/→ or Enter/Space changes a value, Tab switches tabs.
+- **Enter on Save** applies the draft. **Esc** discards it. Moving around never saves anything.
+
+### Colors and sparkles
+
+`/uwu colors on` applies a pastel palette to chat markdown and the user-message bubble, and adds a `(◕ᴗ◕✿) uwu` status badge. In the chat prose, `uwu`/`owo` get a per-letter rainbow, and kaomoji like `(◕ᴗ◕✿)` or `(ﾉ◕ヮ◕)ﾉ` and glyphs like `♡ ☆ ✧ ✿` get a pastel tint.
+
+All of this happens at render time, in the ANSI TUI only:
+
+- No ANSI codes go into message text or history. Code, code blocks and link targets are never painted.
+- The palette is an in-memory TUI theme, so other components that share those colors can change too. It pauses omp's automatic theme detection until omp restarts.
+- A transform the host already uses (for example, live-voice transcript coloring) takes precedence.
+- Other clients and plain output are not colorized.
 
 ## What gets uwufied, and what doesn't
 
@@ -44,8 +64,6 @@ With colors on, the ANSI TUI also paints **sparkles** in the agent's chat prose:
 | | Commit messages and prompts sent to subagents |
 
 Style rules include `r`/`l` → `w`, occasional `th` → `d`, `na/ne/no` → `nya/nye/nyo`, occasional stutter, a broad rotating selection of kaomoji, and the odd cute emoji (`✨ 💖 🌸 🎀`). The kaomoji selection includes examples from [kaomoji.you](https://kaomoji.you/), such as `٩(◕‿◕｡)۶`, `(ฅ^•ﻌ•^ฅ)`, and `(づ｡◕‿‿◕｡)づ`. Meaning, numbers and warnings must stay readable.
-
-Intensity and locale apply to rewrite, prompt and display. `mid` keeps the original rewrite strength; `low` changes fewer words and adds fewer decorations; `max` is stronger. `auto` protects English **and** Turkish critical words, not automatic language detection. `tr` also protects Turkish forms while retaining English protection; `en` uses English protection. These settings never translate text. Negations/warnings and common Turkish inflections are protected conservatively, not by a complete linguistic parser.
 
 Here's the same prompt and model, with the mode off and on:
 
@@ -63,18 +81,27 @@ Only the two scores come from the benchmark run. The other numbers on the chart 
 
 ## How it works
 
-In the default **rewrite** style, the first turn uses prompt styling until the host demonstrates support for the awaited `assistant_message` hook; after that, finalized assistant text is deterministically uwufied before it is added to history and context. This first-turn check supports both older and newer omp builds. Only existing text blocks change; code/tool blocks and metadata stay untouched. Rewrites preserve fenced/inline code, URLs, paths, numbers, quoted spans, identifiers and safety-critical words. Subagent prompts, messages and tool-call arguments are never styled.
+There are three styles:
 
-The hook runs after streaming has finished. The TUI refreshes the current assistant message at completion, but clients that render only streamed chunks may continue showing the original text. If the hook is unavailable (including omp `18.4.3`), prompt style remains enabled as the compatibility fallback. `/uwu prompt` selects live prompt styling directly.
+- **rewrite** (default). After a reply finishes streaming, its text blocks are uwufied deterministically before they go into history and context. No extra prompt tokens are needed. Code and tool blocks and metadata stay untouched. The first turn uses prompt style until omp shows that it supports the awaited `assistant_message` hook. If the hook never shows up (for example on omp `18.4.3`), prompt style stays on as the fallback. The TUI refreshes the message when streaming finishes, but clients that only render streamed chunks may keep showing the original text.
+- **prompt**. A style instruction is added to the system prompt, so the reply is uwu while it streams. The result depends on the model.
+- **display** (experimental). Nothing is sent to the model and history is never changed. Prose is restyled only when the ANSI TUI draws it (see below).
 
-- **Deterministic rewrite.** No style instruction/token overhead once the hook is detected.
-- **Prompt style.** Model-dependent, with live uwu output while streaming.
-- **Experimental display.** Explicit opt-in, ANSI TUI only: `uwufyProse` transforms individual Markdown prose runs before width/wrapping, without rewriting stored content or injecting instructions. No appended emoticons or stutters. Display/level/locale/on/off changes invalidate existing discovered assistant components even with colors off.
-- **Persistent settings.** Enabled state, colors, style, level and locale are saved in `~/.omp/agent/omp-uwu.json`. Older enabled/colors-only files load with rewrite/mid/auto defaults; invalid individual values keep their defaults.
+Rewrite and display protect fenced and inline code, URLs, paths, numbers, quoted spans, identifiers and safety-critical words. Subagent prompts, subagent messages and tool-call arguments are never styled.
 
-Display is deliberately **fragment-based**: inline formatting, links, newlines and streaming edits can split runs and reset deterministic word positions, so effects may differ from a whole-message rewrite or preview. Identifiers, numbers and complete quoted spans within a run stay protected; a quote split across Markdown runs cannot be protected as a whole. Host paths that bypass its prose transform (including blockquotes, some table/heading/math rendering) may remain unchanged or differ from normal paragraphs. This is not a universal Markdown rewriting layer. Prompt-mode preview is only a deterministic approximation, not a prediction of model output.
+Intensity and locale apply to all three styles. `mid` is the original strength, `low` changes fewer words and adds fewer decorations, and `max` is stronger. `auto` protects both English **and** Turkish critical words; it does not detect the language. `en` protects English only, and `tr` adds Turkish forms on top of English. Negations, warnings and common Turkish inflections are protected conservatively; this is not a full linguistic parser.
 
-Capability fallback is explicit: `/uwu status` distinguishes a missing `Container`, pending assistant discovery and an observed ANSI hook; rewrite support is reported as unknown/detected/not observed. Discovery alone does not prove every render path works. Native/client rendering is **unsupported**: the installed omp `18.4.4` native description sends raw Markdown rather than using the ANSI text transform. RPC/print/export output and history stay original in display mode. Use `/uwu rewrite` or `/uwu prompt` explicitly if you want another style; display never switches to them automatically.
+### Display mode (experimental)
+
+Display mode uses omp's per-message text transform, which is not public extension API. The plugin finds `AssistantMessageComponent` through the shared `Container` base class. If it can't, display styling and sparkles do nothing (the palette still works), and there is **no silent fallback** to prompt or rewrite style. `/uwu status` shows whether the hook was found.
+
+Things to expect:
+
+- Styling happens on individual Markdown prose runs, before wrapping. Inline formatting, links, newlines and streaming edits split runs, so the result can differ from a rewrite or `/uwu preview`. No emoticons or stutters are added.
+- Identifiers, numbers and quoted spans within a run stay protected. A quote that spans several runs can't be protected as a whole.
+- Some render paths skip the transform (blockquotes, some tables, headings and math), so that text may stay unchanged.
+- Native clients are **unsupported**: omp `18.4.4` sends them raw Markdown. RPC, print and export output also stay original.
+- Changing display, level, locale or on/off refreshes messages already on screen, with or without colors.
 
 ## Install options
 
@@ -98,7 +125,15 @@ omp -e ./src/index.ts  # or load it for a single run
 
 The full-module integration tests exercise real omp Markdown/Assistant components, narrow wrapping, inline/fenced code preservation, unchanged raw messages, cache invalidation without colors, and host-transform precedence. They restore patched prototypes after each case. An additional installed-host test automatically uses `~/.bun/install/global/node_modules/@oh-my-pi/pi-tui` if present; set `OMP_UWU_HOST_TUI` to a different pi-tui package directory to test another installation (otherwise that case is skipped).
 
-For an interactive smoke check, start `omp -e ./src/index.ts` in an isolated test agent directory, run `/uwu colors off`, `/uwu display`, then `/uwu status`. Edit the draft and switch tabs: the sample should update while existing messages/settings stay unchanged. Esc should discard it; reopen, focus Save and press Enter to persist it and refresh colors, the badge and discovered assistant paragraphs. Narrow the terminal to check wrapping. Ask for ordinary prose plus inline/fenced code: prose should be styled and rewrapped while code stays exact. Change intensity, locale and mode without enabling colors: existing assistant paragraphs should refresh after Save. Reopen the saved transcript/export to confirm raw text is unchanged, and verify the next model prompt has no uwu instruction in display mode. Prompt-style samples are deterministic approximations, not predictions of model output; display samples use prose-only styling, and mode off shows the original sample. On a native client, expect unchanged prose, not fallback prompt styling.
+For an interactive smoke check, start `omp -e ./src/index.ts` with an isolated test agent directory and run `/uwu colors off`, `/uwu display`, then `/uwu status`:
+
+1. Edit the draft and switch tabs. The sample should update, but existing messages and saved settings should not change.
+2. Press Esc; nothing should be saved. Reopen, focus Save and press Enter; the settings should persist, and colors, the badge and assistant paragraphs on screen should refresh.
+3. Ask for ordinary prose plus inline and fenced code. The prose should be styled and rewrapped (try a narrow terminal); the code should stay exact.
+4. With colors still off, change intensity, locale and mode. Existing assistant paragraphs should refresh after Save.
+5. Reopen the saved transcript or export: the raw text should be unchanged, and the next model prompt should have no uwu instruction in display mode.
+
+On a native client, prose should stay unchanged, with no fallback to prompt styling.
 
 ### Re-recording the demo
 
