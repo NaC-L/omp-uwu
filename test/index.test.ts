@@ -1,65 +1,82 @@
 import { beforeEach, describe, expect, test } from "bun:test";
 import uwuExtension, { UWU_PROMPT } from "../src/index.ts";
 
-type Handler = (event: { systemPrompt: string[] }) => Promise<{ systemPrompt: string[] } | undefined>;
+type Handler = (...args: unknown[]) => unknown;
 type Command = (args: string, ctx: unknown) => Promise<void>;
-
-let beforeAgentStart: Handler;
+let handlers: Record<string, Handler>;
+type AgentStartResult = { systemPrompt: string[] } | undefined;
+type RewriteResult = { content: Array<{ type: string; text?: string; id?: string }> } | undefined;
 let command: Command;
 let commandName: string;
 let notices: string[];
-const ctx = { ui: { notify: (msg: string) => notices.push(msg) } };
+const ctx = { mode: "tui", ui: { notify: (msg: string) => notices.push(msg), setStatus: () => {} } };
 const event = () => ({ systemPrompt: ["base policy"] });
 
 beforeEach(() => {
-	notices = [];
-	const pi = {
-		registerCommand(name: string, opts: { handler: Command }) {
-			commandName = name;
-			command = opts.handler;
-		},
-		on(name: string, handler: Handler) {
-			expect(name).toBe("before_agent_start");
-			beforeAgentStart = handler;
-		},
-	};
-	uwuExtension(pi as never);
+  notices = [];
+  handlers = {};
+  const pi = {
+    registerCommand(name: string, opts: { handler: Command }) {
+      commandName = name;
+      command = opts.handler;
+    },
+    on(name: string, handler: Handler) {
+      handlers[name] = handler;
+    },
+  };
+  uwuExtension(pi as never);
 });
 
 describe("omp-uwu", () => {
-	test("registers /uwu", () => {
-		expect(commandName).toBe("uwu");
-	});
+  test("registers /uwu and assistant_message hook", () => {
+    expect(commandName).toBe("uwu");
+    expect(handlers.assistant_message).toBeFunction();
+  });
 
-	test("is on by default and appends the style after the existing prompt", async () => {
-		const result = await beforeAgentStart(event());
-		expect(result?.systemPrompt).toEqual(["base policy", UWU_PROMPT]);
-	});
+  test("prompt-styles the first turn, then rewrites finalized text blocks", async () => {
+    const first = await handlers.before_agent_start(event(), { agent: { kind: "main" } }) as AgentStartResult;
+    expect(first?.systemPrompt).toContain(UWU_PROMPT);
+    await handlers.assistant_message({ message: { role: "assistant", content: [{ type: "text", text: "first reply" }] } });
+    expect(await handlers.before_agent_start(event(), { agent: { kind: "main" } })).toBeUndefined();
 
-	test("does not mutate the incoming system prompt", async () => {
-		const input = event();
-		await beforeAgentStart(input);
-		expect(input.systemPrompt).toEqual(["base policy"]);
-	});
+    const content = [{ type: "text", text: "really nice!" }, { type: "toolCall", id: "keep" }];
+    const result = await handlers.assistant_message({ message: { role: "assistant", content } }) as RewriteResult;
+    expect(result?.content).toHaveLength(2);
+    expect(result?.content[0]?.text).not.toBe("really nice!");
+    expect(result?.content[1]).toEqual(content[1]);
+  });
 
-	test("/uwu off disables, /uwu on enables", async () => {
-		await command("off", ctx);
-		expect(await beforeAgentStart(event())).toBeUndefined();
-		await command(" ON ", ctx);
-		expect((await beforeAgentStart(event()))?.systemPrompt).toContain(UWU_PROMPT);
-	});
+  test("does not mutate input blocks", async () => {
+    const content = [{ type: "text", text: "really nice!" }];
+    await handlers.assistant_message({ message: { role: "assistant", content } });
+    expect(content[0].text).toBe("really nice!");
+  });
 
-	test("bare /uwu toggles", async () => {
-		await command("", ctx);
-		expect(await beforeAgentStart(event())).toBeUndefined();
-		await command("", ctx);
-		expect(await beforeAgentStart(event())).toBeDefined();
-		expect(notices).toHaveLength(2);
-	});
+  test("falls back to prompt mode when host lacks the rewrite hook", async () => {
+    await handlers.message_end({ message: { role: "assistant", stopReason: "stop" } });
+    const input = event();
+    expect((await handlers.before_agent_start(input, { agent: { kind: "main" } })) as AgentStartResult).toEqual({
+      systemPrompt: ["base policy", UWU_PROMPT],
+    });
+    expect(input.systemPrompt).toEqual(["base policy"]);
+  });
 
-	test("prompt protects exact-text surfaces", () => {
-		for (const surface of ["code", "file paths", "URLs", "tool call arguments", "commit messages"]) {
-			expect(UWU_PROMPT).toContain(surface);
-		}
-	});
+  test("/uwu off disables, /uwu on enables", async () => {
+    await command("off", ctx);
+    expect(await handlers.before_agent_start(event(), { agent: { kind: "main" } })).toBeUndefined();
+    await command(" ON ", ctx);
+    await handlers.message_end({ message: { role: "assistant", stopReason: "stop" } });
+    expect(((await handlers.before_agent_start(event(), { agent: { kind: "main" } })) as AgentStartResult)?.systemPrompt).toContain(UWU_PROMPT);
+  });
+
+  test("/uwu prompt selects live prompt-based style", async () => {
+    await command("prompt", ctx);
+    expect(((await handlers.before_agent_start(event(), { agent: { kind: "main" } })) as AgentStartResult)?.systemPrompt).toContain(UWU_PROMPT);
+  });
+
+  test("prompt protects exact-text surfaces and includes varied kaomoji", () => {
+    for (const surface of ["code", "file paths", "URLs", "tool call arguments", "commit messages", "٩(◕‿◕｡)۶", "(ฅ^•ﻌ•^ฅ)"]) {
+      expect(UWU_PROMPT).toContain(surface);
+    }
+  });
 });

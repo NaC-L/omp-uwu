@@ -20,6 +20,10 @@ Restart omp. uwu mode is **on** by default in every session.
 
 - `/uwu` toggles it
 - `/uwu on` / `/uwu off` sets it explicitly
+- `/uwu rewrite` uses omp's finalized-message rewrite hook when available
+- `/uwu prompt` asks the model to write in uwu style while it streams
+
+The TUI also shows a small, theme-accent-colored `(◕ᴗ◕✿) uwu` status badge. Other clients and plain output are not colorized.
 
 ## What gets uwufied, and what doesn't
 
@@ -31,7 +35,7 @@ Restart omp. uwu mode is **on** by default in every session.
 | | Tool-call arguments and file contents the agent writes or edits |
 | | Commit messages and prompts sent to subagents |
 
-Style rules the agent follows: `r`/`l` → `w` in most words, `th` → `d` sometimes, `na/ne/no` → `nya/nye/nyo` sometimes, the occasional stutter (`h-hewwo`), and at most one emoticon per sentence (`uwu`, `owo`, `>w<`, `^w^`, `:3`). Meaning, numbers and warnings must stay readable.
+Style rules include `r`/`l` → `w`, occasional `th` → `d`, `na/ne/no` → `nya/nye/nyo`, occasional stutter, and a broad rotating selection of kaomoji. The kaomoji selection includes examples from [kaomoji.you](https://kaomoji.you/), such as `٩(◕‿◕｡)۶`, `(ฅ^•ﻌ•^ฅ)`, and `(づ｡◕‿‿◕｡)づ`. Meaning, numbers and warnings must stay readable.
 
 Here's the same prompt and model, with the mode off and on:
 
@@ -41,14 +45,13 @@ These are real, unedited replies from `anthropic/claude-opus-5-5`, rendered as i
 
 ## How it works
 
-omp has no extension hook for rewriting assistant text after it's generated. The `message_end` event only gets a detached copy of the message. So omp-uwu asks the model instead: on `before_agent_start` it adds a short style instruction to the end of the system prompt.
+On the first turn, omp-uwu uses the prompt style until the host demonstrates support for the awaited `assistant_message` hook; after that, the default **rewrite** style deterministically uwufies finalized assistant text before it is added to history and context. This first-turn check makes the experience work on both older and newer omp builds. Only text in existing text blocks is changed; code/tool blocks and their metadata stay untouched. Rewrites are markdown-aware and preserve fenced/inline code, URLs, paths, numbers, quoted text, identifiers, and safety-critical words.
 
-This has some consequences:
+The hook runs after streaming has finished. The TUI refreshes the current assistant message at completion, but clients that render only streamed chunks may continue showing the original text. If the hook is unavailable (including omp `18.4.3`), prompt style remains enabled as the compatibility fallback. `/uwu prompt` selects live prompt styling directly.
 
-- **It depends on the model.** Most models follow it well, but the style isn't guaranteed. If code ever comes back uwufied, open an issue with the model name.
-- **History stays clean.** Nothing is rewritten after generation, so session history, compaction and tools see exactly what the model wrote.
-- **Small cost.** The instruction adds roughly 200 tokens to the system prompt while the mode is on. `/uwu off` removes it from the next request.
-- **Session-local toggle.** The on/off state isn't saved. Each new session starts with uwu mode on.
+- **Deterministic rewrite.** No style instruction/token overhead once the hook is detected.
+- **Prompt style.** Model-dependent, with live uwu output while streaming.
+- **Session-local toggle.** Mode and enabled state reset for each new session.
 
 ## Install options
 

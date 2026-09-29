@@ -1,14 +1,15 @@
 {
   "name": "omp-uwu",
   "version": "0.1.0",
-  "description": "omp extension: the agent answers in uwu-speak, while code, paths and commands stay byte-for-byte exact",
+  "description": "omp extension for playful uwu chat styling, markdown-safe rewrites, and kawaii kaomoji",
   "type": "module",
   "license": "MIT",
   "keywords": [
     "omp",
     "oh-my-pi",
     "omp-plugin",
-    "uwu"
+    "uwu",
+    "kaomoji"
   ],
   "homepage": "https://github.com/NaC-L/omp-uwu#readme",
   "bugs": "https://github.com/NaC-L/omp-uwu/issues",
