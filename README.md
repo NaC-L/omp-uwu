@@ -66,7 +66,7 @@ The hook runs after streaming has finished. The TUI refreshes the current assist
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.1.0    # pin a version
+omp plugin install omp-uwu@0.3.0    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
