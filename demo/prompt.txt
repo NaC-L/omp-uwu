@@ -1,0 +1,1 @@
+Quick conceptual question, no files involved: in at most 3 short sentences, why does `for (let i = 0; i <= arr.length; i++) sum += arr[i];` return NaN? Then show the corrected loop in a js code block.

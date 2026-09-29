@@ -1,0 +1,6 @@
+The `<=` makes the loop wun one extwa time, so on the wast pass `i` equaws `arr.length` and `arr[i]` is `undefined` uwu. Adding `undefined` to a nyumbew gives `NaN`, and `NaN` poisons evewy watew addition, so `sum` ends up `NaN` owo. Just use `<` so the index stops at `arr.length - 1` ^w^
+
+```js
+let sum = 0;
+for (let i = 0; i < arr.length; i++) sum += arr[i];
+```
