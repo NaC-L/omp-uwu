@@ -22,8 +22,9 @@ Restart omp. uwu mode is **on** by default in every session.
 - `/uwu on` / `/uwu off` sets it explicitly
 - `/uwu rewrite` uses omp's finalized-message rewrite hook when available
 - `/uwu prompt` asks the model to write in uwu style while it streams
+- `/uwu colors on` / `/uwu colors off` enables or disables the optional kawaii palette (off by default; preference persists)
 
-The TUI also shows a small, theme-accent-colored `(◕ᴗ◕✿) uwu` status badge. Other clients and plain output are not colorized.
+The palette colors chat markdown and the user-message bubble without putting ANSI codes into message text/history. It is applied as an in-memory TUI theme; components sharing those colors can change too. The host's in-memory theme setter pauses automatic theme detection until omp restarts. The TUI also shows a theme-accent `(◕ᴗ◕✿) uwu` status badge; other clients/plain output are not colorized.
 
 ## What gets uwufied, and what doesn't
 
@@ -59,7 +60,7 @@ The hook runs after streaming has finished. The TUI refreshes the current assist
 
 - **Deterministic rewrite.** No style instruction/token overhead once the hook is detected.
 - **Prompt style.** Model-dependent, with live uwu output while streaming.
-- **Persistent toggle.** `/uwu off` is remembered across sessions; `/uwu on` re-enables it. The setting is stored in `~/.omp/agent/omp-uwu.json`. UwU mode remains on by default until explicitly changed.
+- **Persistent settings.** `/uwu off` is remembered across sessions; `/uwu on` re-enables uwu. The colors preference is remembered too. Settings are stored in `~/.omp/agent/omp-uwu.json`. UwU mode remains on by default until explicitly changed.
 
 ## Install options
 

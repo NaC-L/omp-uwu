@@ -1,7 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { KawaiiTheme } from "./kawaii.ts";
 
-import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
+import type { ExtensionAPI, Theme } from "@oh-my-pi/pi-coding-agent";
 import { uwufy } from "./uwufy.ts";
 
 export const UWU_PROMPT = `
@@ -28,31 +29,32 @@ type UiContext = {
   ui?: {
     notify(message: string, level: "info"): void;
     setStatus?(key: string, text: string | undefined): void;
-    theme?: { fg(color: string, text: string): string };
+    theme?: Theme;
   };
 };
 
 export default function uwuExtension(pi: ExtensionAPI) {
   let enabled = true;
+  let colorsEnabled = false;
   let stateReady: Promise<void> | undefined;
   let style: "rewrite" | "prompt" = "rewrite";
   let hookSupport: boolean | undefined;
   let promptAddedThisTurn = false;
   let notifiedFallback = false;
-
   const statePath = join(pi.pi.getAgentDir(), "omp-uwu.json");
+  const kawaiiTheme = new KawaiiTheme(pi.pi);
   const loadState = () => {
     stateReady ??= readFile(statePath, "utf8")
       .then((raw) => {
         const state: unknown = JSON.parse(raw);
-        if (typeof state === "object" && state !== null && "enabled" in state && typeof state.enabled === "boolean") {
-          enabled = state.enabled;
-        }
+        if (typeof state !== "object" || state === null) return;
+        if ("enabled" in state && typeof state.enabled === "boolean") enabled = state.enabled;
+        if ("colors" in state && typeof state.colors === "boolean") colorsEnabled = state.colors;
       })
       .catch(() => {});
     return stateReady;
   };
-  const saveState = () => writeFile(statePath, `${JSON.stringify({ enabled }, null, 2)}\n`, "utf8");
+  const saveState = () => writeFile(statePath, `${JSON.stringify({ enabled, colors: colorsEnabled }, null, 2)}\n`, "utf8");
 
   const updateBadge = (ctx: UiContext) => {
     if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.setStatus) return;
@@ -60,12 +62,37 @@ export default function uwuExtension(pi: ExtensionAPI) {
     ctx.ui.setStatus("omp-uwu", badge && ctx.ui.theme ? ctx.ui.theme.fg("accent", badge) : badge);
   };
 
+  const syncColors = (ctx: UiContext) => {
+    if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.theme) return;
+    if (enabled && colorsEnabled) kawaiiTheme.enable(ctx.ui.theme);
+    else kawaiiTheme.disable(ctx.ui.theme);
+  };
+
   pi.registerCommand("uwu", {
-    description: "UwU chat style and mode (usage: /uwu [on|off|prompt|rewrite])",
+    description: "UwU chat style and mode (usage: /uwu [on|off|prompt|rewrite|colors [on|off]])",
     handler: async (args, rawCtx) => {
       await loadState();
       const ctx = rawCtx as UiContext;
       const arg = String(args ?? "").trim().toLowerCase();
+      if (arg.startsWith("colors")) {
+        const option = arg.slice("colors".length).trim();
+        if (option === "on") colorsEnabled = true;
+        else if (option === "off") colorsEnabled = false;
+        else if (!option) colorsEnabled = !colorsEnabled;
+        else {
+          ctx.ui?.notify("Usage: /uwu [on|off|prompt|rewrite|colors [on|off]]", "info");
+          return;
+        }
+        try {
+          await saveState();
+        } catch {
+          ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
+        }
+        syncColors(ctx);
+        updateBadge(ctx);
+        ctx.ui?.notify(`kawaii chat colors ${colorsEnabled ? "on" : "off"}${colorsEnabled && !enabled ? " (active when uwu mode is on)" : ""}`, "info");
+        return;
+      }
       if (arg === "prompt" || arg === "rewrite") {
         style = arg;
         enabled = true;
@@ -73,7 +100,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
       else if (arg === "off") enabled = false;
       else if (!arg) enabled = !enabled;
       else {
-        ctx.ui?.notify("Usage: /uwu [on|off|prompt|rewrite]", "info");
+        ctx.ui?.notify("Usage: /uwu [on|off|prompt|rewrite|colors [on|off]]", "info");
         return;
       }
       try {
@@ -81,6 +108,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
       } catch {
         ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
       }
+      syncColors(ctx);
       updateBadge(ctx);
       ctx.ui?.notify(enabled ? `uwu mode ${style === "rewrite" ? "rewrite" : "prompt"}! (◕ᴗ◕✿)` : "uwu mode off", "info");
     },
@@ -88,7 +116,9 @@ export default function uwuExtension(pi: ExtensionAPI) {
 
   pi.on("session_start", async (_event, rawCtx) => {
     await loadState();
-    updateBadge(rawCtx as UiContext);
+    const ctx = rawCtx as UiContext;
+    syncColors(ctx);
+    updateBadge(ctx);
   });
 
   pi.on("before_agent_start", async (event, rawCtx) => {

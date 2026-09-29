@@ -2,7 +2,8 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { beforeEach, describe, expect, test } from "bun:test";
+import { afterAll, beforeEach, describe, expect, test } from "bun:test";
+import { getThemeByName, Theme } from "@oh-my-pi/pi-coding-agent";
 import uwuExtension, { UWU_PROMPT } from "../src/index.ts";
 
 type Handler = (...args: unknown[]) => unknown;
@@ -14,12 +15,25 @@ let command: Command;
 let commandName: string;
 let notices: string[];
 let stateDir = "";
-const ctx = { mode: "tui", ui: { notify: (msg: string) => notices.push(msg), setStatus: () => {} } };
+let baseTheme: Theme;
+let activeTheme: Theme;
+const ctx = {
+  mode: "tui",
+  ui: {
+    notify: (msg: string) => notices.push(msg),
+    setStatus: () => {},
+    get theme() { return activeTheme; },
+  },
+};
 const event = () => ({ systemPrompt: ["base policy"] });
 
 function installExtension() {
   const pi = {
-    pi: { getAgentDir: () => stateDir },
+    pi: {
+      getAgentDir: () => stateDir,
+      Theme,
+      setThemeInstance: (theme: Theme) => { activeTheme = theme; },
+    },
     registerCommand(name: string, opts: { handler: Command }) {
       commandName = name;
       command = opts.handler;
@@ -36,8 +50,14 @@ beforeEach(async () => {
   stateDir = await mkdtemp(join(tmpdir(), "omp-uwu-test-"));
   notices = [];
   handlers = {};
+  baseTheme = await getThemeByName("dark") as Theme;
+  activeTheme = baseTheme;
   installExtension();
 });
+afterAll(async () => {
+  if (stateDir) await rm(stateDir, { recursive: true, force: true });
+});
+
 
 describe("omp-uwu", () => {
   test("registers /uwu and assistant_message hook", () => {
@@ -86,7 +106,37 @@ describe("omp-uwu", () => {
     handlers = {};
     installExtension();
     expect(await handlers.before_agent_start(event(), { agent: { kind: "main" } })).toBeUndefined();
-    expect(await Bun.file(join(stateDir, "omp-uwu.json")).json()).toEqual({ enabled: false });
+    expect(await Bun.file(join(stateDir, "omp-uwu.json")).json()).toEqual({ enabled: false, colors: false });
+  });
+
+  test("applies reversible pastel chat colors only in the TUI", async () => {
+    await handlers.session_start({}, ctx);
+    expect(activeTheme).toBe(baseTheme);
+    await command("colors on", ctx);
+    const kawaiiTheme = activeTheme;
+    expect(kawaiiTheme).not.toBe(baseTheme);
+    expect(kawaiiTheme.getColorHex("mdHeading")).toBe("#ff9ed8");
+    expect(kawaiiTheme.getColorHex("error")).toBe(baseTheme.getColorHex("error"));
+
+    await command("colors off", ctx);
+    expect(activeTheme).toBe(baseTheme);
+    await command("colors on", ctx);
+    expect(activeTheme).not.toBe(baseTheme);
+    await command("off", ctx);
+    expect(activeTheme).toBe(baseTheme);
+    expect(await Bun.file(join(stateDir, "omp-uwu.json")).json()).toEqual({ enabled: false, colors: true });
+  });
+
+  test("remembers the colors preference and only applies it in TUI sessions", async () => {
+    await command("colors on", ctx);
+    expect(activeTheme).not.toBe(baseTheme);
+    activeTheme = baseTheme;
+    handlers = {};
+    installExtension();
+    const rpcContext = { mode: "rpc", ui: ctx.ui };
+    await handlers.session_start({}, rpcContext);
+    expect(activeTheme).toBe(baseTheme);
+    expect(await Bun.file(join(stateDir, "omp-uwu.json")).json()).toEqual({ enabled: true, colors: true });
   });
 
   test("/uwu prompt selects live prompt-based style", async () => {
