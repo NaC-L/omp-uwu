@@ -2,8 +2,9 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { KawaiiTheme } from "./kawaii.ts";
 import { type ContainerClass, installSparkles, sparkle, themePaint } from "./sparkle.ts";
+import { createStatusCard, type UwuSettings, type UwuStatus } from "./status.ts";
 
-import type { ExtensionAPI, Theme } from "@oh-my-pi/pi-coding-agent";
+import type { ExtensionAPI, ExtensionUIContext, Theme } from "@oh-my-pi/pi-coding-agent";
 import { type UwuLevel, type UwuLocale, uwufy, uwufyProse } from "./uwufy.ts";
 
 export const UWU_PROMPT = `
@@ -57,6 +58,7 @@ type UiContext = {
     notify(message: string, level: "info"): void;
     setStatus?(key: string, text: string | undefined): void;
     theme?: Theme;
+    custom?: ExtensionUIContext["custom"];
   };
 };
 
@@ -114,6 +116,18 @@ export default function uwuExtension(pi: ExtensionAPI) {
     else kawaiiTheme.disable(ctx.ui.theme);
   };
 
+  const persistSettings = async (ctx: UiContext) => {
+    try {
+      await saveState();
+    } catch {
+      ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
+    }
+    renderAllowed = ctx.mode === "tui";
+    syncColors(ctx);
+    rendering?.refresh();
+    updateBadge(ctx);
+  };
+
   pi.registerCommand("uwu", {
     description: "UwU style, intensity, locale and experimental display (use /uwu status)",
     handler: async (args, rawCtx) => {
@@ -127,7 +141,25 @@ export default function uwuExtension(pi: ExtensionAPI) {
       const value = option.toLowerCase();
       if (arg === "status" && !option) {
         const display = !host.Container ? "unavailable (no Container)" : rendering?.isSupported() ? "ANSI hook detected" : "pending component discovery";
-        ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${hookSupport === undefined ? "unknown" : hookSupport ? "detected" : "not observed"}; display=${display}; native/client display=unsupported; prompt fallback=${enabled && style === "rewrite" && hookSupport !== true ? "on" : "off"}`, "info");
+        const status: UwuStatus = {
+          enabled, style, level, locale, colorsEnabled,
+          rewrite: hookSupport === undefined ? "unknown" : hookSupport ? "detected" : "not observed",
+          display,
+          promptFallback: enabled && style === "rewrite" && hookSupport !== true,
+        };
+        if (ctx.mode === "tui" && typeof ctx.ui?.custom === "function") {
+          const settings = await ctx.ui.custom<UwuSettings | undefined>((tui, theme, _keybindings, done) =>
+            createStatusCard(status, theme, done, () => tui.requestRender()), {
+              overlay: true,
+              overlayOptions: { width: 68, anchor: "center", margin: 1 },
+            });
+          if (settings) {
+            ({ enabled, style, level, locale, colorsEnabled } = settings);
+            await persistSettings(ctx);
+          }
+        } else {
+          ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${hookSupport === undefined ? "unknown" : hookSupport ? "detected" : "not observed"}; display=${display}; native/client display=unsupported; prompt fallback=${enabled && style === "rewrite" && hookSupport !== true ? "on" : "off"}`, "info");
+        }
         return;
       }
       if (arg === "preview") {
@@ -154,15 +186,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
         ctx.ui?.notify(USAGE, "info");
         return;
       }
-      try {
-        await saveState();
-      } catch {
-        ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
-      }
-      renderAllowed = ctx.mode === "tui";
-      syncColors(ctx);
-      rendering?.refresh();
-      updateBadge(ctx);
+      await persistSettings(ctx);
       if (arg === "colors") {
         ctx.ui?.notify(`kawaii chat colors ${colorsEnabled ? "on" : "off"}${colorsEnabled && !enabled ? " (active when uwu mode is on)" : ""}`, "info");
       } else {

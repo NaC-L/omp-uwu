@@ -25,7 +25,7 @@ Restart omp. Defaults are **on**, **rewrite**, **mid**, **auto**, with colors **
 - `/uwu display` explicitly opts into **experimental, ANSI-TUI-only** display styling; never changes history or adds a prompt
 - `/uwu level low` / `/uwu level mid` / `/uwu level max` selects light, standard or stronger intensity
 - `/uwu locale auto` / `/uwu locale en` / `/uwu locale tr` selects critical-word protection and prompt language guidance
-- `/uwu status` reports settings and observed capabilities (unknown/pending is not a support guarantee)
+- `/uwu status` opens a compact, host-themed TUI dashboard: **Controls** has switches, preset chips, an intensity meter and a live sample; **Compatibility** reports observed capabilities, not a support guarantee. ↑/↓ focuses a control, ←/→ or Enter/Space edits it, and Tab switches tabs. **Enter on Save** applies the draft once; **Esc cancels** without changing settings, colors or history. Navigation never saves. Other modes or hosts without custom UI keep the original plain summary.
 - `/uwu preview <text>` shows a deterministic sample with its original case, without changing any settings—even if uwu is off
 - `/uwu colors on` / `/uwu colors off` enables or disables the optional kawaii palette (off by default; preference persists)
 
@@ -80,7 +80,7 @@ Capability fallback is explicit: `/uwu status` distinguishes a missing `Containe
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.5.0    # pin a version
+omp plugin install omp-uwu@0.6.0    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
@@ -98,7 +98,7 @@ omp -e ./src/index.ts  # or load it for a single run
 
 The full-module integration tests exercise real omp Markdown/Assistant components, narrow wrapping, inline/fenced code preservation, unchanged raw messages, cache invalidation without colors, and host-transform precedence. They restore patched prototypes after each case. An additional installed-host test automatically uses `~/.bun/install/global/node_modules/@oh-my-pi/pi-tui` if present; set `OMP_UWU_HOST_TUI` to a different pi-tui package directory to test another installation (otherwise that case is skipped).
 
-For an interactive smoke check, start `omp -e ./src/index.ts` in an isolated test agent directory, run `/uwu colors off`, `/uwu display`, then `/uwu status`. Ask for ordinary prose plus inline/fenced code and narrow the terminal; prose should be styled and rewrapped while code stays exact. Change `/uwu level low` to `max`, switch locales and `/uwu off` without enabling colors: existing assistant paragraphs should refresh. Reopen the saved transcript/export to confirm raw text is unchanged, and verify the next model prompt has no uwu instruction. On a native client, expect unchanged prose, not fallback prompt styling.
+For an interactive smoke check, start `omp -e ./src/index.ts` in an isolated test agent directory, run `/uwu colors off`, `/uwu display`, then `/uwu status`. Edit the draft and switch tabs: the sample should update while existing messages/settings stay unchanged. Esc should discard it; reopen, focus Save and press Enter to persist it and refresh colors, the badge and discovered assistant paragraphs. Narrow the terminal to check wrapping. Ask for ordinary prose plus inline/fenced code: prose should be styled and rewrapped while code stays exact. Change intensity, locale and mode without enabling colors: existing assistant paragraphs should refresh after Save. Reopen the saved transcript/export to confirm raw text is unchanged, and verify the next model prompt has no uwu instruction in display mode. Prompt-style samples are deterministic approximations, not predictions of model output; display samples use prose-only styling, and mode off shows the original sample. On a native client, expect unchanged prose, not fallback prompt styling.
 
 ### Re-recording the demo
 
@@ -124,8 +124,8 @@ CI (`.github/workflows/ci.yml`) runs `check` and the tests on pushes to `main` a
 
 ```sh
 # bump "version" in package.json, commit, then:
-git tag v0.5.0
-git push origin main v0.5.0
+git tag v0.6.0
+git push origin main v0.6.0
 ```
 
 The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu`, and workflow `publish.yml`.
