@@ -16,7 +16,7 @@ omp plugin install omp-uwu
 
 Restart omp. On a fresh install, the defaults are:
 
-| uwu | Style | Intensity | Locale | Colors |
+| uwu | Style | Level | Locale | Colors |
 |---|---|---|---|---|
 | **on** | **rewrite** | **mid** | **auto** | **off** |
 
@@ -40,7 +40,7 @@ This GIF shows **omp's real TUI components**, captured without a model call: `/u
 
 **Rewrite starts with a prompt fallback.** The first turn uses prompt style until omp demonstrates support for the awaited `assistant_message` hook. If that hook never arrives—for example on omp **18.4.3**—prompt style remains the fallback. Once supported, rewriting needs no extra style-prompt tokens; code/tool blocks and metadata are untouched. The TUI refreshes after streaming finishes, but clients that render only streamed chunks may continue showing the original text.
 
-Selecting any style also **turns uwu on**. Intensity and locale apply to all three:
+Selecting any style also **turns uwu on**. Level and locale apply to all three:
 
 - **`low` / `mid` / `max`:** fewer changes and decorations / original strength / stronger styling.
 - **`auto`:** protects both English and Turkish critical words. It does **not** detect the language.
@@ -70,16 +70,19 @@ In prompt style, `/uwu preview` is a **deterministic approximation**, not a pred
 
 ### Your little control panel
 
-![Real /uwu status dashboard: arrow keys change style and intensity, the live preview updates, and Tab opens Compatibility](demo/dashboard.gif)
+![Real /uwu status dashboard: arrow keys change style and level, the live preview updates, and Tab opens Compatibility](demo/dashboard.gif)
 
-- **Controls:** switches, style/level/locale chips, an intensity meter and a live sample.
+- **Controls:** switches, style/level/locale chips, a level meter and a live sample.
 - **Compatibility:** what omp has actually shown it supports in this session—rewrite hook, display hook and fallbacks. These are observations, not guarantees.
 - **↑/↓** moves focus; **←/→** or **Enter/Space** changes a value; **Tab** switches tabs.
 - **Enter on Save** applies the draft. **Esc** discards it. Moving around or editing the preview never saves settings or changes existing messages.
+- **Reset to defaults (Enter/Space)** resets only the draft: on, rewrite, mid, auto, colors off. Choose **Save** to persist it, or **Esc** to keep the previous settings.
+- Command completion lists actions and supported values. Invalid actions explain the rejection; confirmations point back to `/uwu status`.
+- Action labels and keyboard guidance use the normal text color; focus and selected values also have cursor/bracket markers, not color alone.
 
 ### Pastels & sparkles ♡
 
-`/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble, and adds a `(◕ᴗ◕✿) uwu` status badge. In chat prose, `uwu`/`owo` get per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint.
+`/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble. Whenever uwu is on, a `(◕ᴗ◕✿) uwu` status badge identifies it independently of colors. In chat prose, `uwu`/`owo` get per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint.
 
 While uwu mode and colors are on, a full-body kitty walks back and forth instead of the ANSI TUI's activity spinner: `ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses. Its seven-column lane keeps the turn timer and loader text steady. The same kitty appears with every symbol preset (`unicode`, `nerd`, and `ascii`); compact running-tool icons and other preset symbols stay unchanged. `/uwu colors off` or `/uwu off` restores your original spinner. Native/client spinners are unchanged.
 
@@ -143,7 +146,7 @@ Display mode uses omp's **private per-message text transform**, not public exten
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.7.1    # pin a version
+omp plugin install omp-uwu@0.7.2    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
@@ -173,7 +176,7 @@ For an interactive smoke check, start `omp -e ./src/index.ts` with an isolated t
 1. Edit the draft and switch tabs. The sample should update, but existing messages and saved settings should not change.
 2. Press Esc; nothing should be saved. Reopen, focus Save and press Enter; settings should persist, and colors, the badge and assistant paragraphs on screen should refresh.
 3. Ask for ordinary prose plus inline and fenced code. Prose should be styled and rewrapped (try a narrow terminal); code should stay exact.
-4. With colors still off, change intensity, locale and mode. Existing assistant paragraphs should refresh after Save.
+4. With colors still off, change level, locale and mode. Existing assistant paragraphs should refresh after Save.
 5. Reopen the saved transcript or export: raw text should be unchanged, and the next model prompt should have no uwu instruction in display mode.
 
 On a native client, prose should stay unchanged, with no fallback to prompt styling.
@@ -227,8 +230,8 @@ CI ([`ci.yml`](.github/workflows/ci.yml)) runs `check` and tests on pushes to `m
 
 ```sh
 # bump "version" in package.json, commit, then:
-git tag v0.7.1
-git push origin main v0.7.1
+git tag v0.7.2
+git push origin main v0.7.2
 ```
 
 The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu` and workflow `publish.yml`.

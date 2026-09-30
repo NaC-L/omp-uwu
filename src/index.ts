@@ -2,7 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { KawaiiTheme } from "./kawaii.ts";
 import { type ContainerClass, installSparkles, sparkle, themePaint } from "./sparkle.ts";
-import { createStatusCard, type UwuSettings, type UwuStatus } from "./status.ts";
+import { createStatusCard, DEFAULT_SETTINGS, type UwuSettings, type UwuStatus } from "./status.ts";
 
 import type { ExtensionAPI, ExtensionUIContext, Theme } from "@oh-my-pi/pi-coding-agent";
 import { type UwuLevel, type UwuLocale, uwufy, uwufyProse } from "./uwufy.ts";
@@ -55,7 +55,7 @@ type UiContext = {
   mode?: string;
   agent?: { kind?: string };
   ui?: {
-    notify(message: string, level: "info"): void;
+    notify(message: string, level: "info" | "warning"): void;
     setStatus?(key: string, text: string | undefined): void;
     theme?: Theme;
     custom?: ExtensionUIContext["custom"];
@@ -63,17 +63,16 @@ type UiContext = {
 };
 
 export default function uwuExtension(pi: ExtensionAPI) {
-  let enabled = true;
-  let colorsEnabled = false;
+  let enabled = DEFAULT_SETTINGS.enabled;
+  let colorsEnabled = DEFAULT_SETTINGS.colorsEnabled;
   let stateReady: Promise<void> | undefined;
-  let style: UwuStyle = "rewrite";
-  let level: UwuLevel = "mid";
-  let locale: UwuLocale = "auto";
+  let style: UwuStyle = DEFAULT_SETTINGS.style;
+  let level: UwuLevel = DEFAULT_SETTINGS.level;
+  let locale: UwuLocale = DEFAULT_SETTINGS.locale;
   let subagentTurn = false;
   let renderAllowed = true;
   let hookSupport: boolean | undefined;
   let promptAddedThisTurn = false;
-  let notifiedFallback = false;
   const statePath = join(pi.pi.getAgentDir(), "omp-uwu.json");
   const kawaiiTheme = new KawaiiTheme(pi.pi);
   const loadState = () => {
@@ -120,7 +119,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
     try {
       await saveState();
     } catch {
-      ctx.ui?.notify("uwu setting could not be saved; it may reset next session", "info");
+      ctx.ui?.notify("UwU settings could not be saved; current changes apply only to this session. Try saving again from /uwu status.", "warning");
     }
     renderAllowed = ctx.mode === "tui";
     syncColors(ctx);
@@ -129,21 +128,29 @@ export default function uwuExtension(pi: ExtensionAPI) {
   };
 
   pi.registerCommand("uwu", {
-    description: "UwU style, intensity, locale and experimental display (use /uwu status)",
+    description: "UwU settings: /uwu status opens controls; /uwu toggles styling",
+    getArgumentCompletions: (prefix) => {
+      const values = ["status", "on", "off", "rewrite", "prompt", "display", "level low", "level mid", "level max", "locale auto", "locale en", "locale tr", "colors on", "colors off", "preview"];
+      const matches = values.filter((value) => value.startsWith(prefix.toLowerCase()));
+      return matches.length ? matches.map((value) => ({ value, label: value })) : null;
+    },
     handler: async (args, rawCtx) => {
       await loadState();
       const ctx = rawCtx as UiContext;
-      if (ctx.agent?.kind === "sub") return;
+      if (ctx.agent?.kind === "sub") {
+        ctx.ui?.notify("UwU settings are available only in the main conversation.", "warning");
+        return;
+      }
       const input = String(args ?? "").trim();
       const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(input);
       const arg = (match?.[1] ?? "").toLowerCase();
       const option = (match?.[2] ?? "").trim();
       const value = option.toLowerCase();
       if (arg === "status" && !option) {
-        const display = !host.Container ? "unavailable (no Container)" : rendering?.isSupported() ? "ANSI hook detected" : "pending component discovery";
+        const display = !host.Container ? "unavailable" : rendering?.isSupported() ? "available" : "waiting for first reply";
         const status: UwuStatus = {
           enabled, style, level, locale, colorsEnabled,
-          rewrite: hookSupport === undefined ? "unknown" : hookSupport ? "detected" : "not observed",
+          rewrite: hookSupport === undefined ? "waiting for first reply" : hookSupport ? "available" : "unavailable",
           display,
           promptFallback: enabled && style === "rewrite" && hookSupport !== true,
         };
@@ -158,13 +165,13 @@ export default function uwuExtension(pi: ExtensionAPI) {
             await persistSettings(ctx);
           }
         } else {
-          ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${hookSupport === undefined ? "unknown" : hookSupport ? "detected" : "not observed"}; display=${display}; native/client display=unsupported; prompt fallback=${enabled && style === "rewrite" && hookSupport !== true ? "on" : "off"}`, "info");
+          ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${status.rewrite}; display=${display}; native/client display=unsupported; prompt fallback=${status.promptFallback ? "on" : "off"}`, "info");
         }
         return;
       }
       if (arg === "preview") {
         if (!option) {
-          ctx.ui?.notify(USAGE, "info");
+          ctx.ui?.notify("Preview needs sample text. Usage: /uwu preview <text>", "warning");
           return;
         }
         ctx.ui?.notify(style === "display" ? uwufyProse(option, { level, locale }) : uwufy(option, { level, locale }), "info");
@@ -183,17 +190,22 @@ export default function uwuExtension(pi: ExtensionAPI) {
       else if (!option && arg === "off") enabled = false;
       else if (!input) enabled = !enabled;
       else {
-        ctx.ui?.notify(USAGE, "info");
+        const reason = arg === "level" ? "Level must be low, mid or max."
+          : arg === "locale" ? "Locale must be auto, en or tr."
+          : arg === "colors" ? "Colors accepts on or off, or no value to toggle."
+          : ["on", "off", "rewrite", "prompt", "display", "status"].includes(arg) ? `${arg} does not accept extra text.`
+          : `Unknown UwU action: ${arg}.`;
+        ctx.ui?.notify(`${reason} ${USAGE} Open /uwu status for controls.`, "warning");
         return;
       }
       await persistSettings(ctx);
       if (arg === "colors") {
-        ctx.ui?.notify(`kawaii chat colors ${colorsEnabled ? "on" : "off"}${colorsEnabled && !enabled ? " (active when uwu mode is on)" : ""}`, "info");
+        ctx.ui?.notify(`UwU colors ${colorsEnabled ? "on" : "off"}${colorsEnabled && !enabled ? " (active when uwu mode is on)" : ""}. Settings: /uwu status`, "info");
       } else {
-        ctx.ui?.notify(enabled ? `uwu mode ${style}; level=${level}; locale=${locale}! (◕ᴗ◕✿)` : "uwu mode off", "info");
+        ctx.ui?.notify(`${enabled ? `UwU on; style=${style}; level=${level}; locale=${locale}` : "UwU off; /uwu on restores styling"}. Settings: /uwu status`, "info");
       }
       if (enabled && style === "display") {
-        ctx.ui?.notify(`Experimental display: ANSI TUI prose only; ${!host.Container ? "render hook unavailable" : rendering?.isSupported() ? "render hook detected" : "awaiting assistant component discovery"}. Native/client rendering is unsupported; history stays unchanged and no prompt fallback is used.`, "info");
+        ctx.ui?.notify(`Experimental display: terminal prose only; ${!host.Container ? "unavailable in this omp" : rendering?.isSupported() ? "available" : "waiting for first reply"}. Native/client rendering is unsupported; history stays unchanged and no prompt fallback is used.`, "info");
       }
     },
   });
@@ -248,8 +260,6 @@ export default function uwuExtension(pi: ExtensionAPI) {
     const message = (rawEvent as MessageEndEvent).message;
     if (message.role === "assistant" && message.stopReason !== "aborted" && message.stopReason !== "error" && hookSupport === undefined) {
       hookSupport = false;
-      // The current response has already streamed; prompt fallback applies next turn.
-      if (!notifiedFallback) notifiedFallback = true;
     }
   });
 }

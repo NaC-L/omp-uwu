@@ -10,9 +10,16 @@ export type UwuSettings = {
   colorsEnabled: boolean;
 };
 
+export const DEFAULT_SETTINGS: Readonly<UwuSettings> = {
+  enabled: true, style: "rewrite", level: "mid", locale: "auto", colorsEnabled: false,
+};
+
+/** What this session has observed; not a support guarantee. */
+export type Capability = "waiting for first reply" | "available" | "unavailable";
+
 export type UwuStatus = UwuSettings & {
-  rewrite: "unknown" | "detected" | "not observed";
-  display: "unavailable (no Container)" | "ANSI hook detected" | "pending component discovery";
+  rewrite: Capability;
+  display: Capability;
   promptFallback: boolean;
 };
 
@@ -62,11 +69,11 @@ export function createStatusCard(
       };
       const chip = (label: string, selected: boolean) => selected
         ? theme.bg("selectedBg", theme.fg("accent", theme.bold(`[ ${label} ]`)))
-        : theme.fg("dim", `[ ${label} ]`);
+        : theme.fg("text", `[ ${label} ]`);
       const presets = (values: string[], selected: string) => values.map((value) => chip(value, value === selected)).join(" ");
       const control = (index: number, label: string, value: string) => {
         const cursor = theme.fg("accent", focus === index ? "› " : "  ");
-        const name = theme.fg(focus === index ? "accent" : "muted", label);
+        const name = theme.fg(focus === index ? "accent" : "text", label);
         if (contentWidth >= 42) row(`${cursor}${name}${" ".repeat(Math.max(1, 14 - label.length))}${value}`);
         else {
           row(`${cursor}${name}`);
@@ -75,12 +82,12 @@ export function createStatusCard(
       };
       const setting = (label: string, value: string) => {
         const key = contentWidth >= 34 ? label.padEnd(16) : `${label}: `;
-        row(`${theme.fg("muted", key)}${value}`);
+        row(`${theme.fg("text", key)}${value}`);
       };
 
       rule("╭", "╮");
-      const title = theme.fg("accent", theme.bold("UwU"));
-      const badge = theme.fg(draft.enabled ? "success" : "dim", theme.bold(draft.enabled ? "[ON]" : "[OFF]"));
+      const title = theme.fg("accent", theme.bold("UwU settings"));
+      const badge = theme.fg(draft.enabled ? "success" : "text", theme.bold(draft.enabled ? "[ON]" : "[OFF]"));
       row(`${title}${" ".repeat(Math.max(1, contentWidth - visibleWidth(title) - visibleWidth(badge)))}${badge}`);
       row(`${chip("Controls", tab === "controls")} ${chip("Compatibility", tab === "compatibility")}`);
       rule("├", "┤");
@@ -88,13 +95,14 @@ export function createStatusCard(
         control(0, "Mode", `${chip(draft.enabled ? "● ON" : "ON", draft.enabled)} ${chip(draft.enabled ? "OFF" : "OFF ●", !draft.enabled)}`);
         control(1, "Style", presets(styles, draft.style));
         const filled = (levels.indexOf(draft.level) + 1) * 2;
-        control(2, "Intensity", `${presets(levels, draft.level)} ${theme.fg("accent", "▰".repeat(filled))}${theme.fg("dim", "▱".repeat(6 - filled))}`);
+        control(2, "Level", `${presets(levels, draft.level)} ${theme.fg("accent", "▰".repeat(filled))}${theme.fg("dim", "▱".repeat(6 - filled))}`);
         control(3, "Locale", presets(locales, draft.locale));
-        control(4, "Kawaii colors", `${chip(draft.colorsEnabled ? "● ON" : "ON", draft.colorsEnabled)} ${chip(draft.colorsEnabled ? "OFF" : "OFF ●", !draft.colorsEnabled)}`);
+        control(4, "Colors", `${chip(draft.colorsEnabled ? "● ON" : "ON", draft.colorsEnabled)} ${chip(draft.colorsEnabled ? "OFF" : "OFF ●", !draft.colorsEnabled)}`);
         row("");
         row(`${theme.fg("accent", focus === 5 ? "› " : "  ")}${chip("Save", focus === 5)}`);
+        row(`${theme.fg("accent", focus === 6 ? "› " : "  ")}${chip("Reset to defaults", focus === 6)}`);
         const changes = (Object.keys(draft) as (keyof UwuSettings)[]).filter((key) => draft[key] !== status[key]).length;
-        row(theme.fg(changes ? "warning" : "dim", changes ? `${changes} unsaved ${changes === 1 ? "change" : "changes"}` : "Draft unchanged"));
+        row(theme.fg(changes ? "warning" : "text", changes ? `${changes} unsaved ${changes === 1 ? "change" : "changes"}` : "Draft unchanged"));
         rule("├", "┤");
         const previewKind = !draft.enabled ? "mode off" : draft.style === "display" ? "prose only · experimental" : draft.style === "prompt" ? "approximation" : "deterministic";
         row(theme.fg("accent", theme.bold(`Preview · ${previewKind}`)));
@@ -103,20 +111,20 @@ export function createStatusCard(
           : uwufy(sample, { level: draft.level, locale: draft.locale });
         row(theme.fg("text", preview));
         rule("├", "┤");
-        row(theme.fg("muted", "↑↓ focus · ←→ / Enter / Space edit"));
-        row(theme.fg("muted", "Tab tabs · Enter on Save · Esc cancel"));
+        row(theme.fg("text", "↑↓ focus · ←→ / Enter / Space edit"));
+        row(theme.fg("text", "Tab tabs · Enter on Save/Reset · Esc cancel"));
       } else {
         row(theme.fg("accent", theme.bold("Observed capabilities")));
-        setting("Rewrite", theme.fg(status.rewrite === "detected" ? "success" : "muted", status.rewrite));
-        setting("ANSI display", theme.fg(status.display === "ANSI hook detected" ? "success" : "muted", status.display));
+        setting("Rewrite", theme.fg(status.rewrite === "available" ? "success" : "text", status.rewrite));
+        setting("Screen display", theme.fg(status.display === "available" ? "success" : "text", status.display));
         setting("Native/client", theme.fg("warning", "unsupported"));
-        setting("Prompt fallback", theme.fg(status.promptFallback ? "success" : "dim", status.promptFallback ? "on" : "off"));
+        setting("Prompt fallback", theme.fg(status.promptFallback ? "success" : "text", status.promptFallback ? "on" : "off"));
         row("");
-        row(theme.fg("dim", `Fallback reflects saved ${status.style}/${status.enabled ? "on" : "off"} settings, not the draft.`));
+        row(theme.fg("text", `Fallback reflects saved ${status.style}/${status.enabled ? "on" : "off"} settings, not the draft.`));
         row(theme.fg("warning", "Display is experimental: ANSI prose only, not native/client rendering."));
-        row(theme.fg("dim", "Unknown/pending is not a support guarantee. Display never adds a prompt or changes history."));
+        row(theme.fg("text", "Observed in this session, not a support guarantee. Display never adds a prompt or changes history."));
         rule("├", "┤");
-        row(theme.fg("muted", "Tab controls · Esc cancel"));
+        row(theme.fg("text", "Tab controls · Esc cancel"));
       }
       rule("╰", "╯");
       return lines;
@@ -131,12 +139,14 @@ export function createStatusCard(
       if (matchesKey(data, Key.tab)) {
         tab = tab === "controls" ? "compatibility" : "controls";
       } else if (tab === "controls" && matchesKey(data, Key.up)) {
-        focus = (focus + 5) % 6;
+        focus = (focus + 6) % 7;
       } else if (tab === "controls" && matchesKey(data, Key.down)) {
-        focus = (focus + 1) % 6;
+        focus = (focus + 1) % 7;
       } else if (tab === "controls" && focus === 5 && matchesKey(data, Key.enter)) {
         close({ ...draft });
         return;
+      } else if (tab === "controls" && focus === 6 && (matchesKey(data, Key.enter) || matchesKey(data, Key.space))) {
+        Object.assign(draft, DEFAULT_SETTINGS);
       } else if (tab === "controls" && focus < 5 && (
         matchesKey(data, Key.left) || matchesKey(data, Key.right) ||
         matchesKey(data, Key.enter) || matchesKey(data, Key.space)

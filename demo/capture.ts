@@ -53,7 +53,7 @@ const DASH_WIDTH = 68;
 const KEYS = { down: "\x1b[B", right: "\x1b[C", left: "\x1b[D", tab: "\t" } as const;
 const status: UwuStatus = {
   enabled: true, style: "rewrite", level: "mid", locale: "auto", colorsEnabled: true,
-  rewrite: "detected", display: "ANSI hook detected", promptFallback: false,
+  rewrite: "available", display: "available", promptFallback: false,
 };
 const card = createStatusCard(status, theme, () => {}, () => {});
 // Each step: key to press (or null for the opening frame) and how long to hold the result.

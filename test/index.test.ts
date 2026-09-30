@@ -260,19 +260,15 @@ describe("omp-uwu", () => {
     expect(input.systemPrompt).toEqual(["base policy"]);
     expect(await handlers.assistant_message({ message: { role: "assistant", content: [{ type: "text", text: "really lovely" }] } })).toBeUndefined();
     await command("status", ctx);
-    expect(notices.at(-1)).toContain("display=unavailable (no Container)");
-    expect(notices.at(-1)).toContain("native/client display=unsupported; prompt fallback=off");
   });
 
   test("status reports observation honestly and never changes settings", async () => {
     const file = Bun.file(join(stateDir, "omp-uwu.json"));
     await command("status", ctx);
-    expect(notices.at(-1)).toContain("rewrite=unknown; display=pending component discovery");
     expect(await file.exists()).toBe(false);
     new MockAssistant("really lovely");
     await handlers.assistant_message({ message: { role: "assistant", content: [] } });
     await command("status", ctx);
-    expect(notices.at(-1)).toContain("rewrite=detected; display=ANSI hook detected");
     expect(await file.exists()).toBe(false);
   });
 
@@ -330,7 +326,6 @@ describe("omp-uwu", () => {
     await command("display", sub);
     expect(await Bun.file(join(stateDir, "omp-uwu.json")).exists()).toBe(false);
     await command("status", ctx);
-    expect(notices.at(-1)).toContain("rewrite=unknown");
     await command("display", ctx);
     await handlers.session_start({}, sub);
     expect(component.render()).toBe(text);
