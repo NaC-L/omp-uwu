@@ -42,6 +42,7 @@ This GIF shows **omp's real TUI components**, captured without a model call: `/u
 
 Selecting any style also **turns uwu on**. Level and locale apply to all three:
 
+- **`min`:** keeps prose unchanged and only adds occasional `uwu`, `owo`, kaomoji or emoji at sentence ends. Code and other protected spans stay exact. Prompt style requests this behavior from the model; rewrite is deterministic.
 - **`low` / `mid` / `max`:** fewer changes and decorations / original strength / stronger styling.
 - **`auto`:** protects both English and Turkish critical words. It does **not** detect the language.
 - **`en`:** protects English critical words only.
@@ -55,12 +56,12 @@ Commands stay plain, even when the conversation gets fluffy.
 
 | Command | What it does |
 |---|---|
-| `/uwu` | Toggle uwu on/off |
+| `/uwu` | Open the TUI settings dashboard (plain summary outside the TUI); does not toggle |
 | `/uwu on` · `/uwu off` | Turn it on or off explicitly |
 | `/uwu rewrite` | Rewrite finished replies deterministically (default, with the fallback above) |
 | `/uwu prompt` | Ask the model to write in uwu while it streams |
 | `/uwu display` | **Experimental:** style prose only on screen, in the ANSI TUI |
-| `/uwu level low\|mid\|max` | Light, standard or strong intensity |
+| `/uwu level min\|low\|mid\|max` | Decorations only, light, standard or strong intensity |
 | `/uwu locale auto\|en\|tr` | Which critical words to protect (never translates) |
 | `/uwu colors [on\|off]` | Kawaii palette, sparkles and animated working cat (toggles without an argument) |
 | `/uwu preview <text>` | Show a sample with current settings, without changing anything |
@@ -136,7 +137,7 @@ These are reported **kawaii scores**, not evidence of coding accuracy, speed, co
 
 Display mode uses omp's **private per-message text transform**, not public extension API. The plugin finds `AssistantMessageComponent` through the shared `Container` base class. If it cannot, display styling and sparkles do nothing (the palette still works). There is **no silent fallback** to prompt or rewrite. `/uwu status` reports whether the hook was found.
 
-- Styling happens on individual Markdown prose runs before wrapping. Inline formatting, links, newlines and streaming edits split runs, so results can differ from rewrite or `/uwu preview`. Display adds no emoticons or stutters.
+- Styling happens on individual Markdown prose runs before wrapping. Inline formatting, links, newlines and streaming edits split runs, so results can differ from rewrite or `/uwu preview`. Display adds no emoticons or stutters at low/mid/max; min adds only sentence-end decorations.
 - Recognized identifiers, numbers and quoted spans within a run stay protected. **Quotes split across runs cannot be protected as a whole.**
 - Some paths skip the transform: blockquotes, some tables, headings and math may stay unchanged.
 - **Native clients are unsupported:** omp **18.4.4** sends them raw Markdown. RPC, print and export also retain original text.
@@ -146,7 +147,7 @@ Display mode uses omp's **private per-message text transform**, not public exten
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.7.2    # pin a version
+omp plugin install omp-uwu@0.8.0    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
@@ -230,8 +231,8 @@ CI ([`ci.yml`](.github/workflows/ci.yml)) runs `check` and tests on pushes to `m
 
 ```sh
 # bump "version" in package.json, commit, then:
-git tag v0.7.2
-git push origin main v0.7.2
+git tag v0.8.0
+git push origin main v0.8.0
 ```
 
 The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu` and workflow `publish.yml`.

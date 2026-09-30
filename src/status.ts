@@ -34,7 +34,7 @@ export function createStatusCard(
     locale: status.locale, colorsEnabled: status.colorsEnabled,
   };
   const styles: UwuSettings["style"][] = ["rewrite", "prompt", "display"];
-  const levels: UwuLevel[] = ["low", "mid", "max"];
+  const levels: UwuLevel[] = ["min", "low", "mid", "max"];
   const locales: UwuLocale[] = ["auto", "en", "tr"];
   const sample = "Really lovely progress. Merhaba, bugün beraber çalışalım. Keep `raw_code` unchanged.";
   let tab: "controls" | "compatibility" = "controls";
@@ -94,7 +94,7 @@ export function createStatusCard(
       if (tab === "controls") {
         control(0, "Mode", `${chip(draft.enabled ? "● ON" : "ON", draft.enabled)} ${chip(draft.enabled ? "OFF" : "OFF ●", !draft.enabled)}`);
         control(1, "Style", presets(styles, draft.style));
-        const filled = (levels.indexOf(draft.level) + 1) * 2;
+        const filled = levels.indexOf(draft.level) * 2;
         control(2, "Level", `${presets(levels, draft.level)} ${theme.fg("accent", "▰".repeat(filled))}${theme.fg("dim", "▱".repeat(6 - filled))}`);
         control(3, "Locale", presets(locales, draft.locale));
         control(4, "Colors", `${chip(draft.colorsEnabled ? "● ON" : "ON", draft.colorsEnabled)} ${chip(draft.colorsEnabled ? "OFF" : "OFF ●", !draft.colorsEnabled)}`);

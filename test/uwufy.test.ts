@@ -60,6 +60,21 @@ describe("uwufy", () => {
 });
 
 describe("uwufy options", () => {
+  test("min only inserts decorations, preserving prose, whitespace and protected spans", () => {
+    const source = [
+      "Really lovely flowers. The little animal is near. Merhaba beraber çalışalım.",
+      "Never delete anything! Keep `raw_code` and https://example.com/really unchanged.",
+      "```ts\nconst reallyNice = 'really little';\n```",
+    ].join("\n\n");
+    for (const transform of [uwufy, uwufyProse]) {
+      const result = transform(source, { level: "min" });
+      const added = EMOTICONS.filter((face) => result.includes(` ${face}`));
+      expect(added).not.toEqual([]);
+      const undecorated = added.reduce((text, face) => text.replaceAll(` ${face}`, ""), result);
+      expect(undecorated).toBe(source);
+      expect(transform(result, { level: "min" })).toBe(result);
+    }
+  });
   test("defaults remain mid intensity and auto locale", () => {
     const source = "Really nice! The little cat is running. This is a good example.";
     expect(uwufy(source)).toBe(uwufy(source, { level: "mid", locale: "auto" }));
@@ -106,7 +121,7 @@ describe("uwufy options", () => {
     expect(decorations[2]).toBeGreaterThan(decorations[1]!);
   });
 
-  for (const level of LEVELS) {
+  for (const level of ["min", ...LEVELS] as UwuLevel[]) {
     for (const locale of LOCALES) {
       test(`is deterministic and idempotent at ${level}/${locale}`, () => {
         const options: UwuOptions = { level, locale };

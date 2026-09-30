@@ -90,10 +90,10 @@ function fixture(withContainer = true) {
     get closes() { return closeCount; },
     get renders() { return renderCount; },
     get options() { return options; },
-    async status(mode = "tui") {
+    async status(mode = "tui", args = "status") {
       const { promise: opened, resolve: open } = Promise.withResolvers<void>();
       onOpen = open;
-      const finished = command("status", { mode, ui, sessionManager: { getBranch: () => history } });
+      const finished = command(args, { mode, ui, sessionManager: { getBranch: () => history } });
       await opened;
       return { component, finished };
     },
@@ -115,6 +115,26 @@ function flattened(component: ExtensionUiComponent, width: number): string {
 const sample = "Really lovely progress. Merhaba, bugün beraber çalışalım. Keep `raw_code` unchanged.";
 
 describe("/uwu status dashboard", () => {
+  test("bare /uwu opens controls; min saves, reloads and cancels without toggling", async () => {
+    const app = fixture();
+    const first = await app.status("tui", "");
+    press(first.component, "\u001b[B", "\u001b[B", "\u001b[D", "\u001b[D");
+    press(first.component, "\u001b[B", "\u001b[B", "\u001b[B", "\r");
+    await first.finished;
+    const path = join(dir, "omp-uwu.json");
+    expect(await Bun.file(path).json()).toEqual({
+      enabled: true, colors: false, style: "rewrite", level: "min", locale: "auto",
+    });
+    const reopened = await app.status("tui", " ");
+    press(reopened.component, " ", "\u001b");
+    await reopened.finished;
+    expect((await Bun.file(path).json()).enabled).toBe(true);
+    const reloaded = await fixture(false).status("tui", "");
+    expect(content(reloaded.component)).toContain("[ min ]");
+    press(reloaded.component, "\u001b");
+    await reloaded.finished;
+    expect(app.notices).toEqual([]);
+  });
   test("reset is draft-only until Save and Escape preserves the saved settings", async () => {
     const path = join(dir, "omp-uwu.json");
     const saved = { enabled: false, colors: true, style: "display", level: "max", locale: "tr" };
@@ -205,7 +225,8 @@ describe("/uwu status dashboard", () => {
     expect(component.render(80).join("\n")).toContain(theme.bg("selectedBg", theme.fg("accent", theme.bold("[ low ]"))));
     expect(content(component)).toContain("▰▰▱▱▱▱");
     press(component, "\u001b[D");
-    expect(content(component)).toContain("▰▰▰▰▰▰");
+    expect(component.render(80).join("\n")).toContain(theme.bg("selectedBg", theme.fg("accent", theme.bold("[ min ]"))));
+    press(component, "\u001b[D");
     press(component, "\u001b[B", " ");
     expect(component.render(80).join("\n")).toContain(theme.bg("selectedBg", theme.fg("accent", theme.bold("[ en ]"))));
     press(component, "\u001b[B", "\u001b[32u");

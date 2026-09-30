@@ -14,7 +14,7 @@
  * the model may start answering in uwu-speak on its own.
  */
 
-export type UwuLevel = "low" | "mid" | "max";
+export type UwuLevel = "min" | "low" | "mid" | "max";
 export type UwuLocale = "auto" | "en" | "tr";
 
 export interface UwuOptions {
@@ -97,7 +97,9 @@ const KEEP_WORDS = new Set([
 const TH_WORDS = new Set(["the", "this", "that", "these", "those", "them", "then", "there", "their", "they", "than"]);
 
 // Mid retains the original probabilities; low also softens the r/l rewrite.
+// Min never rewrites a word: it only appends uwu/owo/kaomoji/emoji at sentence ends.
 const INTENSITY = {
+	min: { rl: 0, th: 0, ny: 0, stutter: 0, emoticon: 0.4 },
 	low: { rl: 0.4, th: 0.15, ny: 0.2, stutter: 0.04, emoticon: 0.1 },
 	mid: { rl: 1, th: 0.35, ny: 0.5, stutter: 0.12, emoticon: 0.3 },
 	max: { rl: 1, th: 0.75, ny: 0.85, stutter: 0.25, emoticon: 0.6 },
@@ -165,6 +167,7 @@ export function uwufy(text: string, options: UwuOptions = {}): string {
 
 /**
  * Rewrite a render-time prose run without adding stutters or emoticons.
+ * Min is decoration-only: it appends faces instead of rewriting words.
  * Quoted spans, identifiers and markdown protected surfaces still stay exact.
  * Positions reset per supplied run; changing renderer fragment boundaries can
  * change probabilistic choices. This is a lexical rewriter, not a translator.
@@ -172,7 +175,7 @@ export function uwufy(text: string, options: UwuOptions = {}): string {
  * must not split quoted or technical spans across independently rewritten runs.
  */
 export function uwufyProse(text: string, options: UwuOptions = {}): string {
-	return rewriteText(text, options, false);
+	return rewriteText(text, options, options.level === "min");
 }
 
 function rewriteText(text: string, options: UwuOptions, decorate: boolean): string {
@@ -327,7 +330,7 @@ function rewriteToken(event: TokenEvent, seed: string, options: Required<UwuOpti
 	const key = `${seed}|${event.sentence}|${event.word}`;
 	let result = event.token;
 
-	if (!isKeptWord(core, options.locale)) {
+	if (options.level !== "min" && !isKeptWord(core, options.locale)) {
 		let word = core;
 		if (TH_WORDS.has(word.toLowerCase()) && roll(`${key}|th`) < intensity.th) {
 			word = (word[0] === "T" ? "D" : "d") + word.slice(2);

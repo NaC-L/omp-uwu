@@ -24,11 +24,16 @@ The style applies only to natural-language chat text shown to the user. Task qua
 `.trim();
 
 type UwuStyle = "rewrite" | "prompt" | "display";
-const USAGE = "Usage: /uwu [on|off|rewrite|prompt|display|level low|mid|max|locale auto|en|tr|status|preview <text>|colors [on|off]]";
+const USAGE = "Usage: /uwu [on|off|rewrite|prompt|display|level min|low|mid|max|locale auto|en|tr|status|preview <text>|colors [on|off]]";
 
 function stylePrompt(level: UwuLevel, locale: UwuLocale): string {
   let prompt = UWU_PROMPT;
-  if (level === "low") {
+  if (level === "min") {
+    prompt = prompt
+      .replace('replace r/l with w in most words ("weawwy", "hewwo"), "th" → "d" occasionally, "na/ne/no" → "nya/nye/nyo" sometimes',
+        'keep all original words, spelling, punctuation and meaning unchanged; only add uwu, owo, kaomoji or emoji at sentence ends')
+      .replace('occasional stutter ("h-hewwo") and cute kaomoji/emoticons', 'no stutters or word substitutions; occasional cute kaomoji/emoticons');
+  } else if (level === "low") {
     prompt = prompt
       .replace('replace r/l with w in most words ("weawwy", "hewwo"), "th" → "d" occasionally, "na/ne/no" → "nya/nye/nyo" sometimes',
         'use a light, mostly unchanged style: rarely replace r/l with w; very rarely use "th" → "d" or "na/ne/no" → "nya/nye/nyo"')
@@ -83,7 +88,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
         if ("enabled" in state && typeof state.enabled === "boolean") enabled = state.enabled;
         if ("colors" in state && typeof state.colors === "boolean") colorsEnabled = state.colors;
         if ("style" in state && (state.style === "rewrite" || state.style === "prompt" || state.style === "display")) style = state.style;
-        if ("level" in state && (state.level === "low" || state.level === "mid" || state.level === "max")) level = state.level;
+        if ("level" in state && (state.level === "min" || state.level === "low" || state.level === "mid" || state.level === "max")) level = state.level;
         if ("locale" in state && (state.locale === "auto" || state.locale === "en" || state.locale === "tr")) locale = state.locale;
       })
       .catch(() => {});
@@ -128,9 +133,9 @@ export default function uwuExtension(pi: ExtensionAPI) {
   };
 
   pi.registerCommand("uwu", {
-    description: "UwU settings: /uwu status opens controls; /uwu toggles styling",
+    description: "UwU settings: /uwu opens controls; /uwu on|off changes styling",
     getArgumentCompletions: (prefix) => {
-      const values = ["status", "on", "off", "rewrite", "prompt", "display", "level low", "level mid", "level max", "locale auto", "locale en", "locale tr", "colors on", "colors off", "preview"];
+      const values = ["status", "on", "off", "rewrite", "prompt", "display", "level min", "level low", "level mid", "level max", "locale auto", "locale en", "locale tr", "colors on", "colors off", "preview"];
       const matches = values.filter((value) => value.startsWith(prefix.toLowerCase()));
       return matches.length ? matches.map((value) => ({ value, label: value })) : null;
     },
@@ -146,7 +151,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
       const arg = (match?.[1] ?? "").toLowerCase();
       const option = (match?.[2] ?? "").trim();
       const value = option.toLowerCase();
-      if (arg === "status" && !option) {
+      if (!input || (arg === "status" && !option)) {
         const display = !host.Container ? "unavailable" : rendering?.isSupported() ? "available" : "waiting for first reply";
         const status: UwuStatus = {
           enabled, style, level, locale, colorsEnabled,
@@ -179,7 +184,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
       }
       if (arg === "colors" && (value === "on" || value === "off" || !value)) {
         colorsEnabled = value ? value === "on" : !colorsEnabled;
-      } else if (arg === "level" && (value === "low" || value === "mid" || value === "max")) {
+      } else if (arg === "level" && (value === "min" || value === "low" || value === "mid" || value === "max")) {
         level = value;
       } else if (arg === "locale" && (value === "auto" || value === "en" || value === "tr")) {
         locale = value;
@@ -188,9 +193,8 @@ export default function uwuExtension(pi: ExtensionAPI) {
         enabled = true;
       } else if (!option && arg === "on") enabled = true;
       else if (!option && arg === "off") enabled = false;
-      else if (!input) enabled = !enabled;
       else {
-        const reason = arg === "level" ? "Level must be low, mid or max."
+        const reason = arg === "level" ? "Level must be min, low, mid or max."
           : arg === "locale" ? "Locale must be auto, en or tr."
           : arg === "colors" ? "Colors accepts on or off, or no value to toggle."
           : ["on", "off", "rewrite", "prompt", "display", "status"].includes(arg) ? `${arg} does not accept extra text.`

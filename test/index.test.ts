@@ -297,6 +297,17 @@ describe("omp-uwu", () => {
     }
   });
 
+  test("min command keeps assistant words and tool content exact", async () => {
+    await command("level min", ctx);
+    const text = "Really lovely progress. Merhaba, bugün beraber çalışalım. Keep `raw_code` unchanged.";
+    const tool = { type: "toolCall", id: "raw_id" };
+    const result = await handlers.assistant_message({
+      message: { role: "assistant", content: [{ type: "text", text }, tool] },
+    }) as RewriteResult;
+    expect(result?.content[0]?.text).toBe("Really lovely progress. Merhaba, bugün beraber çalışalım. ✨ Keep `raw_code` unchanged. uwu");
+    expect(result?.content[1]).toBe(tool);
+    expect((await Bun.file(join(stateDir, "omp-uwu.json")).json()).level).toBe("min");
+  });
   test("rewrite and prompt use the selected intensity and locale", async () => {
     await command("level low", ctx);
     await command("locale tr", ctx);
