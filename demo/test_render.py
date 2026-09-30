@@ -33,7 +33,7 @@ class RenderTests(unittest.TestCase):
     def setUpClass(cls):
         cls.font_path = render.default_font()
         cls.inputs = {name: (render.HERE / name).read_bytes() for name in (
-            "prompt.txt", "plain.txt", "uwu.txt", "chat.json", "dashboard.json",
+            "prompt.txt", "plain.txt", "uwu.txt", "chat.json", "dashboard.json", "kitty.json",
         )}
 
     def test_saved_gifs_keep_every_frame_and_timing_without_mutating_inputs(self):
@@ -42,6 +42,7 @@ class RenderTests(unittest.TestCase):
             for source, output, title in (
                 ("chat.json", "demo.gif", 'Your coding agent, but it says "hewwo"'),
                 ("dashboard.json", "dashboard.gif", "Your little control panel"),
+                ("kitty.json", "kitty.gif", "A little kitty, on the clock"),
             ):
                 with self.subTest(source=source):
                     capture = json.loads(self.inputs[source])

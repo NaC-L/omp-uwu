@@ -62,7 +62,7 @@ Commands stay plain, even when the conversation gets fluffy.
 | `/uwu display` | **Experimental:** style prose only on screen, in the ANSI TUI |
 | `/uwu level low\|mid\|max` | Light, standard or strong intensity |
 | `/uwu locale auto\|en\|tr` | Which critical words to protect (never translates) |
-| `/uwu colors [on\|off]` | Kawaii palette and sparkles (toggles without an argument) |
+| `/uwu colors [on\|off]` | Kawaii palette, sparkles and animated working cat (toggles without an argument) |
 | `/uwu preview <text>` | Show a sample with current settings, without changing anything |
 | `/uwu status` | Open the dashboard (plain one-line summary outside the TUI) |
 
@@ -80,6 +80,19 @@ In prompt style, `/uwu preview` is a **deterministic approximation**, not a pred
 ### Pastels & sparkles ♡
 
 `/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble, and adds a `(◕ᴗ◕✿) uwu` status badge. In chat prose, `uwu`/`owo` get per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint.
+
+While uwu mode and colors are on, a full-body kitty walks back and forth instead of the ANSI TUI's activity spinner: `ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses. Its seven-column lane keeps the turn timer and loader text steady. Compact running-tool icons stay unchanged. ASCII themes get an ASCII walking cat. `/uwu colors off` or `/uwu off` restores your original spinner. Native/client spinners are unchanged.
+
+![Real omp status-line kitty walking back and forth beside the elapsed turn timer](demo/kitty.gif)
+
+Enable **both** switches, then send a message:
+
+```text
+/uwu on
+/uwu colors on
+```
+
+Look **bottom-left, beside the elapsed turn timer** while omp is working. The GIF shows two cycles of the real status-line brand segment, sampled without a model call; the surrounding frame is presentation artwork.
 
 Everything is colored **at render time, in the ANSI TUI only**:
 
@@ -182,12 +195,13 @@ They use pastel instrument-panel layouts. The score panel visualizes only the tw
 
 The before/after replies come from real transcripts in [`demo/`](demo). `record.sh` captures one reply with the extension loaded and one without it, in a throwaway agent directory so personal rules and extensions do not affect the replies. The side-by-side image is drawn directly from those transcripts.
 
-The two GIFs need no model. `capture.ts` renders omp's real TUI components with the kawaii palette over `dark-sunset` and sparkles installed, then saves their ANSI output:
+The three GIFs need no model. `capture.ts` renders omp's real TUI components with the kawaii palette over `dark-sunset` and sparkles installed, then saves their ANSI output:
 
 - `chat.json`: the prompt typed into a user bubble, then the uwu reply streaming into an assistant message.
 - `dashboard.json`: the `/uwu status` card while a scripted key sequence edits it. Edit the script in `capture.ts` to change what the GIF shows.
+- `kitty.json`: two walking cycles from the real status-line brand segment, sampled every 240ms.
 
-`render.py` draws the before/after image and both GIFs with matching plum-and-pastel frames, pixel motifs and hairline dividers. It preserves the captured TUI content and transcript text; rebuilding the artwork does not record a new session:
+`render.py` draws the before/after image and all three GIFs with matching plum-and-pastel frames, pixel motifs and hairline dividers. It preserves the captured TUI content and transcript text; rebuilding the artwork does not record a new session. On Windows, Gadugi supplies the kitty glyphs missing from Consolas; elsewhere use `--font` with a font covering Canadian syllabics:
 
 ```sh
 mkdir -p /tmp/omp-demo && cp ~/.omp/agent/agent.db* /tmp/omp-demo/
@@ -196,7 +210,7 @@ COLORTERM=truecolor bun demo/capture.ts
 uv run --with pillow python demo/render.py
 ```
 
-Model output varies between runs, so re-run `record.sh` until you get a reply that reads well. `capture.ts` is deterministic; re-run it whenever transcripts, the palette or the dashboard change.
+Model output varies between runs, so re-run `record.sh` until you get a reply that reads well. `capture.ts` is deterministic; re-run it whenever transcripts, the palette, dashboard or kitty animation change.
 
 The old [`uwu-bench.html`](demo/uwu-bench.html) and [`uwu-bench.png`](demo/uwu-bench.png) remain available as **legacy artwork**, not benchmark evidence or the README's current graph. To recreate that legacy screenshot, edit the HTML and take a 1536×960 screenshot with headless Chrome:
 

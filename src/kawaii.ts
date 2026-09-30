@@ -33,6 +33,28 @@ const LIGHT_PALETTE: Partial<Record<ThemeColor | ThemeBg, string>> = {
   mdListBullet: "#c35424", userMessageBg: "#fde8f3",
 };
 
+// A full-body cat paces across a fixed-width lane, turning at each end.
+// Alternating silhouettes animate its legs and tail. omp advances activity
+// frames every 80ms; three ticks per step keep the walk readable.
+// Only `activity` is replaced; `status` fills compact running-tool slots.
+const CAT_POSES = {
+  unicode: [
+    "ᓚᘏᗢ    ", " ᓗᘎᗢ   ", "  ᓚᘏᗢ  ", "   ᓗᘎᗢ ", "    ᓚᘏᗢ",
+    "    ᗢᘏᓗ", "   ᗢᘎᓚ ", "  ᗢᘏᓗ  ", " ᗢᘎᓚ   ", "ᗢᘏᓗ    ",
+  ],
+  ascii: [
+    "~^>/   ", " ~^>\\  ", "  ~^>/ ", "   ~^>\\",
+    "   /<^~", "  \\<^~ ", " /<^~  ", "\\<^~   ",
+  ],
+};
+const CAT_TICKS_PER_POSE = 3;
+
+/** A walking silhouette, with an ASCII fallback for plain symbol presets. */
+function catSpinnerFrames(preset: string): string[] {
+  const poses = preset === "ascii" ? CAT_POSES.ascii : CAT_POSES.unicode;
+  return poses.flatMap((pose) => Array<string>(CAT_TICKS_PER_POSE).fill(pose));
+}
+
 /** Build a pastel copy of a host theme, retaining its colors outside the palette. */
 export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme): Theme {
   const palette = base.isLight ? LIGHT_PALETTE : DARK_PALETTE;
@@ -63,7 +85,7 @@ export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme)
     base.getColorMode(),
     preset,
     {},
-    { status: base.getSpinnerFrames("status"), activity: base.getSpinnerFrames("activity") },
+    { status: base.getSpinnerFrames("status"), activity: catSpinnerFrames(preset) },
   );
   // A nested colored span (a sparkle, an inline code span) ends in a
   // foreground reset, which would drop the enclosing heading/link color for the

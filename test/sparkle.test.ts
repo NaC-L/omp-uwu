@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { Container, getMarkdownTheme, Markdown, visibleWidth } from "@oh-my-pi/pi-tui";
 import { AssistantMessageComponent } from "@oh-my-pi/pi-tui/chat/assistant-message";
 import { getThemeByName, Theme } from "@oh-my-pi/pi-coding-agent";
-import { buildKawaiiTheme } from "../src/kawaii.ts";
+import { buildKawaiiTheme, KawaiiTheme } from "../src/kawaii.ts";
 import { installSparkles, sparkle, type Paint, type SparkleInstallation } from "../src/sparkle.ts";
 import { type UwuLevel, uwufy, uwufyProse } from "../src/uwufy.ts";
 
@@ -62,6 +62,36 @@ describe("sparkle", () => {
     const heading = kawaii.fg("mdHeading", `hi ${kawaii.fg("accent", "u")} there`);
     const open = kawaii.getFgAnsi("mdHeading");
     expect(heading).toBe(`${open}hi ${kawaii.getFgAnsi("accent")}u${open} there\x1b[39m`);
+  });
+
+  test("the working cat keeps text aligned and leaves compact tool spinners unchanged", async () => {
+    const original = (await getThemeByName("dark")) as Theme;
+    for (const preset of ["unicode", "nerd", "ascii"] as const) {
+      const base = new Theme({} as ConstructorParameters<typeof Theme>[0], {} as ConstructorParameters<typeof Theme>[1], original.getColorMode(), preset, {});
+      const originalActivity = [...base.getSpinnerFrames("activity")];
+      const kawaii = buildKawaiiTheme(Theme, base);
+      const frames = kawaii.getSpinnerFrames("activity");
+      expect(new Set(frames.map(visibleWidth)).size).toBe(1);
+      expect(new Set(frames).size).toBeGreaterThan(1);
+      expect(new Set(frames.map((frame) => frame.search(/\S/))).size).toBeGreaterThan(1);
+      expect(frames.every((frame) => !/[\r\n\x1b]/.test(frame))).toBe(true);
+      expect(frames).not.toEqual(base.getSpinnerFrames("activity"));
+      expect(kawaii.getSpinnerFrames("status")).toEqual(base.getSpinnerFrames("status"));
+      expect(base.getSpinnerFrames("activity")).toEqual(originalActivity);
+      if (preset === "ascii") expect(frames.every((frame) => /^[\x20-\x7e]+$/.test(frame))).toBe(true);
+    }
+  });
+
+  test("turning kawaii off restores the user's theme and custom activity spinner", async () => {
+    const original = (await getThemeByName("dark")) as Theme;
+    const base = new Theme({} as ConstructorParameters<typeof Theme>[0], {} as ConstructorParameters<typeof Theme>[1], original.getColorMode(), "unicode", {}, { activity: ["a", "b"] });
+    let current = base;
+    const overlay = new KawaiiTheme({ Theme, setThemeInstance: (theme) => { current = theme; } });
+    overlay.enable(current);
+    expect(current.getSpinnerFrames("activity")).not.toEqual(["a", "b"]);
+    overlay.disable(current);
+    expect(current).toBe(base);
+    expect(current.getSpinnerFrames("activity")).toEqual(["a", "b"]);
   });
 
   test("is deterministic and never changes visible text", () => {

@@ -6,11 +6,13 @@ Inputs (all in this directory):
   plain.txt       omp's reply without it                 (record.sh)
   chat.json       saved ANSI frames of the real chat TUI (capture.ts)
   dashboard.json  saved ANSI frames of the real `/uwu status` card (capture.ts)
+  kitty.json      saved ANSI frames of the real status-line brand (capture.ts)
 
 Outputs:
   demo.gif          the saved chat frames in an editorial presentation
   before-after.png  both replies side by side
   dashboard.gif     the `/uwu status` dashboard being edited with the keyboard
+  kitty.gif         the walking cat beside omp's turn timer
 
 Usage:
   bun demo/capture.ts
@@ -172,6 +174,9 @@ class Canvas:
         symbol_font = ImageFont.truetype(str(symbol_path), FONT_SIZE) if symbol_path.exists() else self.emoticon
         self.emoticon_parts = [(char, symbol_font if char in "◕✿" else self.emoticon)
                                for char in "(◕ᴗ◕✿)"]
+        # Canadian syllabics form the cat silhouette; Consolas lacks these glyphs.
+        kitty_path = Path("C:/Windows/Fonts/gadugi.ttf")
+        self.kitty = ImageFont.truetype(str(kitty_path), FONT_SIZE) if kitty_path.exists() else self.font
         self.char_w = self.font.getlength("M")
 
     def width_for(self, cols: int) -> int:
@@ -349,6 +354,7 @@ def render_ansi(c: Canvas, capture: dict, title: str, out: Path) -> None:
     cols = max(capture["width"], widest) + 2
     rows = max(len(lines) for lines in decoded)
     has_keys = any(f.get("key") for f in capture["frames"])
+    is_kitty = capture.get("kind") == "kitty"
     panel_w = c.width_for(cols)
     width = panel_w + 2 * MARGIN
     panel_h = 60 + 2 * PAD + LINE_H * rows
@@ -365,20 +371,24 @@ def render_ansi(c: Canvas, capture: dict, title: str, out: Path) -> None:
     emoji = ImageFont.truetype(str(emoji_path), FONT_SIZE - 2) if emoji_path.exists() else c.font
     actions = {"down": "Move focus down", "up": "Move focus up",
                "left": "Edit selection", "right": "Edit selection", "tab": "Switch tabs"}
-    headlines = (title,) if has_keys else ("Your coding agent,", 'but it says "hewwo"')
-    note = "Keyboard edits in the saved /uwu status capture." if has_keys else "Saved chat capture / kawaii colours + sparkles"
+    headlines = (title,) if has_keys or is_kitty else ("Your coding agent,", 'but it says "hewwo"')
+    note = ("Real omp status-line brand / walks while a turn is running" if is_kitty else
+            "Keyboard edits in the saved /uwu status capture." if has_keys else
+            "Saved chat capture / kawaii colours + sparkles")
 
     rgb: list[Image.Image] = []
     for index, (f, lines) in enumerate(zip(capture["frames"], decoded)):
-        img, d = c.editorial(width, height, "OMP-UWU / KEYBOARD" if has_keys else "OMP-UWU / CHAT",
+        img, d = c.editorial(width, height, "OMP-UWU / WORKING KITTY" if is_kitty else
+                             "OMP-UWU / KEYBOARD" if has_keys else "OMP-UWU / CHAT",
                              headlines, note)
-        if not has_keys:
+        if not has_keys and not is_kitty:
             x = width - MARGIN - sum(font.getlength(char) for char, font in c.emoticon_parts)
             for char, font in c.emoticon_parts:
                 d.text((x, HEADER_H - 28), char, font=font, fill=UWU, anchor="lt")
                 x += font.getlength(char)
         panel(d, (MARGIN, HEADER_H, width - MARGIN, panel_bottom))
-        d.text((MARGIN + PAD, HEADER_H + 20), "SAVED TUI / STATUS" if has_keys else "SAVED TUI / CHAT",
+        d.text((MARGIN + PAD, HEADER_H + 20),
+               "STATUS LINE / BOTTOM LEFT" if is_kitty else "SAVED TUI / STATUS" if has_keys else "SAVED TUI / CHAT",
                font=c.small, fill=PROMPT, anchor="lt")
         # Real sequence labels also prevent GIF encoders merging identical TUI frames.
         d.text((width - MARGIN - PAD, HEADER_H + 20), f"FRAME {index + 1:03d}",
@@ -397,8 +407,8 @@ def render_ansi(c: Canvas, capture: dict, title: str, out: Path) -> None:
                         d.text((x, y + LINE_H / 2), cell.char, font=emoji, fill=cell.fg,
                                anchor="lm", embedded_color=emoji_path.exists())
                     else:
-                        d.text((x, y + LINE_H / 2), cell.char, font=bold if cell.bold else c.font,
-                               fill=cell.fg, anchor="lm")
+                        font = c.kitty if "\u1400" <= cell.char <= "\u167f" else bold if cell.bold else c.font
+                        d.text((x, y + LINE_H / 2), cell.char, font=font, fill=cell.fg, anchor="lm")
                 col += span
             y += LINE_H
         if has_keys:
@@ -412,7 +422,8 @@ def render_ansi(c: Canvas, capture: dict, title: str, out: Path) -> None:
             d.text((MARGIN, height - 30), "↑↓ FOCUS     ←→ EDIT     TAB SWITCH TABS",
                    font=c.small, fill=DIM, anchor="lm")
         else:
-            d.text((MARGIN, height - 30), "SOURCE / chat.json", font=c.small, fill=DIM, anchor="lm")
+            d.text((MARGIN, height - 30), "SOURCE / kitty.json" if is_kitty else "SOURCE / chat.json",
+                   font=c.small, fill=DIM, anchor="lm")
             pixel_heart(d, width - MARGIN - 14, height - 36, UWU)
         rgb.append(img)
 
@@ -437,11 +448,13 @@ def main() -> None:
     plain = (HERE / "plain.txt").read_text(encoding="utf-8")
     chat = json.loads((HERE / "chat.json").read_text(encoding="utf-8"))
     dashboard = json.loads((HERE / "dashboard.json").read_text(encoding="utf-8"))
+    kitty = json.loads((HERE / "kitty.json").read_text(encoding="utf-8"))
 
     render_ansi(c, chat, 'Your coding agent, but it says "hewwo"', HERE / "demo.gif")
     render_before_after(c, prompt, plain, uwu, HERE / "before-after.png")
     render_ansi(c, dashboard, "Your little control panel", HERE / "dashboard.gif")
-    for name in ("demo.gif", "before-after.png", "dashboard.gif"):
+    render_ansi(c, kitty, "A little kitty, on the clock", HERE / "kitty.gif")
+    for name in ("demo.gif", "before-after.png", "dashboard.gif", "kitty.gif"):
         print(f"{name}: {(HERE / name).stat().st_size / 1024:.0f} KiB")
 
 

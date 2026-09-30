@@ -4,11 +4,14 @@
 //   chat.json       prompt.txt typed into a user bubble, then uwu.txt streaming
 //                   into an assistant message
 //   dashboard.json  the `/uwu status` card while a scripted key sequence edits it
+//   kitty.json      the real status-line brand segment over two walking cycles
 // Usage: COLORTERM=truecolor bun demo/capture.ts
 import { getThemeByName, setThemeInstance, Theme } from "@oh-my-pi/pi-coding-agent";
 import { Container } from "@oh-my-pi/pi-tui";
 import { AssistantMessageComponent } from "@oh-my-pi/pi-tui/chat/assistant-message";
 import { UserMessageComponent } from "@oh-my-pi/pi-tui/chat/user-message";
+import { renderSegment } from "@oh-my-pi/pi-tui/status-line";
+import type { SegmentContext } from "@oh-my-pi/pi-tui/status-line";
 import { buildKawaiiTheme } from "../src/kawaii.ts";
 import { installSparkles, sparkle, themePaint } from "../src/sparkle.ts";
 import { createStatusCard, type UwuStatus } from "../src/status.ts";
@@ -67,4 +70,18 @@ const dashboard: Frame[] = script.map(([key, ms]) => {
   return { key, ms, lines: card.render(DASH_WIDTH) };
 });
 await Bun.write(`${here}/dashboard.json`, JSON.stringify({ theme: THEME, width: DASH_WIDTH, frames: dashboard }, null, 1));
-console.log(`captured ${chat.length} chat frames and ${dashboard.length} dashboard frames`);
+
+// --- kitty: sample the host's actual time-derived brand spinner ---------------------
+const kitty: Frame[] = [];
+const cycleTicks = theme.getSpinnerFrames("activity").length;
+for (let tick = 0; tick < cycleTicks * 2; tick += 3) {
+  // The pi segment reads only these fields; no session/model is needed.
+  const context = {
+    now: new Date(tick * 80),
+    turnElapsedMs: tick * 80,
+    brandFgAnsi: theme.getFgAnsi("accent"),
+  } as SegmentContext;
+  kitty.push({ ms: 240, lines: [renderSegment("pi", context).content] });
+}
+await Bun.write(`${here}/kitty.json`, JSON.stringify({ theme: THEME, kind: "kitty", width: 40, frames: kitty }, null, 1));
+console.log(`captured ${chat.length} chat frames, ${dashboard.length} dashboard frames and ${kitty.length} kitty frames`);
