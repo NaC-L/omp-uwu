@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="440" viewBox="0 0 960 440" role="img" aria-labelledby="title desc" style="width:100%;height:auto;max-width:960px">
+  <title id="title">Reported kawaii/uwu-bench scores — Opus 5.5</title>
+  <desc id="desc">Reported scores: Opus 5.5 0.1%; Opus 5.5 with omp-uwu 98.5%. Horizontal bars share a zero-to-one-hundred-percent axis. The baseline bar is 0.64 SVG units wide; its separate hollow marker is enlarged only for visibility. The +98.4 percentage-point difference is derived by subtraction. This replots reported scores, not raw benchmark evidence or a coding-performance benchmark.</desc>
+  <defs><pattern id="score-dither" width="8" height="8" patternUnits="userSpaceOnUse"><g fill="#ff8fc7" shape-rendering="crispEdges"><rect x="0" y="0" width="2" height="2"/><rect x="4" y="0" width="2" height="2"/><rect x="2" y="2" width="2" height="2"/><rect x="6" y="2" width="2" height="2"/><rect x="0" y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="6" y="6" width="2" height="2"/></g></pattern></defs>
+  <style>
+    text { fill: #f6eaff; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace; font-variant-numeric: tabular-nums; }
+    .eyebrow { font-size: 16px; letter-spacing: 2px; fill: #ff8fc7; }
+    .muted { fill: #b7a8c2; }
+    .pink { fill: #ff8fc7; }
+    .lavender { fill: #b48cff; }
+    .mint { fill: #6fffd2; }
+    .rule { stroke: #f6eaff; stroke-opacity: .16; fill: none; }
+    .grid { stroke: #f6eaff; stroke-opacity: .09; stroke-dasharray: 2 6; fill: none; }
+  </style>
+  <rect width="960" height="440" rx="8" fill="#0b0710"/>
+  <text class="mono eyebrow" x="40" y="36">KAWAII / UWU-BENCH</text>
+  <text x="40" y="75" font-size="32" font-weight="600" letter-spacing="-1">A little more uwu.</text>
+  <g aria-hidden="true"><path d="M1 0H3V1H4V0H6V1H7V3H6V4H5V5H4V6H3V5H2V4H1V3H0V1H1Z" transform="translate(897 41) scale(3)" fill="#ff8fc7" shape-rendering="crispEdges"/></g>
+  <path class="rule" d="M40 98.5H920"/>
+  <path class="grid" d="M260 155V305"/>
+  <text class="mono muted" x="260" y="327" font-size="17" text-anchor="middle">0%</text>
+  <path class="grid" d="M420 155V305"/>
+  <text class="mono muted" x="420" y="327" font-size="17" text-anchor="middle">25%</text>
+  <path class="grid" d="M580 155V305"/>
+  <text class="mono muted" x="580" y="327" font-size="17" text-anchor="middle">50%</text>
+  <path class="grid" d="M740 155V305"/>
+  <text class="mono muted" x="740" y="327" font-size="17" text-anchor="middle">75%</text>
+  <path class="grid" d="M900 155V305"/>
+  <text class="mono muted" x="900" y="327" font-size="17" text-anchor="middle">100%</text>
+  <text x="40" y="190" font-size="23" fill="#a89bac">Opus 5.5</text>
+  <text class="mono muted" x="900" y="148" font-size="29" text-anchor="end">0.1%</text>
+  <rect id="baseline-bar" x="260" y="171" width="0.64" height="28" fill="#a89bac"/>
+  <path d="M260.64 199V209" stroke="#a89bac"/>
+  <rect id="baseline-visibility-marker" x="256.64" y="209" width="8" height="8" fill="#0b0710" stroke="#a89bac"/>
+  <text class="mono muted" x="277" y="219" font-size="16">Hollow marker enlarged; bar is true scale.</text>
+  <text x="40" y="278" font-size="23" font-weight="600">+ omp-uwu</text>
+  <text class="mono pink" x="900" y="249" font-size="29" font-weight="600" text-anchor="end">98.5%</text>
+  <rect id="uwu-bar" x="260" y="260" width="630.4" height="28" fill="#30182b"/>
+  <rect x="260" y="260" width="630.4" height="28" fill="url(#score-dither)"/>
+  <rect x="260.5" y="260.5" width="629.4" height="27" fill="none" stroke="#b48cff"/>
+  <path class="rule" d="M40 345.5H920"/>
+  <text class="mono mint" x="40" y="377" font-size="24">+98.4 percentage points</text>
+  <text class="mono muted" x="900" y="375" font-size="17" text-anchor="end">DERIVED: 98.5 − 0.1</text>
+  <text class="mono" x="40" y="407" font-size="18">Reported kawaii/uwu-bench scores · Opus 5.5</text>
+  <text class="muted" x="40" y="429" font-size="16">Reported scores only; not a coding-performance benchmark.</text>
+</svg>

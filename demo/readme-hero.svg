@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-labelledby="title desc" style="width:100%;height:auto;max-width:960px">
+  <title id="title">omp-uwu — Your coding agent, but it says "hewwo" (◕ᴗ◕✿)</title>
+  <desc id="desc">A soft pink omp-uwu title on dark plum, with an original dithered pixel cat and tiny hearts. Kawaii chat for omp.</desc>
+  <defs><pattern id="cat-dither" width="8" height="8" patternUnits="userSpaceOnUse"><g fill="#b48cff" shape-rendering="crispEdges"><rect x="0" y="0" width="2" height="2"/><rect x="4" y="0" width="2" height="2"/><rect x="2" y="2" width="2" height="2"/><rect x="6" y="2" width="2" height="2"/><rect x="0" y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/><rect x="6" y="6" width="2" height="2"/></g></pattern></defs>
+  <style>
+    text { fill: #f6eaff; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace; font-variant-numeric: tabular-nums; }
+    .eyebrow { font-size: 16px; letter-spacing: 2px; fill: #ff8fc7; }
+    .muted { fill: #b7a8c2; }
+    .pink { fill: #ff8fc7; }
+    .lavender { fill: #b48cff; }
+    .mint { fill: #6fffd2; }
+    .rule { stroke: #f6eaff; stroke-opacity: .16; fill: none; }
+    .grid { stroke: #f6eaff; stroke-opacity: .09; stroke-dasharray: 2 6; fill: none; }
+  </style>
+  <rect width="960" height="300" rx="8" fill="#0b0710"/>
+  <path class="rule" d="M40 78.5H920M40 242.5H920"/>
+  <path d="M40 78.5H112" stroke="#ff8fc7"/>
+  <text class="mono eyebrow" x="40" y="53">KAWAII CHAT / PRECISE BY DESIGN</text>
+  <text x="36" y="170" font-size="104" font-weight="650" letter-spacing="-6">omp<tspan class="pink">-uwu</tspan></text>
+  <text x="40" y="216" font-size="26" letter-spacing="-.5">Your coding agent, but it says "hewwo" (◕ᴗ◕✿)</text>
+  <text class="mono muted" x="40" y="274" font-size="17">A little warmth for your coding agent.</text>
+  <g aria-hidden="true">
+    <path class="grid" d="M700 98.5H920M700 218.5H920M724.5 98V219M892.5 98V219"/>
+    <path d="M754 176V116H766V104H778V116H790V128H838V116H850V104H862V116H874V176H862V188H766V176Z" fill="#22132f"/>
+    <path d="M754 176V116H766V104H778V116H790V128H838V116H850V104H862V116H874V176H862V188H766V176Z" fill="url(#cat-dither)" stroke="#b48cff" stroke-width="1"/>
+    <path d="M778 144H790V156H778ZM838 144H850V156H838Z" fill="#f6eaff"/>
+    <path d="M778 152H790V156H778ZM838 152H850V156H838Z" fill="#0b0710"/>
+    <path d="M806 160H810V164H818V160H822V168H806Z" fill="#ff8fc7"/>
+    <path d="M736 154H762M742 168H762M866 154H892M866 168H886" stroke="#b48cff" stroke-width="2"/>
+    <rect x="766" y="164" width="12" height="4" fill="#ff8fc7"/>
+    <rect x="850" y="164" width="12" height="4" fill="#ff8fc7"/>
+    <path d="M1 0H3V1H4V0H6V1H7V3H6V4H5V5H4V6H3V5H2V4H1V3H0V1H1Z" transform="translate(885 113) scale(3)" fill="#ff8fc7" shape-rendering="crispEdges"/>
+    <path d="M1 0H3V1H4V0H6V1H7V3H6V4H5V5H4V6H3V5H2V4H1V3H0V1H1Z" transform="translate(717 192) scale(2)" fill="#6fffd2" shape-rendering="crispEdges"/>
+    <path d="M901 183V195M895 189H907" stroke="#6fffd2" stroke-width="2"/>
+  </g>
+</svg>
