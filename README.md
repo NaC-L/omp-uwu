@@ -143,7 +143,7 @@ Display mode uses omp's **private per-message text transform**, not public exten
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.6.0    # pin a version
+omp plugin install omp-uwu@0.7.0    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
@@ -227,8 +227,8 @@ CI ([`ci.yml`](.github/workflows/ci.yml)) runs `check` and tests on pushes to `m
 
 ```sh
 # bump "version" in package.json, commit, then:
-git tag v0.6.0
-git push origin main v0.6.0
+git tag v0.7.0
+git push origin main v0.7.0
 ```
 
 The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu` and workflow `publish.yml`.
