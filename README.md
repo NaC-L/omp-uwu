@@ -81,7 +81,7 @@ In prompt style, `/uwu preview` is a **deterministic approximation**, not a pred
 
 `/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble, and adds a `(◕ᴗ◕✿) uwu` status badge. In chat prose, `uwu`/`owo` get per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint.
 
-While uwu mode and colors are on, a full-body kitty walks back and forth instead of the ANSI TUI's activity spinner: `ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses. Its seven-column lane keeps the turn timer and loader text steady. Compact running-tool icons stay unchanged. ASCII themes get an ASCII walking cat. `/uwu colors off` or `/uwu off` restores your original spinner. Native/client spinners are unchanged.
+While uwu mode and colors are on, a full-body kitty walks back and forth instead of the ANSI TUI's activity spinner: `ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses. Its seven-column lane keeps the turn timer and loader text steady. The same kitty appears with every symbol preset (`unicode`, `nerd`, and `ascii`); compact running-tool icons and other preset symbols stay unchanged. `/uwu colors off` or `/uwu off` restores your original spinner. Native/client spinners are unchanged.
 
 ![Real omp status-line kitty walking back and forth beside the elapsed turn timer](demo/kitty.gif)
 
@@ -143,7 +143,7 @@ Display mode uses omp's **private per-message text transform**, not public exten
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.7.0    # pin a version
+omp plugin install omp-uwu@0.7.1    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
@@ -227,8 +227,8 @@ CI ([`ci.yml`](.github/workflows/ci.yml)) runs `check` and tests on pushes to `m
 
 ```sh
 # bump "version" in package.json, commit, then:
-git tag v0.7.0
-git push origin main v0.7.0
+git tag v0.7.1
+git push origin main v0.7.1
 ```
 
 The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu` and workflow `publish.yml`.

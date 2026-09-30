@@ -66,6 +66,7 @@ describe("sparkle", () => {
 
   test("the working cat keeps text aligned and leaves compact tool spinners unchanged", async () => {
     const original = (await getThemeByName("dark")) as Theme;
+    const expectedActivity = buildKawaiiTheme(Theme, original).getSpinnerFrames("activity");
     for (const preset of ["unicode", "nerd", "ascii"] as const) {
       const base = new Theme({} as ConstructorParameters<typeof Theme>[0], {} as ConstructorParameters<typeof Theme>[1], original.getColorMode(), preset, {});
       const originalActivity = [...base.getSpinnerFrames("activity")];
@@ -78,7 +79,7 @@ describe("sparkle", () => {
       expect(frames).not.toEqual(base.getSpinnerFrames("activity"));
       expect(kawaii.getSpinnerFrames("status")).toEqual(base.getSpinnerFrames("status"));
       expect(base.getSpinnerFrames("activity")).toEqual(originalActivity);
-      if (preset === "ascii") expect(frames.every((frame) => /^[\x20-\x7e]+$/.test(frame))).toBe(true);
+      expect(frames).toEqual(expectedActivity);
     }
   });
 

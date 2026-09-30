@@ -37,23 +37,13 @@ const LIGHT_PALETTE: Partial<Record<ThemeColor | ThemeBg, string>> = {
 // Alternating silhouettes animate its legs and tail. omp advances activity
 // frames every 80ms; three ticks per step keep the walk readable.
 // Only `activity` is replaced; `status` fills compact running-tool slots.
-const CAT_POSES = {
-  unicode: [
-    "ᓚᘏᗢ    ", " ᓗᘎᗢ   ", "  ᓚᘏᗢ  ", "   ᓗᘎᗢ ", "    ᓚᘏᗢ",
-    "    ᗢᘏᓗ", "   ᗢᘎᓚ ", "  ᗢᘏᓗ  ", " ᗢᘎᓚ   ", "ᗢᘏᓗ    ",
-  ],
-  ascii: [
-    "~^>/   ", " ~^>\\  ", "  ~^>/ ", "   ~^>\\",
-    "   /<^~", "  \\<^~ ", " /<^~  ", "\\<^~   ",
-  ],
-};
+const CAT_POSES = [
+  "ᓚᘏᗢ    ", " ᓗᘎᗢ   ", "  ᓚᘏᗢ  ", "   ᓗᘎᗢ ", "    ᓚᘏᗢ",
+  "    ᗢᘏᓗ", "   ᗢᘎᓚ ", "  ᗢᘏᓗ  ", " ᗢᘎᓚ   ", "ᗢᘏᓗ    ",
+];
 const CAT_TICKS_PER_POSE = 3;
-
-/** A walking silhouette, with an ASCII fallback for plain symbol presets. */
-function catSpinnerFrames(preset: string): string[] {
-  const poses = preset === "ascii" ? CAT_POSES.ascii : CAT_POSES.unicode;
-  return poses.flatMap((pose) => Array<string>(CAT_TICKS_PER_POSE).fill(pose));
-}
+// The kitty is independent of the base preset; its other symbols stay intact.
+const CAT_FRAMES = CAT_POSES.flatMap((pose) => Array<string>(CAT_TICKS_PER_POSE).fill(pose));
 
 /** Build a pastel copy of a host theme, retaining its colors outside the palette. */
 export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme): Theme {
@@ -85,7 +75,7 @@ export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme)
     base.getColorMode(),
     preset,
     {},
-    { status: base.getSpinnerFrames("status"), activity: catSpinnerFrames(preset) },
+    { status: base.getSpinnerFrames("status"), activity: CAT_FRAMES },
   );
   // A nested colored span (a sparkle, an inline code span) ends in a
   // foreground reset, which would drop the enclosing heading/link color for the
