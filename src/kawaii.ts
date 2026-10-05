@@ -45,6 +45,14 @@ const CAT_TICKS_PER_POSE = 3;
 // The kitty is independent of the base preset; its other symbols stay intact.
 const CAT_FRAMES = CAT_POSES.flatMap((pose) => Array<string>(CAT_TICKS_PER_POSE).fill(pose));
 
+export const KITTY_POSE_MS = 80 * CAT_TICKS_PER_POSE;
+
+/** Share ANSI activity poses, but only while our ephemeral theme owns them. */
+export function kittyPoseAt(theme: Theme | undefined, now: number): string | undefined {
+  if (theme?.getSpinnerFrames("activity") !== CAT_FRAMES) return undefined;
+  return CAT_POSES[Math.floor(now / KITTY_POSE_MS) % CAT_POSES.length];
+}
+
 /** Build a pastel copy of a host theme, retaining its colors outside the palette. */
 export function buildKawaiiTheme(ThemeClass: ThemeRuntime["Theme"], base: Theme): Theme {
   const palette = base.isLight ? LIGHT_PALETTE : DARK_PALETTE;

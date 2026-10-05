@@ -1,6 +1,8 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { KawaiiTheme } from "./kawaii.ts";
+import * as PiTui from "@oh-my-pi/pi-tui";
+import { KawaiiTheme, KITTY_POSE_MS, kittyPoseAt } from "./kawaii.ts";
+import { installNativeKitty } from "./native-kitty.ts";
 import { type ContainerClass, installSparkles, sparkle, sparkleMarks, themePaint } from "./sparkle.ts";
 import { createStatusCard, DEFAULT_SETTINGS, type UwuSettings, type UwuStatus } from "./status.ts";
 
@@ -80,6 +82,10 @@ export default function uwuExtension(pi: ExtensionAPI) {
   let promptAddedThisTurn = false;
   const statePath = join(pi.pi.getAgentDir(), "omp-uwu.json");
   const kawaiiTheme = new KawaiiTheme(pi.pi);
+  const nativeKitty = installNativeKitty(PiTui, {
+    periodMs: KITTY_POSE_MS,
+    pose: (now) => renderAllowed && enabled && colorsEnabled ? kittyPoseAt(pi.pi.theme, now) : undefined,
+  });
   const loadState = () => {
     stateReady ??= readFile(statePath, "utf8")
       .then((raw) => {
@@ -136,6 +142,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
     renderAllowed = ctx.mode === "tui";
     syncColors(ctx);
     rendering?.refresh();
+    nativeKitty.refresh();
     updateBadge(ctx);
   };
 
@@ -228,6 +235,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
     syncColors(ctx);
     renderAllowed = ctx.mode === "tui" && ctx.agent?.kind !== "sub";
     rendering?.refresh();
+    nativeKitty.refresh();
     updateBadge(ctx);
   });
 
@@ -274,4 +282,6 @@ export default function uwuExtension(pi: ExtensionAPI) {
       hookSupport = false;
     }
   });
+
+  pi.on("session_shutdown", () => nativeKitty.dispose());
 }
