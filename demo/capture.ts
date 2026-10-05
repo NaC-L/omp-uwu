@@ -13,7 +13,7 @@ import { UserMessageComponent } from "@oh-my-pi/pi-tui/chat/user-message";
 import { renderSegment } from "@oh-my-pi/pi-tui/status-line";
 import type { SegmentContext } from "@oh-my-pi/pi-tui/status-line";
 import { buildKawaiiTheme } from "../src/kawaii.ts";
-import { installSparkles, sparkle, themePaint } from "../src/sparkle.ts";
+import { installSparkles, sparkle, sparkleMarks, themePaint } from "../src/sparkle.ts";
 import { createStatusCard, type UwuStatus } from "../src/status.ts";
 
 type Frame = { key?: string | null; ms: number; lines: readonly string[] };
@@ -26,7 +26,11 @@ if (!base) throw new Error(`omp theme ${THEME} not found`);
 if (base.getColorMode() !== "truecolor") throw new Error("run with COLORTERM=truecolor so colors match the theme exactly");
 const theme = buildKawaiiTheme(Theme, base);
 setThemeInstance(theme);
-installSparkles(Container, { isActive: () => true, transform: (text) => sparkle(text, themePaint(() => theme)) });
+const rendering = installSparkles(Container, {
+  isActive: () => true,
+  transform: (text) => sparkle(text, themePaint(() => theme)),
+  native: (text) => ({ text, marks: sparkleMarks(text) }),
+});
 
 // --- chat: type the prompt, then stream the reply ---------------------------------
 const CHAT_WIDTH = 76;
@@ -53,7 +57,8 @@ const DASH_WIDTH = 68;
 const KEYS = { down: "\x1b[B", right: "\x1b[C", left: "\x1b[D", tab: "\t" } as const;
 const status: UwuStatus = {
   enabled: true, style: "rewrite", level: "mid", locale: "auto", colorsEnabled: true,
-  rewrite: "available", display: "available", promptFallback: false,
+  rewrite: "available", display: "available",
+  nativeDisplay: rendering.isNativeSupported() ? "available" : "unavailable", promptFallback: false,
 };
 const card = createStatusCard(status, theme, () => {}, () => {});
 // Each step: key to press (or null for the opening frame) and how long to hold the result.

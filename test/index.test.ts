@@ -5,8 +5,8 @@ import { join } from "node:path";
 import { afterAll, afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { getThemeByName, Theme } from "@oh-my-pi/pi-coding-agent";
 import uwuExtension, { UWU_PROMPT } from "../src/index.ts";
-import { installSparkles, sparkle, themePaint } from "../src/sparkle.ts";
-import { uwufy, uwufyProse } from "../src/uwufy.ts";
+import { installSparkles, sparkle, sparkleMarks, themePaint } from "../src/sparkle.ts";
+import { uwufy, uwufyMarkdownProse, uwufyProse } from "../src/uwufy.ts";
 
 type Handler = (...args: unknown[]) => unknown;
 type Command = (args: string, ctx: unknown) => Promise<void>;
@@ -45,6 +45,7 @@ class MockAssistant extends MockContainer {
   updateContent(text: string) { this.text = text; }
   invalidate() { this.invalidations++; this.updateContent(this.text); }
   render() { return this.transform?.(this.text) ?? this.text; }
+  describe() { return { k: "col", c: [{ k: "md", key: "t0", p: { text: this.text } }] }; }
 }
 
 function installExtension(withContainer = true) {
@@ -77,7 +78,7 @@ beforeEach(async () => {
   installExtension();
 });
 afterEach(() => {
-  installSparkles(MockContainer, { isActive: () => false, transform: (text) => text }).dispose();
+  installSparkles(MockContainer, { isActive: () => false, transform: (text) => text, native: (text) => ({ text, marks: [] }) }).dispose();
 });
 afterAll(async () => {
   if (stateDir) await rm(stateDir, { recursive: true, force: true });
@@ -234,6 +235,29 @@ describe("omp-uwu", () => {
     expect(component.render()).toBe(text);
   });
 
+  test("native display composes semantic sparkles and refreshes without changing stored prose", async () => {
+    const text = "really lovely uwu (◕ᴗ◕✿) :3 and `really uwu`\n\n> ~~~\n> really uwu\n> ~~~\n\n- ```\n  really uwu\n  ```\n\nHello `code\nreally world\ncode` really lovely uwu.";
+    const component = new MockAssistant(text);
+    await command("display", ctx);
+    await command("colors on", ctx);
+    const md = component.describe().c[0]!;
+    expect(md.p.text).toBe(uwufyMarkdownProse(text));
+    expect(md.p.text).toContain("> ~~~\n> really uwu\n> ~~~");
+    expect(md.p.text).toContain("- ```\n  really uwu\n  ```");
+    expect(md.p.text).toContain("`code\nreally world\ncode`");
+    expect("marks" in md.p ? md.p.marks : undefined).toEqual(sparkleMarks(uwufyMarkdownProse(text)));
+    expect(component.text).toBe(text);
+    expect(JSON.stringify(component.describe())).not.toContain("\\u001b");
+    await command("colors off", ctx);
+    expect(Object.hasOwn(component.describe().c[0]!.p, "marks")).toBe(false);
+    await command("level max", ctx);
+    expect(component.describe().c[0]!.p.text).toBe(uwufyMarkdownProse(text, { level: "max" }));
+    component.setTextColorTransform((run) => `HOST:${run}`);
+    expect(component.describe().c[0]!.p).toEqual({ text });
+    await command("off", ctx);
+    expect(component.describe().c[0]!.p).toEqual({ text });
+  });
+
   test("composes sparkles after display prose and leaves host transforms authoritative", async () => {
     const text = "really lovely uwu";
     const component = new MockAssistant(text);
@@ -266,10 +290,13 @@ describe("omp-uwu", () => {
     const file = Bun.file(join(stateDir, "omp-uwu.json"));
     await command("status", ctx);
     expect(await file.exists()).toBe(false);
+    expect(notices.at(-1)).toContain("Tern native prose=waiting for first reply");
     new MockAssistant("really lovely");
     await handlers.assistant_message({ message: { role: "assistant", content: [] } });
     await command("status", ctx);
     expect(await file.exists()).toBe(false);
+    expect(notices.at(-1)).toContain("Tern native prose=available");
+    expect(notices.at(-1)).toContain("ACP/RPC display=unsupported");
   });
 
   test("preview keeps sample case and settings unchanged, even while disabled", async () => {

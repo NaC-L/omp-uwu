@@ -20,6 +20,7 @@ export type Capability = "waiting for first reply" | "available" | "unavailable"
 export type UwuStatus = UwuSettings & {
   rewrite: Capability;
   display: Capability;
+  nativeDisplay: Capability;
   promptFallback: boolean;
 };
 
@@ -117,11 +118,12 @@ export function createStatusCard(
         row(theme.fg("accent", theme.bold("Observed capabilities")));
         setting("Rewrite", theme.fg(status.rewrite === "available" ? "success" : "text", status.rewrite));
         setting("Screen display", theme.fg(status.display === "available" ? "success" : "text", status.display));
-        setting("Native/client", theme.fg("warning", "unsupported"));
+        setting("Tern native", theme.fg(status.nativeDisplay === "available" ? "success" : "text", status.nativeDisplay));
+        setting("ACP/RPC", theme.fg("warning", "unsupported"));
         setting("Prompt fallback", theme.fg(status.promptFallback ? "success" : "text", status.promptFallback ? "on" : "off"));
         row("");
         row(theme.fg("text", `Fallback reflects saved ${status.style}/${status.enabled ? "on" : "off"} settings, not the draft.`));
-        row(theme.fg("warning", "Display is experimental: ANSI prose only, not native/client rendering."));
+        row(theme.fg("warning", "Display is experimental: ANSI prose and discovered Tern native hooks only; other clients are unsupported."));
         row(theme.fg("text", "Observed in this session, not a support guarantee. Display never adds a prompt or changes history."));
         rule("├", "┤");
         row(theme.fg("text", "Tab controls · Esc cancel"));

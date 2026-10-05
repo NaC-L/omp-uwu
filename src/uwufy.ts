@@ -115,17 +115,16 @@ const TURKISH_CRITICAL = [
 	/^sil(?:e(?:r|ce[kğ]|lim|bil|me|mi)[\p{L}\p{M}]*|i(?:n|yor|ver|p)[\p{L}\p{M}]*|(?:me|mi|di|se|sin)[\p{L}\p{M}]*)?$/u,
 ];
 
-/**
- * Inline spans that are never rewritten. Only the first alternative captures,
- * so `\1` is the opening backtick run of a code span.
- */
-const PROTECTED_INLINE = new RegExp(
+/** Markdown syntax surfaces whose literal backticks cannot open code spans. */
+const MARKDOWN_OPAQUE_INLINE = new RegExp([
+	String.raw`\]\([^)\s]*(?:\s+"[^"]*")?\)`,
+	String.raw`<\/?[A-Za-z][^>\n]*>`,
+	String.raw`\b(?:[a-z][a-z0-9+.-]*:\/\/|www\.)\S*`,
+].join("|"), "giu");
+
+const PROTECTED_NONCODE_INLINE = new RegExp(
 	[
-		"(`+)[\\s\\S]*?\\1(?!`)", // code span
-		"`.*$", // unmatched backtick: keep the rest of the line
-		String.raw`\]\([^)\s]*(?:\s+"[^"]*")?\)`, // markdown link target
-		String.raw`<\/?[A-Za-z][^>\n]*>`, // HTML tag or autolink
-		String.raw`\b(?:[a-z][a-z0-9+.-]*:\/\/|www\.)\S*`, // bare URL
+		MARKDOWN_OPAQUE_INLINE.source,
 		String.raw`"[^"\n]*"`, // "quoted text"
 		String.raw`“[^”\n]*”`, // “quoted text”
 		// Word boundaries distinguish quote delimiters from we're / they're.
@@ -134,6 +133,12 @@ const PROTECTED_INLINE = new RegExp(
 		// Multi-token kaomoji must not change the word-position seed on re-runs.
 		String.raw`(?<!\S)(?:${EMOTICON_PATTERN})(?!\S)`,
 	].join("|"),
+	"giu",
+);
+
+/** Only the first alternative captures: \1 is the opening backtick run. */
+const PROTECTED_INLINE = new RegExp(
+	["(`+)[\\s\\S]*?\\1(?!`)", "`.*$", PROTECTED_NONCODE_INLINE.source].join("|"),
 	"giu",
 );
 
@@ -178,10 +183,182 @@ export function uwufyProse(text: string, options: UwuOptions = {}): string {
 	return rewriteText(text, options, options.level === "min");
 }
 
-function rewriteText(text: string, options: UwuOptions, decorate: boolean): string {
+type MarkdownContainer = { kind: "quote" } | { kind: "list"; indent: number };
+type SourceRange = { start: number; end: number };
+
+/** Consume existing containers for detection only; source bytes are never rebuilt. */
+function consumeMarkdownContainers(line: string, containers: readonly MarkdownContainer[]): { offset: number; count: number; column: number } {
+	let offset = 0;
+	let count = 0;
+	let column = 0;
+	for (const container of containers) {
+		if (container.kind === "quote") {
+			const quote = /^ {0,3}>[ \t]?/.exec(line.slice(offset));
+			if (!quote) break;
+			offset += quote[0].length;
+			for (const char of quote[0]) column += char === "\t" ? 4 - column % 4 : 1;
+		} else {
+			let width = 0;
+			let end = offset;
+			while (end < line.length && width < container.indent) {
+				if (line[end] === " ") width++;
+				else if (line[end] === "\t") width += 4 - (column + width) % 4;
+				else break;
+				end++;
+			}
+			if (width !== container.indent) break;
+			offset = end;
+			column += width;
+		}
+		count++;
+	}
+	return { offset, count, column };
+}
+
+/**
+ * Native full-Markdown display: preserve source ranges for container fences,
+ * indented code and multi-line backtick spans before applying the prose helper.
+ * Unclosed fences/spans protect their remaining input while streaming.
+ * ANSI prose runs and finalized rewrite keep their existing semantics.
+ */
+export function uwufyMarkdownProse(text: string, options: UwuOptions = {}): string {
+	const ranges: SourceRange[] = [];
+	let containers: MarkdownContainer[] = [];
+	let fence: { char: string; length: number; containers: MarkdownContainer[] } | undefined;
+	let previousCodeOrBlank = true;
+	let lineStart = 0;
+	while (lineStart < text.length) {
+		const newline = text.indexOf("\n", lineStart);
+		const lineEnd = newline === -1 ? text.length : newline + 1;
+		const line = text.slice(lineStart, newline === -1 ? text.length : newline).replace(/\r$/, "");
+		if (fence) {
+			const prefix = consumeMarkdownContainers(line, fence.containers);
+			if (prefix.count === fence.containers.length || line.trim() === "" && fence.containers.slice(prefix.count).every((container) => container.kind === "list")) {
+				ranges.push({ start: lineStart, end: lineEnd });
+				const close = /^ {0,3}(`{3,}|~{3,})[ \t]*$/.exec(line.slice(prefix.offset));
+				if (fence.char === "$" ? MATH_FENCE.test(line.slice(prefix.offset)) : close?.[1]?.[0] === fence.char && close[1].length >= fence.length) fence = undefined;
+				previousCodeOrBlank = true;
+				lineStart = lineEnd;
+				continue;
+			}
+			// A quote/list container ended: its unclosed fence cannot consume a sibling.
+			fence = undefined;
+		}
+		const previousContainers = containers;
+		const inherited = consumeMarkdownContainers(line, containers);
+		containers = containers.slice(0, inherited.count);
+		let offset = inherited.offset;
+		let column = inherited.column;
+		let newList = false;
+		while (offset < line.length) {
+			const remainder = line.slice(offset);
+			const quote = /^ {0,3}>[ \t]?/.exec(remainder);
+			if (quote) {
+				containers.push({ kind: "quote" });
+				offset += quote[0].length;
+				for (const char of quote[0]) column += char === "\t" ? 4 - column % 4 : 1;
+				continue;
+			}
+			const list = /^ {0,3}(?:[-+*]|\d{1,9}[.)])([ \t]+|$)/.exec(remainder);
+			if (!list) break;
+			// CommonMark uses one padding space when the marker is followed by >4.
+			const gap = list[1]!;
+			const markerWidth = list[0].length - gap.length;
+			let gapColumn = column + markerWidth;
+			for (const char of gap) gapColumn += char === "\t" ? 4 - gapColumn % 4 : 1;
+			const padding = gapColumn - column - markerWidth;
+			const consumed = markerWidth + (padding > 4 ? 1 : gap.length);
+			containers.push({ kind: "list", indent: markerWidth + (padding > 4 ? 1 : padding || 1) });
+			for (let index = 0; index < consumed; index++) column += remainder[index] === "\t" ? 4 - column % 4 : 1;
+			offset += consumed;
+			newList = true;
+		}
+		const content = line.slice(offset);
+		const open = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(content);
+		if (open?.[1] && (open[1][0] !== "`" || !open[2]!.includes("`"))) {
+			fence = { char: open[1][0]!, length: open[1].length, containers: [...containers] };
+			ranges.push({ start: lineStart, end: lineEnd });
+			previousCodeOrBlank = true;
+		} else if (MATH_FENCE.test(content)) {
+			if (!/^\s*\$\$.*\$\$\s*$/.test(content) || content.trim() === "$$") {
+				fence = { char: "$", length: 2, containers: [...containers] };
+			}
+			ranges.push({ start: lineStart, end: lineEnd });
+			previousCodeOrBlank = true;
+		} else if (/^(?: {4}|\t)/.test(content) && (previousCodeOrBlank || newList)) {
+			ranges.push({ start: lineStart, end: lineEnd });
+			previousCodeOrBlank = true;
+		} else {
+			previousCodeOrBlank = content.trim() === "";
+			// Blank list lines need no indentation, but do not close the list.
+			if (content.trim() === "" && containers.length === inherited.count && previousContainers.slice(inherited.count).every((container) => container.kind === "list")) {
+				containers = previousContainers;
+			}
+		}
+		lineStart = lineEnd;
+	}
+	// Merge adjacent protected block lines before scanning their prose gaps.
+	ranges.sort((a, b) => a.start - b.start);
+	const blocks: SourceRange[] = [];
+	for (const range of ranges) {
+		const previous = blocks.at(-1);
+		if (previous && range.start <= previous.end) previous.end = Math.max(previous.end, range.end);
+		else blocks.push({ ...range });
+	}
+	ranges.length = 0;
+	for (const block of blocks) ranges.push(block);
+	const opaque = [...text.matchAll(MARKDOWN_OPAQUE_INLINE)].map((match) => ({ start: match.index, end: match.index + match[0].length }));
+	let opaqueIndex = 0;
+	// Maximal backtick runs close only at an exactly matching run length.
+	const backticks = /`+/g;
+	let gapStart = 0;
+	for (let index = 0; index <= blocks.length; index++) {
+		const gapEnd = blocks[index]?.start ?? text.length;
+		let opening: { start: number; length: number } | undefined;
+		backticks.lastIndex = gapStart;
+		for (let match = backticks.exec(text); match && match.index < gapEnd; match = backticks.exec(text)) {
+			if (opening) {
+				if (match[0].length === opening.length) {
+					ranges.push({ start: opening.start, end: match.index + match[0].length });
+					opening = undefined;
+				}
+			} else {
+				while (opaqueIndex < opaque.length && opaque[opaqueIndex]!.end <= match.index) opaqueIndex++;
+				if (opaque[opaqueIndex] && opaque[opaqueIndex]!.start <= match.index) continue;
+				let slashes = 0;
+				for (let before = match.index - 1; before >= gapStart && text[before] === "\\"; before--) slashes++;
+				if (slashes % 2 === 0) opening = { start: match.index, length: match[0].length };
+			}
+		}
+		if (opening) ranges.push({ start: opening.start, end: gapEnd });
+		gapStart = blocks[index]?.end ?? text.length;
+	}
+	ranges.sort((a, b) => a.start - b.start);
+	return rewriteText(text, options, options.level === "min", ranges);
+}
+
+function rewriteText(text: string, options: UwuOptions, decorate: boolean, protectedRanges?: readonly SourceRange[]): string {
 	const resolved: Required<UwuOptions> = { level: options.level ?? "mid", locale: options.locale ?? "auto" };
 	const lines = text.split("\n");
-	const kinds = classifyLines(lines);
+	let sourceOffset = 0;
+	let rangeIndex = 0;
+	const protectedLines = protectedRanges?.length ? lines.map((line) => {
+		const end = sourceOffset + line.length;
+		while (rangeIndex < protectedRanges.length && protectedRanges[rangeIndex]!.end <= sourceOffset) rangeIndex++;
+		let spans: SourceRange[] | undefined;
+		for (let index = rangeIndex; index < protectedRanges.length && protectedRanges[index]!.start < end; index++) {
+			const range = protectedRanges[index]!;
+			(spans ??= []).push({ start: Math.max(0, range.start - sourceOffset), end: Math.min(line.length, range.end - sourceOffset) });
+		}
+		sourceOffset = end + 1;
+		return spans;
+	}) : undefined;
+	const kinds: LineKind[] = protectedRanges
+		? lines.map((line, index) => {
+			if (!line.trim()) return "blank";
+			return HTML_LINE.test(line) || LINK_DEFINITION.test(line) || protectedLines?.[index]?.some((span) => span.start === 0 && span.end === line.length) ? "code" : "prose";
+		})
+		: classifyLines(lines);
 
 	const paragraphs: ProseLine[][] = [];
 	let current: ProseLine[] | undefined;
@@ -204,9 +381,9 @@ function rewriteText(text: string, options: UwuOptions, decorate: boolean): stri
 	for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
 		// Count once, then rewrite: the word count seeds this paragraph's decisions,
 		// which keeps them varied between paragraphs yet stable across re-runs.
-		const wordCount = walkParagraph(lines, paragraph, () => undefined);
+		const wordCount = walkParagraph(lines, paragraph, () => undefined, undefined, protectedLines);
 		const seed = `${paragraphIndex}|${wordCount}`;
-		walkParagraph(lines, paragraph, (event) => rewriteToken(event, seed, resolved), out);
+		walkParagraph(lines, paragraph, (event) => rewriteToken(event, seed, resolved), out, protectedLines);
 	}
 	return out.join("\n");
 }
@@ -271,6 +448,7 @@ function walkParagraph(
 	paragraph: ProseLine[],
 	visit: (event: TokenEvent) => string | undefined,
 	out?: string[],
+	protectedLines?: readonly (readonly SourceRange[] | undefined)[],
 ): number {
 	let sentence = 0;
 	let wordInSentence = 0;
@@ -280,11 +458,20 @@ function walkParagraph(
 		let rebuilt = "";
 		let cursor = 0;
 		const segments: Array<{ prose: boolean; text: string; start: number }> = [];
-		for (const match of line.matchAll(PROTECTED_INLINE)) {
+		const protectedSpans = protectedLines?.[index];
+		const matches = protectedSpans?.length
+			? [
+				...[...line.matchAll(PROTECTED_INLINE)].filter((match) => !protectedSpans.some((span) => match.index >= span.start && match.index < span.end)),
+				...protectedSpans.map((span) => ({ 0: line.slice(span.start, span.end), index: span.start })),
+			].sort((a, b) => a.index - b.index)
+			: line.matchAll(PROTECTED_INLINE);
+		for (const match of matches) {
 			const start = match.index ?? 0;
+			const end = start + match[0].length;
+			if (end <= cursor) continue;
 			if (start > cursor) segments.push({ prose: true, text: line.slice(cursor, start), start: cursor });
-			segments.push({ prose: false, text: match[0], start });
-			cursor = start + match[0].length;
+			segments.push({ prose: false, text: line.slice(Math.max(cursor, start), end), start: Math.max(cursor, start) });
+			cursor = end;
 		}
 		if (cursor < line.length) segments.push({ prose: true, text: line.slice(cursor), start: cursor });
 

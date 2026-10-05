@@ -1,11 +1,11 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { KawaiiTheme } from "./kawaii.ts";
-import { type ContainerClass, installSparkles, sparkle, themePaint } from "./sparkle.ts";
+import { type ContainerClass, installSparkles, sparkle, sparkleMarks, themePaint } from "./sparkle.ts";
 import { createStatusCard, DEFAULT_SETTINGS, type UwuSettings, type UwuStatus } from "./status.ts";
 
 import type { ExtensionAPI, ExtensionUIContext, Theme } from "@oh-my-pi/pi-coding-agent";
-import { type UwuLevel, type UwuLocale, uwufy, uwufyProse } from "./uwufy.ts";
+import { type UwuLevel, type UwuLocale, uwufy, uwufyMarkdownProse, uwufyProse } from "./uwufy.ts";
 
 export const UWU_PROMPT = `
 # uwu mode (display style only)
@@ -102,8 +102,8 @@ export default function uwuExtension(pi: ExtensionAPI) {
     ctx.ui.setStatus("omp-uwu", badge && ctx.ui.theme ? ctx.ui.theme.fg("accent", badge) : badge);
   };
 
-  // Display and sparkle composition share the host's per-prose ANSI hook.
-  // Prose is transformed before Markdown wrapping; no message/history changes.
+  // Compose display and sparkles on ANSI prose runs and Tern native Markdown.
+  // Only rendered copies change; message/history stay untouched.
   const paint = themePaint(() => pi.pi.theme);
   const host = pi.pi as { Container?: ContainerClass };
   const rendering = host.Container && installSparkles(host.Container, {
@@ -112,7 +112,14 @@ export default function uwuExtension(pi: ExtensionAPI) {
       const prose = style === "display" ? uwufyProse(text, { level, locale }) : text;
       return colorsEnabled ? sparkle(prose, paint) : prose;
     },
+    native: (text) => {
+      const prose = style === "display" ? uwufyMarkdownProse(text, { level, locale }) : text;
+      return { text: prose, marks: colorsEnabled ? sparkleMarks(prose) : [] };
+    },
   });
+  const nativeDisplaySupport = () => !host.Container ? "unavailable"
+    : rendering?.isNativeSupported() ? "available"
+    : rendering?.isSupported() ? "unavailable" : "waiting for first reply";
 
   const syncColors = (ctx: UiContext) => {
     if (ctx.mode !== "tui" || ctx.agent?.kind === "sub" || !ctx.ui?.theme) return;
@@ -157,6 +164,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
           enabled, style, level, locale, colorsEnabled,
           rewrite: hookSupport === undefined ? "waiting for first reply" : hookSupport ? "available" : "unavailable",
           display,
+          nativeDisplay: nativeDisplaySupport(),
           promptFallback: enabled && style === "rewrite" && hookSupport !== true,
         };
         if (ctx.mode === "tui" && typeof ctx.ui?.custom === "function") {
@@ -170,7 +178,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
             await persistSettings(ctx);
           }
         } else {
-          ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${status.rewrite}; display=${display}; native/client display=unsupported; prompt fallback=${status.promptFallback ? "on" : "off"}`, "info");
+          ctx.ui?.notify(`uwu ${enabled ? "on" : "off"}; style=${style}; level=${level}; locale=${locale}; colors=${colorsEnabled ? "on" : "off"}; rewrite=${status.rewrite}; display=${display}; Tern native prose=${status.nativeDisplay}; ACP/RPC display=unsupported; prompt fallback=${status.promptFallback ? "on" : "off"}`, "info");
         }
         return;
       }
@@ -209,7 +217,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
         ctx.ui?.notify(`${enabled ? `UwU on; style=${style}; level=${level}; locale=${locale}` : "UwU off; /uwu on restores styling"}. Settings: /uwu status`, "info");
       }
       if (enabled && style === "display") {
-        ctx.ui?.notify(`Experimental display: terminal prose only; ${!host.Container ? "unavailable in this omp" : rendering?.isSupported() ? "available" : "waiting for first reply"}. Native/client rendering is unsupported; history stays unchanged and no prompt fallback is used.`, "info");
+        ctx.ui?.notify(`Experimental display: ANSI prose ${!host.Container ? "unavailable in this omp" : rendering?.isSupported() ? "available" : "waiting for first reply"}; Tern native prose ${nativeDisplaySupport()}. ACP/RPC rendering is unsupported; history stays unchanged and no prompt fallback is used.`, "info");
       }
     },
   });
@@ -238,7 +246,7 @@ export default function uwuExtension(pi: ExtensionAPI) {
   });
 
 
-  // The hook is newer than the bundled 18.4.3 types, so register structurally.
+  // Register structurally so older hosts that never emit this hook still work.
   // ExtensionAPI.on stores event names as strings; old hosts simply never emit it.
   (pi.on as unknown as (name: string, handler: (event: RewriteEvent, ctx?: UiContext) => unknown) => void)(
     "assistant_message",

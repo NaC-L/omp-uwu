@@ -3,9 +3,9 @@
  * assistant's chat prose with the kawaii palette.
  *
  * Nothing is written into message text, history or model context. omp renders
- * assistant prose through a per-component text color transform that Markdown
- * applies to plain-text runs only — never to inline code, code blocks or link
- * targets — so painting there leaves every exact-text surface untouched.
+ * assistant prose through a per-component ANSI text transform or Tern native
+ * Markdown text/marks. Both paths leave code and link targets untouched;
+ * native marks use one semantic color per literal token, not ANSI escapes.
  */
 import type { Theme, ThemeColor } from "@oh-my-pi/pi-coding-agent";
 import { EMOTICON_TOKENS } from "./uwufy.ts";
@@ -68,6 +68,16 @@ export function sparkle(text: string, paint: Paint): string {
 	});
 }
 
+/** Native Markdown marks style every prose occurrence of a literal token. */
+export function sparkleMarks(text: string): { t: string; s: string }[] {
+	const marks = new Map<string, { t: string; s: string }>();
+	for (const [match] of text.matchAll(SPARKLE)) {
+		if (match.length < 3 && /^[\x00-\x7f]+$/.test(match)) continue;
+		if (!marks.has(match)) marks.set(match, { t: match, s: TONES[hash(match) % TONES.length]! });
+	}
+	return [...marks.values()];
+}
+
 /** A paint function over the live host theme; unknown colors fall back to plain text. */
 export function themePaint(getTheme: () => Theme | undefined): Paint {
 	return (tone, text) => {
@@ -81,10 +91,11 @@ export function themePaint(getTheme: () => Theme | undefined): Paint {
 
 type ColorTransform = (text: string) => string;
 
-/** The two public methods of omp's AssistantMessageComponent this relies on. */
+/** The assistant render methods shared with the host; native describe is optional. */
 interface AssistantPrototype {
 	updateContent(...args: unknown[]): unknown;
 	setTextColorTransform(transform?: ColorTransform): void;
+	describe?(...args: unknown[]): unknown;
 }
 
 /** omp's TUI `Container`, the base class of AssistantMessageComponent. */
@@ -96,11 +107,14 @@ export interface SparkleControl {
 	/** Whether assistant prose should be transformed (independent of colors). */
 	isActive(): boolean;
 	transform: ColorTransform;
+	native(text: string): { text: string; marks: readonly { t: string; s: string }[] };
 }
 
 export interface SparkleInstallation {
-	/** Discovery proves only the ANSI render hook, not native/client rendering. */
+	/** Whether the assistant's ANSI prose hook was discovered. */
 	isSupported(): boolean;
+	/** Whether a Tern native describe hook was actually installed on that prototype. */
+	isNativeSupported(): boolean;
 	/** Refresh existing components, including when no theme change occurs. */
 	refresh(): void;
 	/** Restore host methods; useful for isolated integration tests. */
@@ -112,6 +126,7 @@ interface Registry {
 	control: SparkleControl;
 	transform: ColorTransform;
 	assistant?: AssistantPrototype;
+	nativeSupported?: boolean;
 	components: Set<WeakRef<object & { invalidate?: () => void }>>;
 	seen: WeakSet<object>;
 	restoreAssistant?: () => void;
@@ -134,6 +149,14 @@ function findAssistantPrototype(value: unknown): AssistantPrototype | undefined 
 	return undefined;
 }
 
+/** Only these fields of the host's native description are inspected. */
+interface NativeDescription {
+	k?: unknown;
+	key?: unknown;
+	p?: unknown;
+	c?: unknown;
+}
+
 /**
  * Give every assistant message component the sparkle transform while
  * `control.isActive()`. A transform set by the host itself (e.g. the
@@ -143,6 +166,9 @@ function patchAssistant(proto: AssistantPrototype, registry: Registry): void {
 	const originalSet = proto.setTextColorTransform;
 	const originalUpdate = proto.updateContent;
 	const hostTransforms = new WeakMap<object, ColorTransform>();
+	const originalDescribe = Object.hasOwn(proto, "describe") && typeof proto.describe === "function" ? proto.describe : undefined;
+	const nativeCache = new WeakMap<object, { token: ColorTransform; out: unknown }>();
+	registry.nativeSupported = originalDescribe !== undefined;
 	const applied = new WeakMap<object, ColorTransform | undefined>();
 
 	proto.setTextColorTransform = function (this: object, transform?: ColorTransform) {
@@ -165,11 +191,47 @@ function patchAssistant(proto: AssistantPrototype, registry: Registry): void {
 		}
 		return originalUpdate.apply(this, args);
 	};
+	if (originalDescribe) {
+		proto.describe = function (this: object, ...args: unknown[]) {
+			const source = originalDescribe.apply(this, args);
+			if (!registry.control.isActive() || hostTransforms.has(this)) return source;
+			if (source === null || typeof source !== "object" || Array.isArray(source)) return source;
+			const root = source as NativeDescription;
+			if (root.k !== "col" || !Array.isArray(root.c)) return source;
+			const token = registry.transform;
+			const cached = nativeCache.get(source);
+			if (cached?.token === token) return cached.out;
+			const children = root.c.map((child: unknown) => {
+				if (child === null || typeof child !== "object" || Array.isArray(child)) return child;
+				const node = child as NativeDescription;
+				if (node.k !== "md" || typeof node.key !== "string" || !/^t\d+$/.test(node.key)) return child;
+				if (node.p === null || typeof node.p !== "object" || Array.isArray(node.p)) return child;
+				const sourceProps = node.p as { text?: unknown; marks?: unknown };
+				if (typeof sourceProps.text !== "string") return child;
+				if (sourceProps.marks !== undefined && !Array.isArray(sourceProps.marks)) return child;
+				const cachedChild = nativeCache.get(child);
+				if (cachedChild?.token === token) return cachedChild.out;
+				const prose = registry.control.native(sourceProps.text);
+				const props = { ...sourceProps, text: prose.text };
+				if (sourceProps.marks !== undefined || prose.marks.length) {
+					props.marks = [...(sourceProps.marks ?? []), ...prose.marks];
+				}
+				const out = { ...child, p: props };
+				nativeCache.set(child, { token, out });
+				return out;
+			});
+			const out = { ...source, c: children };
+			nativeCache.set(source, { token, out });
+			return out;
+		};
+	}
 	const patchedSet = proto.setTextColorTransform;
 	const patchedUpdate = proto.updateContent;
+	const patchedDescribe = proto.describe;
 	registry.restoreAssistant = () => {
 		if (proto.setTextColorTransform === patchedSet) proto.setTextColorTransform = originalSet;
 		if (proto.updateContent === patchedUpdate) proto.updateContent = originalUpdate;
+		if (originalDescribe && proto.describe === patchedDescribe) proto.describe = originalDescribe;
 	};
 }
 
@@ -221,9 +283,10 @@ export function installSparkles(Container: ContainerClass, control: SparkleContr
 	refresh();
 	return {
 		isSupported: () => registry.assistant !== undefined,
+		isNativeSupported: () => registry.nativeSupported === true,
 		refresh,
 		dispose: () => {
-			registry.control = { isActive: () => false, transform: (text) => text };
+			registry.control = { isActive: () => false, transform: (text) => text, native: (text) => ({ text, marks: [] }) };
 			refresh();
 			registry.restoreWatch?.();
 			registry.restoreAssistant?.();

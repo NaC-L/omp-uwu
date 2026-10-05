@@ -29,7 +29,7 @@ afterEach(async () => {
   await rm(dir, { recursive: true, force: true });
 });
 
-function fixture(withContainer = true) {
+function fixture(withContainer = true, withNative = false) {
   class Container { addChild(_child: unknown) {} }
   class Assistant extends Container {
     constructor() { super(); this.addChild({}); this.updateContent(); }
@@ -38,6 +38,10 @@ function fixture(withContainer = true) {
     updateContent() {}
     invalidate() { mutations.push("refresh"); }
   }
+  if (withNative) Object.defineProperty(Assistant.prototype, "describe", {
+    configurable: true, writable: true,
+    value() { return { k: "col", c: [{ k: "md", key: "t0", p: { text: "uwu" } }] }; },
+  });
   const handlers: Record<string, Handler> = {};
   let command!: Command;
   const mutations: string[] = [];
@@ -83,7 +87,7 @@ function fixture(withContainer = true) {
     sendUserMessage() { mutations.push("sendUserMessage"); },
     appendEntry() { mutations.push("appendEntry"); },
   } as never);
-  if (withContainer) dispose = () => installSparkles(Container, { isActive: () => false, transform: (text) => text }).dispose();
+  if (withContainer) dispose = () => installSparkles(Container, { isActive: () => false, transform: (text) => text, native: (text) => ({ text, marks: [] }) }).dispose();
   return {
     command, handlers, notices, ui, history, mutations,
     discover() { return new Assistant(); },
@@ -410,11 +414,28 @@ describe("/uwu status dashboard", () => {
       expect(text).toContain(rewrite === "available" ? "available" : "waiting for first reply");
       expect(text).toContain(`Prompt fallback ${rewrite === "available" ? "off" : "on"}`);
       expect(text).toContain("saved rewrite/on settings, not the draft.");
-      expect(text).toContain("Native/client   unsupported");
+      expect(text).toContain(`Tern native     ${rewrite === "available" ? "unavailable" : "waiting for first reply"}`);
+      expect(text).toContain("ACP/RPC         unsupported");
       press(component, "\u001b");
       await finished;
     });
   }
+
+  test("Tern native support is available only after its own describe hook is installed", async () => {
+    const app = fixture(true, true);
+    const waiting = await app.status();
+    press(waiting.component, "\t");
+    expect(content(waiting.component)).toContain("Tern native     waiting for first reply");
+    press(waiting.component, "\u001b");
+    await waiting.finished;
+    app.discover();
+    const discovered = await app.status();
+    press(discovered.component, "\t");
+    expect(content(discovered.component)).toContain("Tern native     available");
+    expect(content(discovered.component)).toContain("ACP/RPC         unsupported");
+    press(discovered.component, "\u001b");
+    await discovered.finished;
+  });
 
   test("dashboard uses the current light host theme supplied to the factory", async () => {
     theme = await getThemeByName("light") as Theme;

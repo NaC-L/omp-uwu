@@ -34,7 +34,7 @@ This GIF shows **omp's real TUI components**, captured without a model call: `/u
 |---|---|---|
 | **rewrite** · default | Deterministically, after the reply finishes streaming | Styled text enters history and context once the awaited hook is supported |
 | **prompt** | The model follows a system-prompt instruction while streaming | Model-written uwu text; results depend on the model |
-| **display** · experimental | Only while the ANSI TUI draws prose | Original text stays in history; no uwu instruction goes to the model |
+| **display** · experimental | Only while the ANSI TUI or Tern native Markdown draws prose | Original text stays in history; no uwu instruction goes to the model |
 
 ![Three style paths: rewrite changes finalized text, prompt asks the model to style streamed text, and display changes only ANSI TUI rendering](demo/style-map.svg)
 
@@ -60,7 +60,7 @@ Commands stay plain, even when the conversation gets fluffy.
 | `/uwu on` · `/uwu off` | Turn it on or off explicitly |
 | `/uwu rewrite` | Rewrite finished replies deterministically (default, with the fallback above) |
 | `/uwu prompt` | Ask the model to write in uwu while it streams |
-| `/uwu display` | **Experimental:** style prose only on screen, in the ANSI TUI |
+| `/uwu display` | **Experimental:** style prose only on screen, in the ANSI TUI or a discovered Tern native hook |
 | `/uwu level min\|low\|mid\|max` | Decorations only, light, standard or strong intensity |
 | `/uwu locale auto\|en\|tr` | Which critical words to protect (never translates) |
 | `/uwu colors [on\|off]` | Kawaii palette, sparkles and animated working cat (toggles without an argument) |
@@ -83,7 +83,7 @@ In prompt style, `/uwu preview` is a **deterministic approximation**, not a pred
 
 ### Pastels & sparkles ♡
 
-`/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble. Whenever uwu is on, a `(◕ᴗ◕✿) uwu` status badge identifies it independently of colors. In chat prose, `uwu`/`owo` get per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint.
+In the ANSI TUI, `/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble. Whenever uwu is on, a `(◕ᴗ◕✿) uwu` status badge identifies it independently of colors. ANSI chat prose gives `uwu`/`owo` per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint. Tern native prose uses semantic Markdown marks: one stable color per distinct token, drawn with Tern's current palette.
 
 While uwu mode and colors are on, a full-body kitty walks back and forth instead of the ANSI TUI's activity spinner: `ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses. Its seven-column lane keeps the turn timer and loader text steady. The same kitty appears with every symbol preset (`unicode`, `nerd`, and `ascii`); compact running-tool icons and other preset symbols stay unchanged. `/uwu colors off` or `/uwu off` restores your original spinner. Native/client spinners are unchanged.
 
@@ -98,12 +98,13 @@ Enable **both** switches, then send a message:
 
 Look **bottom-left, beside the elapsed turn timer** while omp is working. The GIF shows two cycles of the real status-line brand segment, sampled without a model call; the surrounding frame is presentation artwork.
 
-Everything is colored **at render time, in the ANSI TUI only**:
+Sparkles are colored **at render time**, through ANSI prose transforms or Tern native Markdown marks:
 
 - No ANSI codes enter message text or history. Code, code blocks and link targets are never painted.
 - The palette is an in-memory TUI theme; other components sharing those colors may change too. It pauses omp's automatic theme detection until omp restarts.
+- The kawaii palette and walking cat remain **ANSI-only**: omp 18.6.1 does not serialize in-memory themes into Tern's Surface Protocol (TSP), and Tern clocks its own spinner without custom cat frames. The plugin does not write theme files to work around this upstream limitation.
 - An existing host transform, such as live-voice transcript coloring, takes precedence.
-- Other clients and plain output are not colorized.
+- ACP/RPC clients and plain output are not colorized.
 
 ## What changes—and what stays exact
 
@@ -135,19 +136,19 @@ These are reported **kawaii scores**, not evidence of coding accuracy, speed, co
 
 ## Display mode: know the edges
 
-Display mode uses omp's **private per-message text transform**, not public extension API. The plugin finds `AssistantMessageComponent` through the shared `Container` base class. If it cannot, display styling and sparkles do nothing (the palette still works). There is **no silent fallback** to prompt or rewrite. `/uwu status` reports whether the hook was found.
+Display mode uses omp's **private per-message render hooks**, not public extension API. The plugin finds `AssistantMessageComponent` through the shared `Container` base class and patches its ANSI transform plus its own `describe()` method when present. If discovery fails, display styling and sparkles do nothing (the ANSI palette is independent). There is **no silent fallback** to prompt or rewrite. `/uwu status` separately reports ANSI discovery and whether a Tern native `describe()` hook was actually installed; neither is a universal client-support claim.
 
-- Styling happens on individual Markdown prose runs before wrapping. Inline formatting, links, newlines and streaming edits split runs, so results can differ from rewrite or `/uwu preview`. Display adds no emoticons or stutters at low/mid/max; min adds only sentence-end decorations.
-- Recognized identifiers, numbers and quoted spans within a run stay protected. **Quotes split across runs cannot be protected as a whole.**
-- Some paths skip the transform: blockquotes, some tables, headings and math may stay unchanged.
-- **Native clients are unsupported:** omp **18.4.4** sends them raw Markdown. RPC, print and export also retain original text.
+- **ANSI:** styling happens on individual Markdown prose runs before wrapping. Inline formatting, links, newlines and streaming edits split runs, so results can differ from rewrite or `/uwu preview`. Recognized identifiers, numbers and quoted spans within a run stay protected; **quotes split across runs cannot be protected as a whole**. Blockquotes, some tables, headings and math may skip this path.
+- **Tern native:** on hosts with the discovered `describe()` hook (development API: omp **18.6.1**), display transforms copies of top-level assistant Markdown text and sparkles add semantic `md.marks`, never ANSI in Markdown. Thinking, code, badges, usage, raw messages and history stay unchanged. Native-only source ranges protect recognized quote/list fences, indented code and exact-length multiline backtick spans before the prose rules run on the original lines. Unfinished code stays protected while streaming until closure or container exit; these are conservative rules, not a replacement for a complete Markdown parser. ANSI and finalized rewrite keep their existing protection behavior.
+- Native marks have **one color per literal token**, not per-letter rainbows. Tern styles every occurrence of that literal in prose, without the ANSI regex's word-edge guards. Short ASCII tokens such as `:3`, `:)`, `:D`, `<3`, `x3` and `^^` are skipped to avoid overly broad matches.
+- ACP/RPC, print and export retain original display-mode text. Host-set transforms take precedence on both render paths.
 - Changing display, level, locale or on/off refreshes messages already on screen, with or without colors.
 
 ## Install options
 
 ```sh
 omp plugin install omp-uwu          # from npm (recommended)
-omp plugin install omp-uwu@0.8.0    # pin a version
+omp plugin install omp-uwu@0.9.0    # pin a version
 omp plugin uninstall omp-uwu        # remove
 ```
 
@@ -165,14 +166,14 @@ bun install
 bun run check          # tsc against the omp package types
 bun test
 omp plugin link .      # use this checkout instead of the installed copy
-omp -e ./src/index.ts  # or load it for a single run
+omp --no-extensions -e ./src/index.ts  # or load only this checkout for a single run
 ```
 
-The full-module integration tests exercise real omp Markdown/Assistant components, narrow wrapping, inline/fenced code preservation, unchanged raw messages, cache invalidation without colors and host-transform precedence. They restore patched prototypes after each case.
+The full-module integration tests exercise real omp Markdown/Assistant components, narrow wrapping, inline/fenced code preservation, unchanged raw messages, cache invalidation without colors and host-transform precedence. Native cases exercise `describe()` text/marks, quote/list/indented code and multiline backticks with colors off/on, incomplete streaming code, untouched thinking, guarded node shapes, preserved host marks/metadata, repeated-description identity, streaming child reuse and reload/disposal. They restore patched prototypes after each case.
 
 An additional installed-host test automatically uses `~/.bun/install/global/node_modules/@oh-my-pi/pi-tui` if present. Set `OMP_UWU_HOST_TUI` to a different pi-tui package directory to test another installation; otherwise that case is skipped.
 
-For an interactive smoke check, start `omp -e ./src/index.ts` with an isolated test agent directory and run `/uwu colors off`, `/uwu display`, then `/uwu status`:
+For an interactive smoke check, start `omp --no-extensions -e ./src/index.ts` with an isolated test agent directory and run `/uwu colors off`, `/uwu display`, then `/uwu status`. `--no-extensions` avoids loading the installed plugin alongside this checkout:
 
 1. Edit the draft and switch tabs. The sample should update, but existing messages and saved settings should not change.
 2. Press Esc; nothing should be saved. Reopen, focus Save and press Enter; settings should persist, and colors, the badge and assistant paragraphs on screen should refresh.
@@ -180,7 +181,7 @@ For an interactive smoke check, start `omp -e ./src/index.ts` with an isolated t
 4. With colors still off, change level, locale and mode. Existing assistant paragraphs should refresh after Save.
 5. Reopen the saved transcript or export: raw text should be unchanged, and the next model prompt should have no uwu instruction in display mode.
 
-On a native client, prose should stay unchanged, with no fallback to prompt styling.
+For a **no-model Tern smoke**, resume a copied session containing assistant prose such as `really lovely uwu (◕ᴗ◕✿) owo ☆`, short `:3`, inline `uwu` code and a fenced `uwu` block. In the Tern pane, set `PI_CODING_AGENT_DIR` to an isolated directory with `omp-uwu.json` containing `{"enabled":true,"colors":true,"style":"display","level":"mid","locale":"auto"}`. Set `OMP_TUI_DEBUG` to a unique socket (Windows example: `\\.\pipe\omp-uwu-probe`), then run `omp --no-extensions -e ./src/index.ts --resume <copied-session.jsonl>`. The debug server accepts newline-delimited JSON: `{"op":"tsp","n":5}` must report `native:true`; `{"op":"doc"}` must show styled assistant `md.p.text` and semantic `md.p.marks`, with no ANSI. Send `{"op":"paste","text":"/uwu colors off"}` and `{"op":"keys","keys":"enter"}`, then inspect `doc` again: sparkle marks should be gone while display prose remains styled. Check visually that only prose is tinted, not inline/fenced code. Repeat in a fresh session with `PI_TUI_NATIVE=0` for the unchanged ANSI path. Do not infer native mode from `TERM_PROGRAM` or `TERN_LENSES`; inspect the debug result.
 
 </details>
 
@@ -231,8 +232,8 @@ CI ([`ci.yml`](.github/workflows/ci.yml)) runs `check` and tests on pushes to `m
 
 ```sh
 # bump "version" in package.json, commit, then:
-git tag v0.8.0
-git push origin main v0.8.0
+git tag v0.9.0
+git push origin main v0.9.0
 ```
 
 The workflow uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/), so the repository has no npm token. npm only allows trusted publishing on a package that already exists, so the first version is published by hand with `npm publish --access public`. After that, go to the package's Settings → Trusted publishing on npmjs.com and add GitHub Actions with user `NaC-L`, repository `omp-uwu` and workflow `publish.yml`.
