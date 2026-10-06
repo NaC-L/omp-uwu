@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { Loader, TUI } from "@oh-my-pi/pi-tui";
 import type { DescribeContext } from "@oh-my-pi/pi-tui/native/node";
+import { Reconciler } from "@oh-my-pi/pi-tui/native/reconcile";
 import { installNativeKitty } from "../src/native-kitty.ts";
 import { buildKawaiiTheme, KITTY_POSE_MS, kittyPoseAt } from "../src/kawaii.ts";
 import { Theme } from "@oh-my-pi/pi-coding-agent";
@@ -19,7 +20,7 @@ afterEach(() => {
   originalRequest = undefined;
 });
 
-function setup(pose: (now: number) => string | undefined) {
+function setup(pose: (now: number) => string | undefined, roaming = false) {
   let native = true;
   let now = 0;
   let timer: (() => void) | undefined;
@@ -39,12 +40,15 @@ function setup(pose: (now: number) => string | undefined) {
   };
   installed = installNativeKitty(host, { periodMs: KITTY_POSE_MS, pose }, animationClock);
   const ui = Object.create(TUI.prototype) as TUI;
+  const writes: string[] = [];
+  ui.terminal = { write: (data: string) => { writes.push(data); } } as unknown as TUI["terminal"];
+  ui.requestRender = () => { renders++; };
   const loader = new Loader(ui, (text) => text, (text) => text, "working", [" esc"]);
   loaders.push(loader);
   loader.setWorkingRow(() => ({ label: "Working", startedAt: 0, interruptKey: "escape" }), () => {});
-  const cx = { cols: 80, reduceMotion: false, dark: true, supports: () => true, feature: () => false } as DescribeContext;
+  const cx = { cols: 80, reduceMotion: false, dark: true, supports: () => true, feature: (name: string) => roaming && name === "styles" } as DescribeContext;
   return {
-    loader, ui, cx, host, animationClock,
+    loader, ui, cx, host, animationClock, writes,
     original: () => originalDescribe.call(loader, cx),
     tick(at: number) { now = at; timer?.(); },
     get canceled() { return canceled; }, get renders() { return renders; },
@@ -53,6 +57,51 @@ function setup(pose: (now: number) => string | undefined) {
 }
 
 describe("native kitty", () => {
+  test("roams in a hoisted non-modal layer without changing the working row or sending animation repaints", () => {
+    let active = true;
+    const state = setup((now) => active ? kittyPoseAt(kittyTheme, now) : undefined, true);
+    const source = state.original();
+    const first = state.loader.describe(state.cx);
+    for (const [index, child] of (source.c ?? []).entries()) expect(first.c?.[index]).toBe(child);
+    expect(first.c?.at(-1)).toMatchObject({
+      k: "overlay", key: "kitty", p: { role: "uwu.kitty.roam", modal: false, size: "sm" },
+      c: [{ k: "row", p: { role: "uwu.kitty.walk" }, c: [
+        { k: "text", p: { role: "uwu.kitty.pose", spans: [{ t: "ᓚᘏᗢ", s: "accent" }] } },
+        { k: "text", p: { role: "uwu.kitty.step", spans: [{ t: "ᓗᘎᗢ", s: "accent" }] } },
+      ] }],
+    });
+    const reconciler = new Reconciler("kitty-smoke");
+    const ops = reconciler.reconcile({ main: [state.loader], dock: [], layer: [] }, state.cx);
+    const overlay = ops.find((op) => op[0] === "add" && op[2] === "layer" && op[4]?.k === "overlay");
+    expect(overlay).toBeDefined();
+    const renders = state.renders;
+    state.tick(KITTY_POSE_MS * 5);
+    expect(state.renders).toBe(renders);
+    expect(state.loader.describe(state.cx)).toBe(first);
+    active = false;
+    installed!.refresh();
+    expect(state.renders).toBeGreaterThan(renders);
+    const off = state.loader.describe(state.cx);
+    expect(off.c?.some((child) => "k" in child && child.k === "overlay")).toBe(false);
+    expect(off.c?.[0]).toMatchObject({ k: "spinner" });
+    active = true;
+    expect(state.loader.describe(state.cx).c?.at(-1)).toMatchObject({ k: "overlay" });
+    installed!.dispose();
+    expect(state.loader.describe(state.cx).c?.some((child) => "k" in child && child.k === "overlay")).toBe(false);
+    expect(state.writes.at(-1)).toContain('"css":""');
+  });
+
+  test("reduced motion keeps the roaming cat still and switching back preserves its layer identity", () => {
+    const state = setup((now) => kittyPoseAt(kittyTheme, now), true);
+    const still = state.loader.describe({ ...state.cx, reduceMotion: true });
+    expect(still.c?.at(-1)).toMatchObject({ key: "kitty", c: [{ p: { role: "uwu.kitty.still" } }] });
+    const renders = state.renders;
+    state.tick(KITTY_POSE_MS);
+    expect(state.renders).toBe(renders);
+    const moving = state.loader.describe(state.cx);
+    expect(moving.c?.at(-1)).toMatchObject({ key: "kitty", c: [{ p: { role: "uwu.kitty.walk" } }] });
+  });
+
   test("replaces only the working spinner and advances on host repaint requests", () => {
     const state = setup((now) => kittyPoseAt(kittyTheme, now));
     const first = state.loader.describe(state.cx);

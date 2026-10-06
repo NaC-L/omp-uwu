@@ -14,7 +14,7 @@ Long coding sessions can feel a little grey. omp-uwu is an [omp](https://github.
 omp plugin install omp-uwu
 ```
 
-Restart omp. On a fresh install, the defaults are:
+Restart omp after installation, linking a checkout, or changing extension code. On omp 18.6.1, `/reload-plugins` refreshes discovery and commands but does not re-evaluate already loaded extensions; exit and run `omp --continue` to load the changed code and resume your conversation. On a fresh install, the defaults are:
 
 | uwu | Style | Level | Locale | Colors |
 |---|---|---|---|---|
@@ -85,7 +85,7 @@ In prompt style, `/uwu preview` is a **deterministic approximation**, not a pred
 
 In the ANSI TUI, `/uwu colors on` applies a pastel palette to chat Markdown and the user-message bubble. Whenever uwu is on, a `(◕ᴗ◕✿) uwu` status badge identifies it independently of colors. ANSI chat prose gives `uwu`/`owo` per-letter rainbows; kaomoji such as `(◕ᴗ◕✿)` and `(ﾉ◕ヮ◕)ﾉ`, and glyphs like `♡ ☆ ✧ ✿`, get a pastel tint. Tern native prose uses semantic Markdown marks: one stable color per distinct token, drawn with Tern's current palette.
 
-While uwu mode and colors are on, a full-body kitty walks in the ANSI activity spinner and the Tern native working row: `ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses. Both keep a seven-column lane so nearby text does not jitter. Tern repaints the text kitty every 240ms using its accent color; reduced-motion mode shows a still pose. The same kitty appears with every ANSI symbol preset (`unicode`, `nerd`, and `ascii`); compact running-tool spinners stay unchanged. `/uwu colors off` or `/uwu off` restores the native spinner.
+While uwu mode and colors are on and omp is working, a larger full-body kitty crawls around the **Tern agent pane**, alternating leg/tail poses every 240 ms and briefly turning to face its direction at each corner. It climbs the sides and crosses the top without moving the working label or taking keyboard/pointer focus. Tern animates the transparent, non-modal layer locally; reduced-motion mode leaves one static kitty. This requires Tern's `styles` protocol feature. ANSI terminals and older Tern versions keep the seven-column spinner walk (`ᓚᘏᗢ` → `ᗢᘏᓗ`, with alternating legs and tail poses); compact running-tool spinners stay unchanged. `/uwu colors off` or `/uwu off` removes the kitty. Restart omp after updating extension code; `/reload-plugins` does not activate the change on omp 18.6.1.
 
 ![Real omp status-line kitty walking back and forth beside the elapsed turn timer](demo/kitty.gif)
 
@@ -96,13 +96,13 @@ Enable **both** switches, then send a message:
 /uwu colors on
 ```
 
-Look **bottom-left, beside the elapsed turn timer** while omp is working. The GIF shows two cycles of the real status-line brand segment, sampled without a model call; the surrounding frame is presentation artwork.
+In Tern, look around the pane edges while omp is working. In ANSI terminals, look **bottom-left, beside the elapsed turn timer**. The GIF above shows the ANSI spinner's two walking cycles, not the native roaming layer; the surrounding frame is presentation artwork.
 
 Sparkles are colored **at render time**, through ANSI prose transforms or Tern native Markdown marks:
 
 - No ANSI codes enter message text or history. Code, code blocks and link targets are never painted.
 - The palette is an in-memory TUI theme; other components sharing those colors may change too. It pauses omp's automatic theme detection until omp restarts.
-- The pastel theme is not serialized into Tern's Surface Protocol. Tern's working-row spinner has no custom frames, so the native kitty replaces only that spinner with a semantic accent-colored text pose, repainted every 240ms; no theme files are written.
+- The pastel theme is not serialized into Tern's Surface Protocol. The native kitty uses an accent-colored text node in a hoisted, non-modal overlay and a surface-scoped stylesheet; no theme files are written. Tern owns its motion clock and geometry. Without stylesheet support, the kitty replaces the working spinner and repaints every 240ms.
 - An existing host transform, such as live-voice transcript coloring, takes precedence.
 - ACP/RPC clients and plain output are not colorized.
 
@@ -183,7 +183,7 @@ For an interactive smoke check, start `omp --no-extensions -e ./src/index.ts` wi
 
 For a **no-model Tern smoke**, resume a copied session containing assistant prose such as `really lovely uwu (◕ᴗ◕✿) owo ☆`, short `:3`, inline `uwu` code and a fenced `uwu` block. In the Tern pane, set `PI_CODING_AGENT_DIR` to an isolated directory with `omp-uwu.json` containing `{"enabled":true,"colors":true,"style":"display","level":"mid","locale":"auto"}`. Set `OMP_TUI_DEBUG` to a unique socket (Windows example: `\\.\pipe\omp-uwu-probe`), then run `omp --no-extensions -e ./src/index.ts --resume <copied-session.jsonl>`. The debug server accepts newline-delimited JSON: `{"op":"tsp","n":5}` must report `native:true`; `{"op":"doc"}` must show styled assistant `md.p.text` and semantic `md.p.marks`, with no ANSI. Send `{"op":"paste","text":"/uwu colors off"}` and `{"op":"keys","keys":"enter"}`, then inspect `doc` again: sparkle marks should be gone while display prose remains styled. Check visually that only prose is tinted, not inline/fenced code. Repeat in a fresh session with `PI_TUI_NATIVE=0` for the unchanged ANSI path. Do not infer native mode from `TERM_PROGRAM` or `TERN_LENSES`; inspect the debug result.
 
-For the **native kitty**, mount a real `Loader` in an isolated test widget and call `setWorkingRow()` with a working label (no model or API key needed). Its `omp.working` row should contain a `kitty` text node with an accent span, while adjacent label, elapsed and stop nodes stay intact. Successive TSP frames should update only the kitty span every 240ms. Visually check both walking directions and a stable label position in Tern. `/uwu colors off` and `/uwu off` must restore the native spinner and stop host animation updates; turning them back on resumes the cat. Inject `{"op":"bytes","data":"\u001b_tsp;e;{\"ev\":\"motion\",\"reduce\":true}\u001b\\"}` to verify a still kitty with no animation frames; send `reduce:false` to resume. Removing the widget must stop animation frames, and reloading the extension must not duplicate timers.
+For the **native kitty**, mount a real `Loader` in an isolated test widget and call `setWorkingRow()` with a working label (no model or API key needed). With the `styles` feature, the kitty's non-modal overlay must be hoisted into `layer`, leaving the original working row intact. Observe movement around the pane, both directions, and a stable working label; typing and the stop control must remain usable. Movement must not send host animation frames. `/uwu colors off` and `/uwu off` must remove the layer; turning them back on resumes the cat. Inject `{"op":"bytes","data":"\u001b_tsp;e;{\"ev\":\"motion\",\"reduce\":true}\u001b\\"}` to verify a still kitty; send `reduce:false` to resume. Check a narrow pane for clipping. Removing the widget must remove its layer; reloading the extension must not duplicate cats or timers. Without `styles`, verify the existing seven-column working-spinner animation instead.
 
 </details>
 
